@@ -22,7 +22,7 @@ const NavBar: FC<NavBarProps> = async ({}) => {
             <span className="underline-offset-4 group-hover:underline">Productivus</span>
           </Link>
         </div>
-        <div className="flex space-x-3">
+        <div className="flex space-x-3 items-center">
           <ModeToggle />
           {session && (
             <UserAccountNav

@@ -34,12 +34,12 @@ const Page: FC<PageProps> = async ({}) => {
         <Starfield
           starCount={1000}
           starColor={[255, 255, 255]}
-          speedFactor={0.25}
+          speedFactor={0.09}
           backgroundColor="black"
         />
-        <Card className="ml-5 mb-5 border-none">
+        <Card className="ml-5 mb-5 border-none bg-transparent">
           <CardHeader>
-            <CardTitle>Workspaces</CardTitle>
+            <CardTitle className="text-neutral-200">Workspaces</CardTitle>
             <CardDescription>Your Workspaces</CardDescription>
           </CardHeader>
         </Card>
@@ -55,7 +55,7 @@ const Page: FC<PageProps> = async ({}) => {
             >
               <Card
                 key={workspace.id}
-                className="p-5 text-center group-hover:text-indigo-400 w-[350px] mb-3"
+                className="p-5 text-center group-hover:text-indigo-400 w-[350px] mb-3 bg-transparent border-zinc-900 text-neutral-200"
               >
                 <h1>{workspace.name}</h1>
               </Card>
