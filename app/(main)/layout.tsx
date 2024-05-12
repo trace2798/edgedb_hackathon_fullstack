@@ -12,7 +12,7 @@ const MainLayout = async ({ children }: Props) => {
         <MobileHeader />
       </div>
       <Sidebar className="hidden lg:flex" />
-      {children}
+      <div className="py-24 px-[10vw] lg:ml-[256px]">{children}</div>
     </>
   );
 };

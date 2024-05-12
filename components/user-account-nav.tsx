@@ -55,7 +55,7 @@ const UserAccountNav = ({ email, imageUrl, name }: UserAccountNavProps) => {
         <DropdownMenuSeparator />
 
         <DropdownMenuItem asChild className="hover:cursor-pointer">
-          <Link href="/dashboard">Dashboard</Link>
+          <Link href="/workspace">Workspace</Link>
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />
