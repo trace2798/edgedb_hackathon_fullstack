@@ -18,7 +18,6 @@ export async function createWorkspace(userId: string, content: string) {
     }
     const newWorkspace = e.insert(e.Workspace, {
       name: content as string,
-      createdBy: user.id,
       user: e.select(e.User, (user) => ({
         filter_single: e.op(user.id, "=", e.uuid(userId)),
       })),
