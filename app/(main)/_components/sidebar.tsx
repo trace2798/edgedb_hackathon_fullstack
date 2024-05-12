@@ -39,6 +39,7 @@ export const Sidebar = async ({ className }: Props) => {
         {session && (
           <>
             <SidebarItem label="Activity" href="/activity" />
+            <SidebarItem label="Members" href="/members" />
             <SidebarItem label="Settings" href="/settings" />
           </>
         )}
