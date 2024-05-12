@@ -1,11 +1,20 @@
 "use client";
 
 import { signIn } from "next-auth/react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card";
+import {
+  Card,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
+import { Target } from "lucide-react";
+import { Separator } from "./ui/separator";
 
 export const Social = () => {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl");
 
@@ -17,8 +26,12 @@ export const Social = () => {
 
   return (
     <Card className="flex flex-col items-center w-[350px]">
-      <CardHeader>
-        <CardTitle>Sign in</CardTitle>
+      <CardHeader className="flex flex-col items-center">
+        <CardTitle>
+          {" "}
+          <Target />
+        </CardTitle>
+        <CardDescription>Welcome! Sign in to continue</CardDescription>
       </CardHeader>
       {/* <Button
         size="lg"
@@ -70,6 +83,9 @@ export const Social = () => {
             fill="#545454"
           />
         </svg>
+      </Button>
+      <Button size="lg" className="w-[320px] mt-5" variant="link" onClick={() => router.push("/")}>
+        Back Home
       </Button>
       <CardFooter></CardFooter>
     </Card>

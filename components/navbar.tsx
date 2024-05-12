@@ -4,6 +4,7 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 import { auth } from "@/auth";
 import UserAccountNav from "./user-account-nav";
+import { Target } from "lucide-react";
 
 interface NavBarProps {}
 
@@ -13,7 +14,9 @@ const NavBar: FC<NavBarProps> = async ({}) => {
     <>
       <div className="pt-5 pb-2 shadow-md dark:shadow-sm dark:shadow-blue-50 px-[10vw] flex justify-between items-center fixed top-0 left-0 w-full backdrop-blur-sm">
         <div>
-          <a href="/">Productivus</a>
+          <Link href="/" className="flex hover:text-indigo-400">
+            <Target className="mr-3" /> Productivus
+          </Link>
         </div>
         <div className="flex space-x-3">
           <ModeToggle />
