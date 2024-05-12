@@ -3,5 +3,6 @@
 import { signOut } from "@/auth";
 
 export const logout = async () => {
-  await signOut();
+  const response = await signOut();
+  console.log(response);
 };

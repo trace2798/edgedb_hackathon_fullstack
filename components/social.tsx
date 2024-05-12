@@ -1,8 +1,9 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { Target } from "lucide-react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardDescription,
@@ -10,8 +11,6 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
-import { Target } from "lucide-react";
-import { Separator } from "./ui/separator";
 
 export const Social = () => {
   const router = useRouter();
@@ -20,7 +19,7 @@ export const Social = () => {
 
   const onClick = (provider: "google" | "github") => {
     signIn(provider, {
-      callbackUrl: callbackUrl || "/",
+      callbackUrl: callbackUrl || "/dashboard",
     });
   };
 
