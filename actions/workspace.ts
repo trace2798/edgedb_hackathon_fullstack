@@ -1,0 +1,32 @@
+"use server";
+import e, { createClient } from "@/dbschema/edgeql-js";
+import { uuid } from "edgedb/dist/codecs/ifaces";
+
+const client = createClient();
+
+export async function createWorkspace(userId: string, content: string) {
+  try {
+    console.log(userId, "USER ID");
+    console.log(content, "CONTENT");
+    const user = await e
+      .select(e.User, (user) => ({
+        filter_single: e.op(user.id, "=", e.uuid(userId)),
+      }))
+      .run(client);
+    if (!user) {
+      return "User Not Found";
+    }
+    const newWorkspace = e.insert(e.Workspace, {
+      name: content as string,
+      createdBy: user.id,
+      user: e.select(e.User, (user) => ({
+        filter_single: e.op(user.id, "=", e.uuid(userId)),
+      })),
+    });
+    await newWorkspace.run(client);
+    return "Post Created";
+  } catch (error) {
+    console.error(error);
+    return "Profile Action Error";
+  }
+}

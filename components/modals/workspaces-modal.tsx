@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -20,6 +19,8 @@ import { Spinner } from "../spinner";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { useWorkspaces } from "@/hooks/use-workspaces";
+import { createWorkspace } from "@/actions/workspace";
+import { useCurrentUser } from "@/hooks/use-current-user";
 
 interface WorkspaceModalProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -29,6 +30,7 @@ const formSchema = z.object({
 
 export function WorkspaceModal({ className, ...props }: WorkspaceModalProps) {
   const workspaces = useWorkspaces();
+  const user = useCurrentUser();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -42,8 +44,10 @@ export function WorkspaceModal({ className, ...props }: WorkspaceModalProps) {
   const onSubmit: SubmitHandler<FormData> = async (values) => {
     try {
       setLoading(true);
-      const response = await axios.post(`/api/tenant`, values);
+      console.log(values, "VALUES VALUES");
+      const response = await createWorkspace(user?.id as string, values.name);
       // console.log(values, "VALUES VALUES");
+      console.log(response, "RESPONSE");
       form.reset();
       toast.success("Workspace Created.");
       router.refresh();

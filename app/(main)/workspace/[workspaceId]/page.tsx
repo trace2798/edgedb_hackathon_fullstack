@@ -1,23 +1,14 @@
 import {
   Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
+  CardHeader
 } from "@/components/ui/card";
-import Link from "next/link";
-import { FC } from "react";
 
-interface PageProps {}
-
-const Page: FC<PageProps> = ({}) => {
+const Page = async ({ params }: { params: { workspaceId: string } }) => {
   return (
     <>
       <div className=" flex justify-center items-center text-center">
         <Card className=" ml-5">
-          <CardHeader>
-            <CardTitle>Workspaces</CardTitle>
-            <CardDescription>Your Workspaces</CardDescription>
-          </CardHeader>
+          <CardHeader>{params.workspaceId}</CardHeader>
         </Card>
       </div>
     </>

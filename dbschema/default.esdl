@@ -8,6 +8,7 @@ module default {
         property image -> str;
         multi link accounts := .<user[is Account];
         multi link sessions := .<user[is Session];
+        multi link workspaces := .<user[is Workspace];
         property createdAt -> datetime {
             default := datetime_current();
         };
@@ -64,7 +65,22 @@ module default {
         constraint exclusive on ((.identifier, .token))
     }
 
-
+type Workspace {
+   required name: str;
+   description: str;
+   required createdBy: str;
+   required userId := .user.id;
+    created: datetime {
+      rewrite insert using (datetime_of_statement());
+    }
+    updated: datetime {
+      rewrite insert using (datetime_of_statement());
+      rewrite update using (datetime_of_statement());
+    }
+     required link user -> User {
+            on target delete delete source;
+       };
+}
 
 }
  
