@@ -1,14 +1,16 @@
 import { Social } from "@/components/social";
-import { FC } from "react";
+import { FC, Suspense } from "react";
 
 interface PageProps {}
 
 const Page: FC<PageProps> = ({}) => {
   return (
     <>
-      <div>
-        <Social/>
-      </div>
+      <Suspense>
+        <div>
+          <Social />
+        </div>
+      </Suspense>
     </>
   );
 };
