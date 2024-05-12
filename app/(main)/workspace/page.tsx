@@ -9,6 +9,7 @@ import AddWorkspaceButton from "./_components/add-workspace-button";
 import e, { createClient } from "@/dbschema/edgeql-js";
 import { auth } from "@/auth";
 import Link from "next/link";
+import Starfield from "@/components/star-field";
 
 interface PageProps {}
 const client = createClient();
@@ -30,6 +31,12 @@ const Page: FC<PageProps> = async ({}) => {
   return (
     <>
       <div className=" flex flex-col justify-center items-center text-center">
+        <Starfield
+          starCount={1000}
+          starColor={[255, 255, 255]}
+          speedFactor={0.25}
+          backgroundColor="black"
+        />
         <Card className="ml-5 mb-5 border-none">
           <CardHeader>
             <CardTitle>Workspaces</CardTitle>
