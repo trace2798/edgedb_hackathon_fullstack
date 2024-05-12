@@ -1,7 +1,4 @@
-import {
-  Card,
-  CardHeader
-} from "@/components/ui/card";
+import { Card, CardHeader } from "@/components/ui/card";
 
 const Page = async ({ params }: { params: { workspaceId: string } }) => {
   return (

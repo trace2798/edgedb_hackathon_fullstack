@@ -1,13 +1,12 @@
-import { Loader } from "lucide-react";
-import Link from "next/link";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 import { SidebarItem } from "./sidebar-item";
 
 import { auth } from "@/auth";
-import UserAccountNav from "@/components/user-account-nav";
-import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import UserAccountNav from "@/components/user-account-nav";
 
 type Props = {
   className?: string;
@@ -15,6 +14,7 @@ type Props = {
 
 export const Sidebar = async ({ className }: Props) => {
   const session = await auth();
+
   return (
     <div
       className={cn(
@@ -30,15 +30,16 @@ export const Sidebar = async ({ className }: Props) => {
         </div>
       </Link>
       <div className="flex flex-col gap-y-2 flex-1">
-        <SidebarItem label="Search Web" href="/web-search" />
+        {/* <SidebarItem label="Search Web" href="/web-search" />
         <SidebarItem label="Wikipedia" href="/wiki" />
-        <SidebarItem label="Document" href="/documents" />
+        <SidebarItem label="Document" href="/documents" /> */}
+        <Separator />
+        <h1 className="text-xs">Workspace Name: </h1>
         <Separator />
         {session && (
           <>
             <SidebarItem label="Activity" href="/activity" />
             <SidebarItem label="Settings" href="/settings" />
-            <SidebarItem label="Restore Files" href="/deleted" />
           </>
         )}
         {!session && (
