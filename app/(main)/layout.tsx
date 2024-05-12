@@ -6,13 +6,7 @@ type Props = {
 };
 
 const MainLayout = async ({ children }: Props) => {
-  return (
-    <>
-      <div className="py-24 px-[10vw] bg-zinc-950 h-[100vh] w-[100vw]">
-        {children}
-      </div>
-    </>
-  );
+  return <>{children}</>;
 };
 
 export default MainLayout;

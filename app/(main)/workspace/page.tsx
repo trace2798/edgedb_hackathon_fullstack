@@ -30,7 +30,7 @@ const Page: FC<PageProps> = async ({}) => {
   console.log(workspaces);
   return (
     <>
-      <div className=" flex flex-col justify-center items-center text-center">
+      <div className=" flex flex-col pt-24 items-center text-center bg-zinc-950 h-[100vh] w-[100vw]">
         <Starfield
           starCount={1000}
           starColor={[255, 255, 255]}
