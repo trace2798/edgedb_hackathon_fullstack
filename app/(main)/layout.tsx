@@ -8,11 +8,7 @@ type Props = {
 const MainLayout = async ({ children }: Props) => {
   return (
     <>
-      <div className="lg:hidden">
-        <MobileHeader />
-      </div>
-      <Sidebar className="hidden lg:flex" />
-      <div className="py-24 px-[10vw] lg:ml-[256px]">{children}</div>
+      <div className="py-24 px-[10vw]">{children}</div>
     </>
   );
 };
