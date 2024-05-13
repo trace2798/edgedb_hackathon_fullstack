@@ -38,6 +38,7 @@ const DeleteWorkspace = ({
     if (response === "Done") {
       toast.success("Workspace Deleted");
       router.push("/workspace");
+      router.refresh();
     } else {
       toast.error(response);
     }

@@ -1,5 +1,5 @@
 "use client";
-import { addMemberByEmail } from "@/actions/member";
+import { addMemberByEmail, transferOwnership } from "@/actions/member";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -21,11 +21,14 @@ import { z } from "zod";
 const formSchema = z.object({
   email: z.string().min(2).max(50),
 });
-interface AddMemberFormProps {
+interface TransferOwnershipFormProps {
   workspaceId: string;
 }
 
-const AddMemberForm: FC<AddMemberFormProps> = ({ workspaceId }) => {
+const TransferOwnershipForm: FC<TransferOwnershipFormProps> = ({
+  workspaceId,
+}) => {
+  console.log(workspaceId);
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -34,7 +37,7 @@ const AddMemberForm: FC<AddMemberFormProps> = ({ workspaceId }) => {
     },
   });
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const response = await addMemberByEmail(values.email, workspaceId);
+    const response = await transferOwnership(values.email, workspaceId);
     console.log(response);
     if (response === "Done") {
       toast.success("Member Added");
@@ -64,11 +67,11 @@ const AddMemberForm: FC<AddMemberFormProps> = ({ workspaceId }) => {
               </FormItem>
             )}
           />
-          <Button type="submit">Add Member</Button>
+          <Button type="submit">Transfer Ownership</Button>
         </form>
       </Form>
     </>
   );
 };
 
-export default AddMemberForm;
+export default TransferOwnershipForm;

@@ -32,6 +32,7 @@ export async function createWorkspace(
         })),
       })
       .run(client);
+    console.log(newWorkspace);
 
     const addWorkspaceCreatorAsOwner = await e
       .insert(e.WorkspaceMember, {
@@ -42,10 +43,11 @@ export async function createWorkspace(
           filter_single: e.op(workspace.id, "=", e.uuid(newWorkspace.id)),
         })),
         user: e.select(e.User, (user) => ({
-          filter_single: e.op(user.email, "=", e.str_lower(user.email)),
+          filter_single: e.op(user.id, "=", e.uuid(userId)),
         })),
       })
       .run(client);
+    console.log(addWorkspaceCreatorAsOwner);
 
     const activity = await e
       .insert(e.Activity, {
@@ -54,10 +56,12 @@ export async function createWorkspace(
           filter_single: e.op(workspace.id, "=", e.uuid(newWorkspace.id)),
         })),
         user: e.select(e.User, (user) => ({
-          filter_single: e.op(user.email, "=", e.str_lower(user.email)),
+          filter_single: e.op(user.id, "=", e.uuid(userId)),
         })),
       })
       .run(client);
+    console.log(activity);
+
     return "Workspace Created";
   } catch (error) {
     console.error(error);

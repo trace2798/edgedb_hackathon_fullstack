@@ -7,9 +7,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import TransferOwnershipForm from "./add-member-form";
 
-
-const TransferOwnership = ({ status }: { status: any }) => {
+const TransferOwnership = ({
+  status,
+  workspaceId,
+}: {
+  status: any;
+  workspaceId: string;
+}) => {
   return (
     <>
       <Card className="border-teal-300">
@@ -23,11 +29,13 @@ const TransferOwnership = ({ status }: { status: any }) => {
         </CardHeader>
         <CardFooter className="bg-primary-foreground rounded-xl">
           {typeof status === "object" && status.memberRole === "owner" ? (
-            <Button className="w-[320px] mt-5">Transfer Ownership</Button>
+            // <Button className="w-[320px] mt-5">Transfer Ownership</Button>
+            <TransferOwnershipForm workspaceId={workspaceId} />
           ) : (
             <Button disabled={true} className="w-[320px] mt-5">
               Transfer Ownership
             </Button>
+
             // <AlertDialog>
             //   <AlertDialogTrigger>
             //  <Button
