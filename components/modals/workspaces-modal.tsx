@@ -89,7 +89,7 @@ export function WorkspaceModal({ className, ...props }: WorkspaceModalProps) {
                       <FormControl>
                         <Input
                           id="name"
-                          placeholder="Trevor's Birthday"
+                          placeholder="Name of the workspace"
                           type="text"
                           autoCorrect="off"
                           disabled={isLoading}
@@ -116,7 +116,7 @@ export function WorkspaceModal({ className, ...props }: WorkspaceModalProps) {
                         <FormControl>
                           <Textarea
                             id="description"
-                            placeholder="Trevor's Birthday"
+                            placeholder="What is this workspace for?(optional)"
                             autoCorrect="off"
                             disabled={isLoading}
                             className="bg-zinc-800 border-zinc-600 text-neutral-100"

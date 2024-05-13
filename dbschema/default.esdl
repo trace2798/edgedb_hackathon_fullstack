@@ -1,4 +1,5 @@
 module default {
+  scalar type MemberRole extending enum<admin, member, owner>;
     type User {
          name: str;
         required email -> str {
@@ -11,6 +12,7 @@ module default {
         multi accounts := .<user[is Account];
         multi sessions := .<user[is Session];
         multi workspaces := .<user[is Workspace];
+        multi workspacesMember := .<user[is WorkspaceMember];
        createdAt: datetime {
       rewrite insert using (datetime_of_statement());
     }
@@ -85,6 +87,31 @@ type Workspace {
      required link user -> User {
             on target delete delete source;
        };
+         multi workspaceMember := .<workspace[is WorkspaceMember];
+}
+
+type WorkspaceMember {
+  name: str;
+  required email: str;
+  required userId := .user.id;
+  required workspaceId := .workspace.id;
+  created: datetime {
+      rewrite insert using (datetime_of_statement());
+    }
+    updated: datetime {
+      rewrite insert using (datetime_of_statement());
+      rewrite update using (datetime_of_statement());
+    }
+    memberRole: MemberRole {
+      default := "member";
+    };
+     required link user -> User {
+      on target delete delete source;
+    }
+    required link workspace -> Workspace {
+      on target delete delete source;
+    }
+
 }
 
 }

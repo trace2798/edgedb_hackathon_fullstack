@@ -5,7 +5,7 @@ export default async function Home() {
   console.log(session);
   return (
     <main className="flex h-full w-full flex-col items-center justify-center">
-      Hello
+      <a href="/workspace">Workspace</a>
     </main>
   );
 }
