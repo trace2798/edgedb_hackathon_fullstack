@@ -14,23 +14,41 @@ export async function createWorkspace(
     console.log(name, "CONTENT");
     const user = await e
       .select(e.User, (user) => ({
+        id: true,
+        email: true,
+        name: true,
         filter_single: e.op(user.id, "=", e.uuid(userId)),
       }))
       .run(client);
     if (!user) {
       return "User Not Found";
     }
-    const newWorkspace = e.insert(e.Workspace, {
-      name: name as string,
-      description: description as string,
-      user: e.select(e.User, (user) => ({
-        filter_single: e.op(user.id, "=", e.uuid(userId)),
-      })),
-    });
-    await newWorkspace.run(client);
+    const newWorkspace = await e
+      .insert(e.Workspace, {
+        name: name as string,
+        description: description as string,
+        user: e.select(e.User, (user) => ({
+          filter_single: e.op(user.id, "=", e.uuid(userId)),
+        })),
+      })
+      .run(client);
+
+    const addWorkspaceCreatorAsOwner = await e
+      .insert(e.WorkspaceMember, {
+        name: user.name as string,
+        email: user.email as string,
+        memberRole: "owner",
+        workspace: e.select(e.Workspace, (workspace) => ({
+          filter_single: e.op(workspace.id, "=", e.uuid(newWorkspace.id)),
+        })),
+        user: e.select(e.User, (user) => ({
+          filter_single: e.op(user.email, "=", e.str_lower(user.email)),
+        })),
+      })
+      .run(client);
     return "Workspace Created";
   } catch (error) {
     console.error(error);
-    return "Workspace Action Error";
+    return "Error Creating Workspace";
   }
 }

@@ -58,20 +58,22 @@ export const addMemberByEmail = async (email: string, workspaceId: string) => {
     if (workspaceMember) {
       return "User is already a member of this workspace";
     }
-    const addNewWorkspaceMember = await e.insert(e.WorkspaceMember, {
-      name: user.name as string,
-      email: user.email as string,
-      memberRole: "member",
-      workspace: e.select(e.Workspace, (workspace) => ({
-        filter_single: e.op(workspace.id, "=", e.uuid(workspaceId)),
-      })),
-      user: e.select(e.User, (user) => ({
-        filter_single: e.op(user.email, "=", e.str_lower(email)),
-      })),
-    }).run(client);
+    const addNewWorkspaceMember = await e
+      .insert(e.WorkspaceMember, {
+        name: user.name as string,
+        email: user.email as string,
+        memberRole: "member",
+        workspace: e.select(e.Workspace, (workspace) => ({
+          filter_single: e.op(workspace.id, "=", e.uuid(workspaceId)),
+        })),
+        user: e.select(e.User, (user) => ({
+          filter_single: e.op(user.email, "=", e.str_lower(email)),
+        })),
+      })
+      .run(client);
     console.log(addNewWorkspaceMember);
     return "Done";
   } catch {
-    return null;
+    return "Error adding member to workspace";
   }
 };
