@@ -52,7 +52,7 @@ export const columns: ColumnDef<Member>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const payment = row.original;
+      const member = row.original;
 
       return (
         <DropdownMenu>
@@ -64,14 +64,14 @@ export const columns: ColumnDef<Member>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
+              onClick={() => navigator.clipboard.writeText(member.id)}
               className="hover:text-indigo-400 hover:cursor-pointer"
             >
               Copy Member ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            {/* <DropdownMenuItem>View customer</DropdownMenuItem>
+            <DropdownMenuItem>View payment details</DropdownMenuItem> */}
           </DropdownMenuContent>
         </DropdownMenu>
       );
