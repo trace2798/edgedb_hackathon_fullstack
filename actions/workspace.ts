@@ -28,9 +28,9 @@ export async function createWorkspace(
       })),
     });
     await newWorkspace.run(client);
-    return "Post Created";
+    return "Workspace Created";
   } catch (error) {
     console.error(error);
-    return "Profile Action Error";
+    return "Workspace Action Error";
   }
 }
