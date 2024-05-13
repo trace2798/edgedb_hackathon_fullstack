@@ -19,6 +19,10 @@ const MembersPage = async ({ params }: { params: { workspaceId: string } }) => {
         "=",
         e.uuid(params.workspaceId)
       ),
+      order_by: {
+        expression: workspaceMember.created,
+        direction: e.DESC,
+      },
     }))
     .run(client);
   return (

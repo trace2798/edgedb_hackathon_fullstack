@@ -47,7 +47,7 @@ export async function createWorkspace(
       })
       .run(client);
 
-    const avtivity = await e
+    const activity = await e
       .insert(e.Activity, {
         message: `Created Workspace: ${name} by ${user.name}` as string,
         workspace: e.select(e.Workspace, (workspace) => ({

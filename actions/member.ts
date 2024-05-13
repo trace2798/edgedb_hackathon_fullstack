@@ -1,4 +1,5 @@
 "use server";
+import { auth } from "@/auth";
 import e, { createClient } from "@/dbschema/edgeql-js";
 
 const client = createClient();
@@ -21,6 +22,15 @@ export const getUserByEmail = async (email: string) => {
 
 export const addMemberByEmail = async (email: string, workspaceId: string) => {
   try {
+    const session = await auth();
+    const currentUser = await e
+      .select(e.User, (user) => ({
+        id: true,
+        email: true,
+        name: true,
+        filter_single: e.op(user.id, "=", e.uuid(session?.user?.id as string)),
+      }))
+      .run(client);
     const user = await e
       .select(e.User, (user) => ({
         id: true,
@@ -72,6 +82,21 @@ export const addMemberByEmail = async (email: string, workspaceId: string) => {
       })
       .run(client);
     console.log(addNewWorkspaceMember);
+    const activity = await e
+      .insert(e.Activity, {
+        message: `${currentUser?.name} added ${user.name}` as string,
+        workspace: e.select(e.Workspace, (workspace) => ({
+          filter_single: e.op(workspace.id, "=", e.uuid(workspaceId)),
+        })),
+        user: e.select(e.User, (user) => ({
+          filter_single: e.op(
+            user.id,
+            "=",
+            e.uuid(session?.user?.id as string)
+          ),
+        })),
+      })
+      .run(client);
     return "Done";
   } catch {
     return "Error adding member to workspace";

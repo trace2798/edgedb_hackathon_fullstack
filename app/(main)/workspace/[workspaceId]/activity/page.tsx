@@ -16,6 +16,10 @@ const ActivityPage = async ({
       message: true,
       created: true,
       filter: e.op(activity.workspaceId, "=", e.uuid(params.workspaceId)),
+      order_by: {
+        expression: activity.created,
+        direction: e.DESC,
+      },
     }))
     .run(client);
   console.log(activity);
