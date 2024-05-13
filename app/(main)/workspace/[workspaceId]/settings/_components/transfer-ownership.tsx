@@ -7,13 +7,21 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import TransferOwnershipForm from "./add-member-form";
+import TransferOwnershipForm from "./transfer-ownership-form";
+
+export type StatusType = {
+  id: string;
+  name: string;
+  email: string;
+  memberRole: string;
+  userId: string;
+};
 
 const TransferOwnership = ({
   status,
   workspaceId,
 }: {
-  status: any;
+  status: StatusType;
   workspaceId: string;
 }) => {
   return (
@@ -27,39 +35,13 @@ const TransferOwnership = ({
             can not be undone.
           </CardDescription>
         </CardHeader>
-        <CardFooter className="bg-primary-foreground rounded-xl">
+        <CardFooter className="bg-primary-foreground rounded-xl pt-2">
           {typeof status === "object" && status.memberRole === "owner" ? (
-            // <Button className="w-[320px] mt-5">Transfer Ownership</Button>
             <TransferOwnershipForm workspaceId={workspaceId} />
           ) : (
             <Button disabled={true} className="w-[320px] mt-5">
               Transfer Ownership
             </Button>
-
-            // <AlertDialog>
-            //   <AlertDialogTrigger>
-            //  <Button
-            //   disabled={true}
-            //   variant="destructive"
-            //   className="w-[320px] mt-5"
-            // >
-            //   Delete
-            // </Button>
-            //   </AlertDialogTrigger>
-            //   <AlertDialogContent>
-            //     <AlertDialogHeader>
-            //       <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-            //       <AlertDialogDescription>
-            //         This action cannot be undone. This will permanently delete
-            //         your account and remove your data from our servers.
-            //       </AlertDialogDescription>
-            //     </AlertDialogHeader>
-            //     <AlertDialogFooter>
-            //       <AlertDialogCancel>Cancel</AlertDialogCancel>
-            //       <AlertDialogAction>Continue</AlertDialogAction>
-            //     </AlertDialogFooter>
-            //   </AlertDialogContent>
-            // </AlertDialog>
           )}
         </CardFooter>
       </Card>

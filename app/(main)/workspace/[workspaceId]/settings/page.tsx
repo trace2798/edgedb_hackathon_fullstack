@@ -9,7 +9,9 @@ import {
 } from "@/components/ui/card";
 import { checkStatus } from "@/lib/checkStatus";
 import DeleteWorkspace from "./_components/delete-workspace";
-import TransferOwnership from "./_components/transfer-ownership";
+import TransferOwnership, {
+  StatusType,
+} from "./_components/transfer-ownership";
 
 const SettingsPage = async ({
   params,
@@ -21,7 +23,10 @@ const SettingsPage = async ({
   return (
     <>
       <div className="space-y-5">
-        <TransferOwnership status={status} workspaceId={params.workspaceId}/>
+        <TransferOwnership
+          status={status as StatusType}
+          workspaceId={params.workspaceId}
+        />
         <DeleteWorkspace status={status} workspaceId={params.workspaceId} />
       </div>
     </>

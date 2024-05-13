@@ -1,5 +1,5 @@
 "use client";
-import { addMemberByEmail, transferOwnership } from "@/actions/member";
+import { transferOwnership } from "@/actions/member";
 import { Button } from "@/components/ui/button";
 import {
   Form,
