@@ -1,8 +1,17 @@
+import { checkStatus } from "@/lib/checkStatus";
 import { FC } from "react";
+import DialogNonUser from "../_components/dialog-non-member";
 
-interface SettingsPageProps {}
-
-const SettingsPage: FC<SettingsPageProps> = ({}) => {
+const SettingsPage = async ({
+  params,
+}: {
+  params: { workspaceId: string };
+}) => {
+  const status = await checkStatus({ workspaceId: params.workspaceId });
+  console.log(status);
+  if (status === "not member") {
+    return <DialogNonUser />;
+  }
   return (
     <>
       <div>SettingsPage</div>

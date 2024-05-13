@@ -1,13 +1,19 @@
-import e, { createClient } from "@/dbschema/edgeql-js";
-import AddMemberForm from "./_components/add-member-form";
-import { DataTable } from "./_components/members/data-table";
-import { Member, columns } from "./_components/members/column";
 import { Heading } from "@/components/heading";
-import { Separator } from "@/components/ui/separator";
+import e, { createClient } from "@/dbschema/edgeql-js";
+import { checkStatus } from "@/lib/checkStatus";
+import DialogNonUser from "../_components/dialog-non-member";
+import AddMemberForm from "./_components/add-member-form";
+import { Member, columns } from "./_components/members/column";
+import { DataTable } from "./_components/members/data-table";
 
 const client = createClient();
 
 const MembersPage = async ({ params }: { params: { workspaceId: string } }) => {
+  const status = await checkStatus({ workspaceId: params.workspaceId });
+  console.log(status);
+  if (status === "not member") {
+    return <DialogNonUser />;
+  }
   const members = await e
     .select(e.WorkspaceMember, (workspaceMember) => ({
       id: true,
