@@ -1,8 +1,10 @@
-import { FC } from "react";
 
-interface ActivityPageProps {}
+const ActivityPage = async ({
+  params,
+}: {
+  params: { workspaceId: string };
+}) => {
 
-const ActivityPage: FC<ActivityPageProps> = ({}) => {
   return (
     <>
       <div>ActivityPage</div>
