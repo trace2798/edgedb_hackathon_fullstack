@@ -36,6 +36,25 @@ const $Account = $.makeType<$Account>(_.spec, "b1b6a034-103f-11ef-9e2f-a9ad8001e
 
 const Account: $.$expr_PathNode<$.TypeSet<$Account, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($Account, $.Cardinality.Many), null);
 
+export type $ActivityλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588λShape & {
+  "user": $.LinkDesc<$User, $.Cardinality.One, {}, false, false,  false, false>;
+  "userId": $.PropertyDesc<_std.$uuid, $.Cardinality.One, false, true, false, false>;
+  "workspace": $.LinkDesc<$Workspace, $.Cardinality.One, {}, false, false,  false, false>;
+  "workspaceId": $.PropertyDesc<_std.$uuid, $.Cardinality.One, false, true, false, false>;
+  "created": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
+  "message": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "updated": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
+  "<activity[is User]": $.LinkDesc<$User, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<activity[is Workspace]": $.LinkDesc<$Workspace, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<activity": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
+}>;
+type $Activity = $.ObjectType<"default::Activity", $ActivityλShape, null, [
+  ..._std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588['__exclusives__'],
+]>;
+const $Activity = $.makeType<$Activity>(_.spec, "57afc9de-113b-11ef-87f6-1f54bd7e55a8", _.syntax.literal);
+
+const Activity: $.$expr_PathNode<$.TypeSet<$Activity, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($Activity, $.Cardinality.Many), null);
+
 export type $SessionλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588λShape & {
   "user": $.LinkDesc<$User, $.Cardinality.One, {}, false, false,  false, false>;
   "userId": $.PropertyDesc<_std.$uuid, $.Cardinality.One, false, true, false, false>;
@@ -63,10 +82,12 @@ export type $UserλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f73840c2
   "createdAt": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
   "emailVerified": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
   "workspacesMember": $.LinkDesc<$WorkspaceMember, $.Cardinality.Many, {}, false, true,  false, false>;
+  "activity": $.LinkDesc<$Activity, $.Cardinality.Many, {}, false, true,  false, false>;
   "<user[is Account]": $.LinkDesc<$Account, $.Cardinality.Many, {}, false, false,  false, false>;
   "<user[is Session]": $.LinkDesc<$Session, $.Cardinality.Many, {}, false, false,  false, false>;
   "<user[is Workspace]": $.LinkDesc<$Workspace, $.Cardinality.Many, {}, false, false,  false, false>;
   "<user[is WorkspaceMember]": $.LinkDesc<$WorkspaceMember, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<user[is Activity]": $.LinkDesc<$Activity, $.Cardinality.Many, {}, false, false,  false, false>;
   "<user": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
 }>;
 type $User = $.ObjectType<"default::User", $UserλShape, null, [
@@ -100,8 +121,10 @@ export type $WorkspaceλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f73
   "name": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
   "updated": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
   "workspaceMember": $.LinkDesc<$WorkspaceMember, $.Cardinality.Many, {}, false, true,  false, false>;
+  "activity": $.LinkDesc<$Activity, $.Cardinality.Many, {}, false, true,  false, false>;
   "<workspaces[is User]": $.LinkDesc<$User, $.Cardinality.Many, {}, false, false,  false, false>;
   "<workspace[is WorkspaceMember]": $.LinkDesc<$WorkspaceMember, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<workspace[is Activity]": $.LinkDesc<$Activity, $.Cardinality.Many, {}, false, false,  false, false>;
   "<workspace": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
   "<workspaces": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
 }>;
@@ -136,11 +159,12 @@ const WorkspaceMember: $.$expr_PathNode<$.TypeSet<$WorkspaceMember, $.Cardinalit
 
 
 
-export { MemberRole, $Account, Account, $Session, Session, $User, User, $VerificationToken, VerificationToken, $Workspace, Workspace, $WorkspaceMember, WorkspaceMember };
+export { MemberRole, $Account, Account, $Activity, Activity, $Session, Session, $User, User, $VerificationToken, VerificationToken, $Workspace, Workspace, $WorkspaceMember, WorkspaceMember };
 
 type __defaultExports = {
   "MemberRole": typeof MemberRole;
   "Account": typeof Account;
+  "Activity": typeof Activity;
   "Session": typeof Session;
   "User": typeof User;
   "VerificationToken": typeof VerificationToken;
@@ -150,6 +174,7 @@ type __defaultExports = {
 const __defaultExports: __defaultExports = {
   "MemberRole": MemberRole,
   "Account": Account,
+  "Activity": Activity,
   "Session": Session,
   "User": User,
   "VerificationToken": VerificationToken,

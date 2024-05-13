@@ -46,9 +46,34 @@ export async function createWorkspace(
         })),
       })
       .run(client);
+
+    const avtivity = await e
+      .insert(e.Activity, {
+        message: `Created Workspace: ${name} by ${user.name}` as string,
+        workspace: e.select(e.Workspace, (workspace) => ({
+          filter_single: e.op(workspace.id, "=", e.uuid(newWorkspace.id)),
+        })),
+        user: e.select(e.User, (user) => ({
+          filter_single: e.op(user.email, "=", e.str_lower(user.email)),
+        })),
+      })
+      .run(client);
     return "Workspace Created";
   } catch (error) {
     console.error(error);
     return "Error Creating Workspace";
+  }
+}
+
+export async function deleteWorkspace(workspaceId: string) {
+  try {
+    const deleteWorkspace = await e
+      .delete(e.Workspace, (workspace) => ({
+        filter_single: e.op(workspace.id, "=", e.uuid(workspaceId)),
+      }))
+      .run(client);
+    return "Done";
+  } catch (error) {
+    return "Error Deleting Workspace";
   }
 }

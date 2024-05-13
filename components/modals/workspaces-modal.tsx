@@ -27,7 +27,7 @@ interface WorkspaceModalProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
-  description: z.string().min(10).max(150),
+  description: z.string().min(0).max(150),
 });
 
 export function WorkspaceModal({ className, ...props }: WorkspaceModalProps) {

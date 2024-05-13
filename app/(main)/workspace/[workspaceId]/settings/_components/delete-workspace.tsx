@@ -1,15 +1,48 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import {
-    Card,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle
+  Card,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
 } from "@/components/ui/card";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { deleteWorkspace } from "@/actions/workspace";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
+const DeleteWorkspace = ({
+  status,
+  workspaceId,
+}: {
+  status: any;
+  workspaceId: string;
+}) => {
+  console.log(workspaceId);
+  console.log(status);
+  const router = useRouter();
+  const handleWorkspaceDelete = async ({}: {}) => {
+    const response = await deleteWorkspace(workspaceId);
+    console.log(response);
+    if (response === "Done") {
+      toast.success("Workspace Deleted");
+      router.push("/workspace");
+    } else {
+      toast.error(response);
+    }
+  };
 
-const DeleteWorkspace = ({status}: {status: any}) => {
   return (
     <>
       <Card className="border-red-300">
@@ -22,9 +55,30 @@ const DeleteWorkspace = ({status}: {status: any}) => {
         </CardHeader>
         <CardFooter className="bg-[#2A1214] rounded-xl">
           {typeof status === "object" && status.memberRole === "owner" ? (
-            <Button variant="destructive" className="w-[320px] mt-5">
-              Delete
-            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger>
+                <Button variant="destructive" className="w-[320px] mt-5">
+                  Delete
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete
+                    your account and remove your data from our servers.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() => handleWorkspaceDelete(workspaceId)}
+                  >
+                    Continue
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           ) : (
             <Button
               disabled={true}

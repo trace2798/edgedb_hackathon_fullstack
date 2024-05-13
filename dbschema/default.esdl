@@ -13,6 +13,7 @@ module default {
         multi sessions := .<user[is Session];
         multi workspaces := .<user[is Workspace];
         multi workspacesMember := .<user[is WorkspaceMember];
+        multi activity := .<user[is Activity];
        createdAt: datetime {
       rewrite insert using (datetime_of_statement());
     }
@@ -42,7 +43,7 @@ module default {
     constraint exclusive on ((.provider, .providerAccountId));
   }
  
-     type Session {
+ type Session {
     required sessionToken: str {
       constraint exclusive;
     }
@@ -58,7 +59,7 @@ module default {
     }
   }
  
-     type VerificationToken {
+type VerificationToken {
     required identifier: str;
     required token: str {
       constraint exclusive;
@@ -87,7 +88,8 @@ type Workspace {
      required link user -> User {
             on target delete delete source;
        };
-         multi workspaceMember := .<workspace[is WorkspaceMember];
+      multi workspaceMember := .<workspace[is WorkspaceMember];
+      multi activity := .<workspace[is Activity];
 }
 
 type WorkspaceMember {
@@ -112,6 +114,23 @@ type WorkspaceMember {
       on target delete delete source;
     }
 
+}
+
+type Activity {
+  message: str;
+  required userId := .user.id;
+  required workspaceId := .workspace.id;
+  created: datetime {
+      rewrite insert using (datetime_of_statement());
+    }
+    updated: datetime {
+      rewrite insert using (datetime_of_statement());
+      rewrite update using (datetime_of_statement());
+    }
+    required link workspace -> Workspace {
+      on target delete delete source;
+    }
+      required user: User
 }
 
 }

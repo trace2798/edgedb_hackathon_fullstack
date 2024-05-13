@@ -22,7 +22,7 @@ const SettingsPage = async ({
     <>
       <div className="space-y-5">
         <TransferOwnership status={status} />
-        <DeleteWorkspace status={status} />
+        <DeleteWorkspace status={status} workspaceId={params.workspaceId} />
       </div>
     </>
   );

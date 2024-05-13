@@ -8,6 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
+
 const TransferOwnership = ({ status }: { status: any }) => {
   return (
     <>
@@ -24,13 +25,33 @@ const TransferOwnership = ({ status }: { status: any }) => {
           {typeof status === "object" && status.memberRole === "owner" ? (
             <Button className="w-[320px] mt-5">Transfer Ownership</Button>
           ) : (
-            <Button
-              disabled={true}
-              variant="destructive"
-              className="w-[320px] mt-5"
-            >
-              Delete
+            <Button disabled={true} className="w-[320px] mt-5">
+              Transfer Ownership
             </Button>
+            // <AlertDialog>
+            //   <AlertDialogTrigger>
+            //  <Button
+            //   disabled={true}
+            //   variant="destructive"
+            //   className="w-[320px] mt-5"
+            // >
+            //   Delete
+            // </Button>
+            //   </AlertDialogTrigger>
+            //   <AlertDialogContent>
+            //     <AlertDialogHeader>
+            //       <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            //       <AlertDialogDescription>
+            //         This action cannot be undone. This will permanently delete
+            //         your account and remove your data from our servers.
+            //       </AlertDialogDescription>
+            //     </AlertDialogHeader>
+            //     <AlertDialogFooter>
+            //       <AlertDialogCancel>Cancel</AlertDialogCancel>
+            //       <AlertDialogAction>Continue</AlertDialogAction>
+            //     </AlertDialogFooter>
+            //   </AlertDialogContent>
+            // </AlertDialog>
           )}
         </CardFooter>
       </Card>
