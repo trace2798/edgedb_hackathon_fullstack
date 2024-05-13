@@ -21,11 +21,11 @@ import { useRouter } from "next/navigation";
 const formSchema = z.object({
   email: z.string().min(2).max(50),
 });
-interface MemberCheckFormProps {
+interface AddMemberFormProps {
   workspaceId: string;
 }
 
-const MemberCheckForm: FC<MemberCheckFormProps> = ({ workspaceId }) => {
+const AddMemberForm: FC<AddMemberFormProps> = ({ workspaceId }) => {
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -34,8 +34,6 @@ const MemberCheckForm: FC<MemberCheckFormProps> = ({ workspaceId }) => {
     },
   });
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
     const response = await addMemberByEmail(values.email, workspaceId);
     console.log(response);
     if (response === "Done") {
@@ -57,20 +55,20 @@ const MemberCheckForm: FC<MemberCheckFormProps> = ({ workspaceId }) => {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="shadcn" {...field} />
+                  <Input placeholder="Email address" {...field} />
                 </FormControl>
                 <FormDescription>
-                  This is your public display name.
+                  User needs to have an account in productivus.
                 </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Button type="submit">Submit</Button>
+          <Button type="submit">Add Member</Button>
         </form>
       </Form>
     </>
   );
 };
 
-export default MemberCheckForm;
+export default AddMemberForm;

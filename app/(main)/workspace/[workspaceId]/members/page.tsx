@@ -1,5 +1,5 @@
 import e, { createClient } from "@/dbschema/edgeql-js";
-import MemberCheckForm from "./_components/member-check-form";
+import AddMemberForm from "./_components/add-member-form";
 import { DataTable } from "./_components/members/data-table";
 import { Member, columns } from "./_components/members/column";
 import { Heading } from "@/components/heading";
@@ -22,13 +22,12 @@ const MembersPage = async ({ params }: { params: { workspaceId: string } }) => {
       ),
     }))
     .run(client);
-  console.log(members);
   return (
     <>
       <div>
-        <MemberCheckForm workspaceId={params.workspaceId} />
+        <Heading title={`Add Member`} description="Add member by email" />
+        <AddMemberForm workspaceId={params.workspaceId} />
         <Heading title={`Members (${members.length})`} />
-        <Separator />
         <DataTable columns={columns} data={members as Member[]} />
       </div>
     </>
