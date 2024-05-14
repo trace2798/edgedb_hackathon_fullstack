@@ -9,6 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import UserAccountNav from "@/components/user-account-nav";
 import e, { createClient } from "@/dbschema/edgeql-js";
 import { SelectWorkspaceBox } from "./select-workspace-box";
+import BoardListByWorkspace from "./boardlist-by-workspace";
 
 type Props = {
   className?: string;
@@ -54,27 +55,18 @@ export const Sidebar = async ({ className, workspaceId }: Props) => {
             currentWorkspaceId={workspaceId}
           />
         </div>
-
-        <h1 className="text-xs">Workspace Name:{workspaceId} </h1>
         <Separator />
-        {session && (
-          <>
-            <SidebarItem label="Activity" href="/activity" />
-            <SidebarItem label="Members" href="/members" />
-            <SidebarItem label="Settings" href="/settings" />
-          </>
-        )}
-        {!session && (
-          <>
-            <div className="flex flex-col items-center gap-y-8">
-              <div className="flex flex-col items-center gap-y-3 max-w-[330px] w-full">
-                <Link href="/sign-in">
-                  <Button variant="outline">Get Started</Button>
-                </Link>
-              </div>
-            </div>
-          </>
-        )}
+        <BoardListByWorkspace currentWorkspaceId={workspaceId} />
+        <Separator />
+      </div>
+      <div className="divide-x-4">
+        <>
+          <Separator />
+          <SidebarItem label="Activity" href="/activity" />
+          <SidebarItem label="Members" href="/members" />
+          <SidebarItem label="Settings" href="/settings" />
+          <Separator />
+        </>
       </div>
       <div className="p-4">
         <UserAccountNav

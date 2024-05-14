@@ -24,11 +24,12 @@ export const SidebarItem = ({ label, href }: Props) => {
 
   return (
     <Button
-      variant={active ? "secondary" : "special"}
-      className="justify-start h-[52px] hover:bg-secondary font-ranadeRegular"
+      variant={active ? "special" : "sidebar"}
+      size={"sidebar"}
+      className="justify-start hover:bg-secondary"
       asChild
     >
-      <Link href={`${newPath}/${href}`}>{label}</Link>
+      <Link href={`${newPath}${href}`}>{label}</Link>
     </Button>
   );
 };
