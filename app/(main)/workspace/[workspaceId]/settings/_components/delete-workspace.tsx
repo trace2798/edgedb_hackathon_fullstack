@@ -58,7 +58,7 @@ const DeleteWorkspace = ({
           {typeof status === "object" && status.memberRole === "owner" ? (
             <AlertDialog>
               <AlertDialogTrigger>
-                <Button variant="destructive" className="w-[320px] mt-5">
+                <Button variant="destructive" className="w-[180px] mt-5">
                   Delete
                 </Button>
               </AlertDialogTrigger>

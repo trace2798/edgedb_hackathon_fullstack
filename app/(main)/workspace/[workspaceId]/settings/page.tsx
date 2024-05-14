@@ -22,7 +22,7 @@ const SettingsPage = async ({
   console.log(status);
   return (
     <>
-      <div className="space-y-5">
+      <div className="space-y-5 py-24 px-[10vw]  lg:pl-[256px]">
         <TransferOwnership
           status={status as StatusType}
           workspaceId={params.workspaceId}

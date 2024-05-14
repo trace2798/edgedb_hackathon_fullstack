@@ -21,7 +21,7 @@ const WorkspaceLayout = async ({ children, params }: Props) => {
         <MobileHeader  workspaceId={params.workspaceId} />
       </div>
       <Sidebar className="hidden lg:flex" workspaceId={params.workspaceId} />
-      <div className="py-24 px-[10vw] lg:ml-[256px]">{children}</div>
+      <div className="lg:pl-[256px]">{children}</div>
     </>
   );
 };

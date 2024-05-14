@@ -55,7 +55,7 @@ const AddMemberForm: FC<AddMemberFormProps> = ({ workspaceId }) => {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="Email address" {...field} />
+                  <Input className="max-w-2xl" placeholder="Email address" {...field} />
                 </FormControl>
                 <FormDescription>
                   User needs to have an account in productivus.

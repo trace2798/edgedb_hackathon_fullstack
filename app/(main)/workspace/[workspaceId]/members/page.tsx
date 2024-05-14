@@ -27,7 +27,7 @@ const MembersPage = async ({ params }: { params: { workspaceId: string } }) => {
     .run(client);
   return (
     <>
-      <div>
+      <div className="py-24 px-[10vw] lg:pl-[256px]">
         <Heading title={`Add Member`} description="Add member by email" />
         <AddMemberForm workspaceId={params.workspaceId} />
         <Heading title={`Members (${members.length})`} />

@@ -25,11 +25,13 @@ const ActivityPage = async ({
   console.log(activity);
   return (
     <>
-      <Heading
-        title={`Activities`}
-        description="Activities related to this workspace"
-      />
-      <DataTable columns={columns} data={activity as Activity[]} />
+      <div className="py-24 px-[10vw] lg:pl-[256px]">
+        <Heading
+          title={`Activities`}
+          description="Activities related to this workspace"
+        />
+        <DataTable columns={columns} data={activity as Activity[]} />
+      </div>
     </>
   );
 };

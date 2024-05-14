@@ -1,10 +1,7 @@
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-
 import { SidebarItem } from "./sidebar-item";
-
 import { auth } from "@/auth";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import UserAccountNav from "@/components/user-account-nav";
 import e, { createClient } from "@/dbschema/edgeql-js";
@@ -55,6 +52,7 @@ export const Sidebar = async ({ className, workspaceId }: Props) => {
             currentWorkspaceId={workspaceId}
           />
         </div>
+        <SidebarItem label="Issues" href="/issues" />
         <Separator />
         <BoardListByWorkspace currentWorkspaceId={workspaceId} />
         <Separator />
