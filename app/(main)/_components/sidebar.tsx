@@ -58,13 +58,11 @@ export const Sidebar = async ({ className, workspaceId }: Props) => {
         <Separator />
       </div>
       <div className="divide-x-4">
-        <>
-          <Separator />
-          <SidebarItem label="Activity" href="/activity" />
-          <SidebarItem label="Members" href="/members" />
-          <SidebarItem label="Settings" href="/settings" />
-          <Separator />
-        </>
+        <Separator />
+        <SidebarItem label="Activity" href="/activity" />
+        <SidebarItem label="Members" href="/members" />
+        <SidebarItem label="Settings" href="/settings" />
+        <Separator />
       </div>
       <div className="p-4">
         <UserAccountNav

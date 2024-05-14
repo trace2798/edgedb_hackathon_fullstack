@@ -1,24 +1,25 @@
 module default {
   scalar type MemberRole extending enum<admin, member, owner>;
-    type User {
-         name: str;
-        required email -> str {
-            constraint exclusive;
-        }
-         emailVerified: datetime {
+
+  type User {
+    name: str;
+    required email: str {
+      constraint exclusive;
+    }
+    emailVerified: datetime {
       rewrite insert using (datetime_of_statement());
     }
-         image: str;
-        multi accounts := .<user[is Account];
-        multi sessions := .<user[is Session];
-        multi workspaces := .<user[is Workspace];
-        multi workspacesMember := .<user[is WorkspaceMember];
-        multi activity := .<user[is Activity];
-       createdAt: datetime {
+    image: str;
+    multi accounts := .<user[is Account];
+    multi sessions := .<user[is Session];
+    multi workspaces := .<user[is Workspace];
+    multi workspacesMember := .<user[is WorkspaceMember];
+    multi activity := .<user[is Activity];
+    createdAt: datetime {
       rewrite insert using (datetime_of_statement());
     }
-    }
- 
+  }
+
   type Account {
     required userId := .user.id;
     required type: str;
@@ -42,15 +43,15 @@ module default {
 
     constraint exclusive on ((.provider, .providerAccountId));
   }
- 
- type Session {
+
+  type Session {
     required sessionToken: str {
       constraint exclusive;
     }
     required userId := .user.id;
     required expires: datetime {
       rewrite insert using (datetime_of_statement());
-    };
+    }
     required user: User {
       on target delete delete source;
     }
@@ -58,8 +59,8 @@ module default {
       rewrite insert using (datetime_of_statement());
     }
   }
- 
-type VerificationToken {
+
+  type VerificationToken {
     required identifier: str;
     required token: str {
       constraint exclusive;
@@ -74,10 +75,10 @@ type VerificationToken {
     constraint exclusive on ((.identifier, .token));
   }
 
-type Workspace {
-   required name: str;
-   description: str;
-   required userId := .user.id;
+  type Workspace {
+    required name: str;
+    description: str;
+    required userId := .user.id;
     created: datetime {
       rewrite insert using (datetime_of_statement());
     }
@@ -85,19 +86,20 @@ type Workspace {
       rewrite insert using (datetime_of_statement());
       rewrite update using (datetime_of_statement());
     }
-     required link user -> User {
-            on target delete delete source;
-       };
-      multi workspaceMember := .<workspace[is WorkspaceMember];
-      multi activity := .<workspace[is Activity];
-}
+    required link user -> User {
+      on target delete delete source;
+    }
+    multi workspaceMember := .<workspace[is WorkspaceMember];
+    multi activity := .<workspace[is Activity];
+    multi issue := .<workspace[is Issue];
+  }
 
-type WorkspaceMember {
-  name: str;
-  required email: str;
-  required userId := .user.id;
-  required workspaceId := .workspace.id;
-  created: datetime {
+  type WorkspaceMember {
+    name: str;
+    required email: str;
+    required userId := .user.id;
+    required workspaceId := .workspace.id;
+    created: datetime {
       rewrite insert using (datetime_of_statement());
     }
     updated: datetime {
@@ -106,21 +108,21 @@ type WorkspaceMember {
     }
     memberRole: MemberRole {
       default := "member";
-    };
-     required link user -> User {
+    }
+    required link user -> User {
       on target delete delete source;
     }
     required link workspace -> Workspace {
       on target delete delete source;
     }
+    multi issue := .<workspaceMember[is Issue];
+  }
 
-}
-
-type Activity {
-  message: str;
-  required userId := .user.id;
-  required workspaceId := .workspace.id;
-  created: datetime {
+  type Activity {
+    message: str;
+    required userId := .user.id;
+    required workspaceId := .workspace.id;
+    created: datetime {
       rewrite insert using (datetime_of_statement());
     }
     updated: datetime {
@@ -130,10 +132,33 @@ type Activity {
     required link workspace -> Workspace {
       on target delete delete source;
     }
-      required user: User
+    required user: User;
+  }
+
+  type Issue {
+    required title: str;
+    required status: str {
+      default := "todo";
+    }
+    description: str;
+    required priority: str {
+      default := "no priority";
+    }
+    required workspaceId := .workspace.id;
+    created: datetime {
+      rewrite insert using (datetime_of_statement());
+    }
+    updated: datetime {
+      rewrite insert using (datetime_of_statement());
+      rewrite update using (datetime_of_statement());
+    }
+    required link workspace -> Workspace {
+      on target delete delete source;
+    }
+    required workspaceMember: WorkspaceMember;
+  }
 }
 
-}
  
 # Disable the application of access policies within access policies
 # themselves. This behavior will become the default in EdgeDB 3.0.

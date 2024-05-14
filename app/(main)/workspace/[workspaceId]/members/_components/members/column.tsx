@@ -20,6 +20,7 @@ export type Member = {
   memberRole: "member" | "owner" | "admin";
   email: string;
   created: Date;
+  userId?: string;
 };
 
 export const columns: ColumnDef<Member>[] = [
