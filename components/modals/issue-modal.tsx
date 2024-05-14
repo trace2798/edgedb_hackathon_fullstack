@@ -38,6 +38,7 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Member } from "@/app/(main)/workspace/[workspaceId]/members/_components/members/column";
 import { User } from "next-auth";
+import { createIssue } from "@/actions/issues";
 
 interface IssueModalProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -61,7 +62,7 @@ export function IssueModal({ className, ...props }: IssueModalProps) {
   ) as string;
   console.log(membershipIdOfCurrentUser);
   useEffect(() => {
-    form.setValue('assignee', membershipIdOfCurrentUser);
+    form.setValue("assignee", membershipIdOfCurrentUser);
   }, [membershipIdOfCurrentUser]);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -83,15 +84,18 @@ export function IssueModal({ className, ...props }: IssueModalProps) {
     try {
       setLoading(true);
       console.log(values);
-      // await createWorkspace(
-      //   user?.id as string,
-      //   values.title,
-      //   values.description
-      // );
-      // form.reset();
-      // toast.success("Workspace Created.");
-      // router.refresh();
-      // issues.onClose();
+      await createIssue(
+        user?.id as string,
+        values.title,
+        values.description,
+        values.status,
+        values.priority,
+        values.assignee
+      );
+      form.reset();
+      toast.success("Issue Created.");
+      router.refresh();
+      issues.onClose();
     } catch (error) {
       console.error(error);
       toast.error("Error creating Workspace.");

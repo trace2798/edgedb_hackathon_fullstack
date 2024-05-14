@@ -1,16 +1,22 @@
-'use server'
+"use server";
 import e, { createClient } from "@/dbschema/edgeql-js";
 
 const client = createClient();
 
 export async function createIssue(
   userId: string,
-  name: string,
-  description: string
+  title: string,
+  description: string,
+  status: string,
+  priority: string,
+  assigneeId: string
 ) {
   try {
     console.log(userId, "USER ID");
-    console.log(name, "CONTENT");
+    console.log(title, "CONTENT");
+    console.log(status, "STATUS");
+    console.log(priority, "PRIORITY");
+    console.log(assigneeId, "ASSIGNEE ID");
     const user = await e
       .select(e.User, (user) => ({
         id: true,
@@ -22,44 +28,53 @@ export async function createIssue(
     if (!user) {
       return "User Not Found";
     }
+    const verifyMember = await e
+      .select(e.WorkspaceMember, (member) => ({
+        id: true,
+        email: true,
+        name: true,
+        workspaceId: true,
+        filter_single: e.op(member.id, "=", e.uuid(assigneeId)),
+      }))
+      .run(client);
+    console.log(verifyMember);
     const newIssue = await e
-      .insert(e.Workspace, {
-        name: name as string,
+      .insert(e.Issue, {
+        title: title as string,
         description: description as string,
-        user: e.select(e.User, (user) => ({
-          filter_single: e.op(user.id, "=", e.uuid(userId)),
+        status: status as string,
+        priority: priority as string,
+        workspace: e.select(e.Workspace, (workspace) => ({
+          filter_single: e.op(
+            workspace.id,
+            "=",
+            e.uuid(verifyMember?.workspaceId as string)
+          ),
+        })),
+        workspaceMember: e.select(e.WorkspaceMember, (member) => ({
+          filter_single: e.op(member.id, "=", e.uuid(assigneeId as string)),
         })),
       })
       .run(client);
     console.log(newIssue);
 
-    // const addWorkspaceCreatorAsOwner = await e
-    //   .insert(e.WorkspaceMember, {
-    //     name: user.name as string,
-    //     email: user.email as string,
-    //     memberRole: "owner",
-    //     workspace: e.select(e.Workspace, (workspace) => ({
-    //       filter_single: e.op(workspace.id, "=", e.uuid(newWorkspace.id)),
-    //     })),
-    //     user: e.select(e.User, (user) => ({
-    //       filter_single: e.op(user.id, "=", e.uuid(userId)),
-    //     })),
-    //   })
-    //   .run(client);
-    // console.log(addWorkspaceCreatorAsOwner);
-
-    // const activity = await e
-    //   .insert(e.Activity, {
-    //     message: `Created Issue: ${name} by ${user.name}` as string,
-    //     workspace: e.select(e.Workspace, (workspace) => ({
-    //       filter_single: e.op(workspace.id, "=", e.uuid(newWorkspace.id)),
-    //     })),
-    //     user: e.select(e.User, (user) => ({
-    //       filter_single: e.op(user.id, "=", e.uuid(userId)),
-    //     })),
-    //   })
-    //   .run(client);
-    // console.log(activity);
+    const activity = await e
+      .insert(e.Activity, {
+        message:
+          `${user.name} created an issue: "${title}". Issue assigned to : ${verifyMember?.name} ` as string,
+        workspace: e.select(e.Workspace, (workspace) => ({
+          filter_single: e.op(
+            workspace.id,
+            "=",
+            e.uuid(verifyMember?.workspaceId as string)
+          ),
+        })),
+        user: e.select(e.User, (user) => ({
+          filter_single: e.op(user.id, "=", e.uuid(userId)),
+        })),
+      })
+      .run(client);
+    console.log(activity);
 
     return "Issue Created";
   } catch (error) {

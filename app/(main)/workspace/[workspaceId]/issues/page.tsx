@@ -11,7 +11,7 @@ const Page = async ({ params }: { params: { workspaceId: string } }) => {
       name: true,
       email: true,
       memberRole: true,
-      userId:true,
+      userId: true,
       created: true,
       filter: e.op(
         workspaceMember.workspaceId,
@@ -27,7 +27,7 @@ const Page = async ({ params }: { params: { workspaceId: string } }) => {
   console.log(members);
   return (
     <>
-      <div className="pt-[50px] lg:mt-0 dark:bg-zinc-900 min-h-screen flex-flex-col rounded-xl">
+      <div className="pt-[50px] lg:pt-0 lg:mt-0 dark:bg-zinc-900 min-h-screen flex-flex-col rounded-xl">
         <div className="px-5 py-2 border border-secondary text-sm flex justify-between">
           <h1>All Issues</h1>
           <AddIssueButton members={members as Member[]} />
