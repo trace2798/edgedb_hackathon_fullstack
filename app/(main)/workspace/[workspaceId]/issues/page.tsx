@@ -2,8 +2,38 @@ import { FC } from "react";
 import AddIssueButton from "./_components/add-issue-button";
 import e, { createClient } from "@/dbschema/edgeql-js";
 import { Member } from "../members/_components/members/column";
-
+import { format } from "date-fns";
+import { statuses, priorities } from "@/lib/constant";
+import {
+  ArrowUpCircle,
+  CheckCircle2,
+  Circle,
+  HelpCircle,
+  LucideIcon,
+  XCircle,
+  MoreHorizontal,
+  ShieldAlert,
+  Signal,
+  SignalLow,
+  SignalMedium,
+} from "lucide-react";
 const client = createClient();
+
+const statusIcons = {
+  backlog: HelpCircle,
+  todo: Circle,
+  "in progress": ArrowUpCircle,
+  done: CheckCircle2,
+  canceled: XCircle,
+};
+
+const priorityIcons = {
+  low: SignalLow,
+  medium: SignalMedium,
+  high: Signal,
+  urgent: ShieldAlert,
+  "no priority": MoreHorizontal,
+};
 const Page = async ({ params }: { params: { workspaceId: string } }) => {
   const members = await e
     .select(e.WorkspaceMember, (workspaceMember) => ({
@@ -25,16 +55,61 @@ const Page = async ({ params }: { params: { workspaceId: string } }) => {
     }))
     .run(client);
   console.log(members);
+  const issues = await e
+    .select(e.Issue, (issue) => ({
+      id: true,
+      title: true,
+      status: true,
+      priority: true,
+      created: true,
+      updated: true,
+      filter: e.op(issue.workspaceId, "=", e.uuid(params.workspaceId)),
+      order_by: {
+        expression: issue.created,
+        direction: e.DESC,
+      },
+    }))
+    .run(client);
+  console.log(issues);
   return (
     <>
-      <div className="pt-[50px] lg:pt-0 lg:mt-0 dark:bg-zinc-900 min-h-screen flex-flex-col rounded-xl">
+      <div className="pt-[50px] lg:pt-0 lg:mt-0 dark:bg-[#0f1011] min-h-screen flex-flex-col rounded-2xl">
         <div className="px-5 py-2 border border-secondary text-sm flex justify-between">
           <h1>All Issues</h1>
           <AddIssueButton members={members as Member[]} />
+        </div>
+        <div>
+          {issues.map((issue) => {
+            const StatusIcon =
+              statusIcons[issue.status as keyof typeof statusIcons];
+            const PriorityIcon =
+              priorityIcons[issue.priority as keyof typeof priorityIcons];
+            return (
+              <div className="px-5 py-2 border border-secondary text-sm flex justify-between dark:bg-zinc-950 items-center">
+                <div className="flex  justify-between items-center">
+                  <div className="flex space-x-3 w-18 mr-5">
+                    {" "}
+                    {PriorityIcon && <PriorityIcon className="w-4 h-4 mr-1" />}
+                    {StatusIcon && <StatusIcon className="w-4 h-4 mr-1" />}
+                  </div>
+                  <div className="line-clamp-1">{issue.title}</div>
+                </div>
+
+                <div className="lg:flex space-x-3 hidden">
+                  <h1>{format(new Date(issue.created as Date), "MMM dd")}</h1>
+                  <h1>{format(new Date(issue.updated as Date), "MMM dd")}</h1>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </>
   );
 };
-
 export default Page;
+// Map statuses to an object
+
+// import { HelpCircle, Circle, ArrowUpCircle, CheckCircle2, XCircle } from 'lucide-react'; // import the icons
+
+//                   {statusIcon && <statusIcon />} {/* render the icon */}
