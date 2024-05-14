@@ -18,9 +18,9 @@ const WorkspaceLayout = async ({ children, params }: Props) => {
   return (
     <>
       <div className="lg:hidden">
-        <MobileHeader />
+        <MobileHeader  workspaceId={params.workspaceId} />
       </div>
-      <Sidebar className="hidden lg:flex" />
+      <Sidebar className="hidden lg:flex" workspaceId={params.workspaceId} />
       <div className="py-24 px-[10vw] lg:ml-[256px]">{children}</div>
     </>
   );

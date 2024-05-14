@@ -7,14 +7,31 @@ import { auth } from "@/auth";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import UserAccountNav from "@/components/user-account-nav";
+import e, { createClient } from "@/dbschema/edgeql-js";
+import { SelectWorkspaceBox } from "./select-workspace-box";
 
 type Props = {
   className?: string;
+  workspaceId: string;
 };
 
-export const Sidebar = async ({ className }: Props) => {
-  const session = await auth();
+const client = createClient();
 
+export const Sidebar = async ({ className, workspaceId }: Props) => {
+  const session = await auth();
+  console.log(workspaceId);
+  const workspaces = await e
+    .select(e.Workspace, (workspace) => ({
+      id: true,
+      name: true,
+      filter: e.op(workspace.user.id, "=", e.uuid(session?.user?.id as string)),
+      order_by: {
+        expression: workspace.created,
+        direction: e.DESC,
+      },
+    }))
+    .run(client);
+  console.log(workspaces);
   return (
     <div
       className={cn(
@@ -30,11 +47,15 @@ export const Sidebar = async ({ className }: Props) => {
         </div>
       </Link>
       <div className="flex flex-col gap-y-2 flex-1">
-        {/* <SidebarItem label="Search Web" href="/web-search" />
-        <SidebarItem label="Wikipedia" href="/wiki" />
-        <SidebarItem label="Document" href="/documents" /> */}
         <Separator />
-        <h1 className="text-xs">Workspace Name: </h1>
+        <div className="hidden lg:flex">
+          <SelectWorkspaceBox
+            workspace={workspaces}
+            currentWorkspaceId={workspaceId}
+          />
+        </div>
+
+        <h1 className="text-xs">Workspace Name:{workspaceId} </h1>
         <Separator />
         {session && (
           <>

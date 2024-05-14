@@ -1,10 +1,35 @@
 import Link from "next/link";
 import { MobileSidebar } from "./mobile-sidebar";
+import { SelectWorkspaceBox } from "./select-workspace-box";
+import e, { createClient } from "@/dbschema/edgeql-js";
+import { auth } from "@/auth";
 
-export const MobileHeader = () => {
+const client = createClient();
+export const MobileHeader = async ({
+  workspaceId,
+}: {
+  workspaceId: string;
+}) => {
+  const session = await auth();
+  const workspaces = await e
+    .select(e.Workspace, (workspace) => ({
+      id: true,
+      name: true,
+      filter: e.op(workspace.user.id, "=", e.uuid(session?.user?.id as string)),
+      order_by: {
+        expression: workspace.created,
+        direction: e.DESC,
+      },
+    }))
+    .run(client);
+  console.log(workspaceId);
   return (
     <nav className="lg:hidden px-6 h-[50px] flex items-center justify-between bg-secondary border-b fixed top-0 w-full z-50">
-      <MobileSidebar />
+      <MobileSidebar workspaceId={workspaceId} />
+      <SelectWorkspaceBox
+        workspace={workspaces}
+        currentWorkspaceId={workspaceId}
+      />
       <Link href={"/"}>
         <h1 className="text-xl font-semibold tracking-wide bg-gradient-to-r bg-clip-text text-transparent from-indigo-500  to-indigo-300 hover:cursor-pointer">
           Productivus
