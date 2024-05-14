@@ -1,22 +1,25 @@
-import { FC } from "react";
-import AddIssueButton from "./_components/add-issue-button";
 import e, { createClient } from "@/dbschema/edgeql-js";
-import { Member } from "../members/_components/members/column";
 import { format } from "date-fns";
-import { statuses, priorities } from "@/lib/constant";
 import {
   ArrowUpCircle,
   CheckCircle2,
   Circle,
   HelpCircle,
-  LucideIcon,
-  XCircle,
   MoreHorizontal,
   ShieldAlert,
   Signal,
   SignalLow,
   SignalMedium,
+  XCircle,
 } from "lucide-react";
+import { Member } from "../members/_components/members/column";
+import AddIssueButton from "./_components/add-issue-button";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
+
 const client = createClient();
 
 const statusIcons = {
@@ -96,8 +99,35 @@ const Page = async ({ params }: { params: { workspaceId: string } }) => {
                 </div>
 
                 <div className="lg:flex space-x-3 hidden">
-                  <h1>{format(new Date(issue.created as Date), "MMM dd")}</h1>
-                  <h1>{format(new Date(issue.updated as Date), "MMM dd")}</h1>
+                  <HoverCard>
+                    <HoverCardTrigger asChild>
+                      <h1>
+                        {format(new Date(issue.created as Date), "MMM dd")}
+                      </h1>
+                    </HoverCardTrigger>
+                    <HoverCardContent className="w-fit dark:bg-zinc-800 text-sm py-1 px-2">
+                      Created on:{" "}
+                      {format(
+                        new Date(issue.created as Date),
+                        "MMM dd, yyyy HH:mm"
+                      )}
+                    </HoverCardContent>
+                  </HoverCard>
+
+                  <HoverCard>
+                    <HoverCardTrigger asChild>
+                      <h1>
+                        {format(new Date(issue.updated as Date), "MMM dd")}
+                      </h1>
+                    </HoverCardTrigger>
+                    <HoverCardContent className="w-fit text-sm py-1 px-2">
+                      Updated on:{" "}
+                      {format(
+                        new Date(issue.updated as Date),
+                        "MMM dd, yyyy HH:mm"
+                      )}
+                    </HoverCardContent>
+                  </HoverCard>
                 </div>
               </div>
             );
