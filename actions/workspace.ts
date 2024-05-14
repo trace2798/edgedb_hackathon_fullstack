@@ -1,6 +1,5 @@
 "use server";
 import e, { createClient } from "@/dbschema/edgeql-js";
-import { uuid } from "edgedb/dist/codecs/ifaces";
 
 const client = createClient();
 
