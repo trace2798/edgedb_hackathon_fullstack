@@ -1,7 +1,5 @@
 "use client";
-
 import * as React from "react";
-
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,42 +16,41 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { ListTodo } from "lucide-react";
+import { UserSearch } from "lucide-react";
 
-type Status = {
+type Assignee = {
   value: string;
   label: string;
 };
 
-const statuses: Status[] = [
+const assignees: Assignee[] = [
   {
-    value: "backlog",
-    label: "Backlog",
+    value: "no assignee",
+    label: "No Assignee",
   },
   {
-    value: "todo",
-    label: "Todo",
+    value: "urgent",
+    label: "Urgent",
   },
   {
-    value: "in progress",
-    label: "In Progress",
+    value: "high",
+    label: "High",
   },
   {
-    value: "done",
-    label: "Done",
+    value: "medium",
+    label: "Medium",
   },
   {
-    value: "canceled",
-    label: "Canceled",
+    value: "low",
+    label: "Low",
   },
 ];
 
-export function StatusSelector() {
+export function AssigneeSelector() {
   const [open, setOpen] = React.useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
-  const [selectedStatus, setSelectedStatus] = React.useState<Status | null>(
-    null
-  );
+  const [selectedAssignee, setSelectedAssignee] =
+    React.useState<Assignee | null>(null);
 
   if (isDesktop) {
     return (
@@ -62,19 +59,23 @@ export function StatusSelector() {
           <Button
             variant={"sidebar"}
             size={"sidebar"}
-            className="bg-secondary min-w-[80px] items-center"
+            className="bg-secondary min-w-[80px]"
           >
-            {selectedStatus ? (
-              <>{selectedStatus.label}</>
+            {selectedAssignee ? (
+              <>{selectedAssignee.label}</>
             ) : (
               <>
-                <ListTodo className="w-4 h-4 mr-1" /> Set Status
+                {" "}
+                <UserSearch className="w-4 h-4 mr-1" /> Set Assignee
               </>
             )}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-[200px] p-0" align="start">
-          <StatusList setOpen={setOpen} setSelectedStatus={setSelectedStatus} />
+          <AssigneeList
+            setOpen={setOpen}
+            setSelectedAssignee={setSelectedAssignee}
+          />
         </PopoverContent>
       </Popover>
     );
@@ -88,50 +89,53 @@ export function StatusSelector() {
           size={"sidebar"}
           className="bg-secondary min-w-[80px]"
         >
-          {selectedStatus ? (
-            <>{selectedStatus.label}</>
+          {selectedAssignee ? (
+            <>{selectedAssignee.label}</>
           ) : (
             <>
               {" "}
-              <ListTodo className="w-4 h-4 mr-1" /> Set Status
+              <UserSearch className="w-4 h-4 mr-1" /> Set Assignee
             </>
           )}
         </Button>
       </DrawerTrigger>
       <DrawerContent>
         <div className="mt-4 border-t">
-          <StatusList setOpen={setOpen} setSelectedStatus={setSelectedStatus} />
+          <AssigneeList
+            setOpen={setOpen}
+            setSelectedAssignee={setSelectedAssignee}
+          />
         </div>
       </DrawerContent>
     </Drawer>
   );
 }
 
-function StatusList({
+function AssigneeList({
   setOpen,
-  setSelectedStatus,
+  setSelectedAssignee,
 }: {
   setOpen: (open: boolean) => void;
-  setSelectedStatus: (status: Status | null) => void;
+  setSelectedAssignee: (assignee: Assignee | null) => void;
 }) {
   return (
     <Command>
-      <CommandInput placeholder="Filter status..." />
+      <CommandInput placeholder="Filter Assignee..." />
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
         <CommandGroup>
-          {statuses.map((status) => (
+          {assignees.map((assignee) => (
             <CommandItem
-              key={status.value}
-              value={status.value}
+              key={assignee.value}
+              value={assignee.value}
               onSelect={(value) => {
-                setSelectedStatus(
-                  statuses.find((priority) => priority.value === value) || null
+                setSelectedAssignee(
+                  assignees.find((assignee) => assignee.value === value) || null
                 );
                 setOpen(false);
               }}
             >
-              {status.label}
+              {assignee.label}
             </CommandItem>
           ))}
         </CommandGroup>

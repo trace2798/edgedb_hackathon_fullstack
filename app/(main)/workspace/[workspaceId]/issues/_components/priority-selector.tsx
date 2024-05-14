@@ -1,7 +1,5 @@
 "use client";
-
 import * as React from "react";
-
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,6 +16,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Triangle } from "lucide-react";
 
 type Priority = {
   value: string;
@@ -65,7 +64,9 @@ export function PrioritySelector() {
             {selectedPriority ? (
               <>{selectedPriority.label}</>
             ) : (
-              <>+ Set Priority</>
+              <>
+                <Triangle className="w-4 h-4 mr-1" /> Set Priority
+              </>
             )}
           </Button>
         </PopoverTrigger>
@@ -82,11 +83,17 @@ export function PrioritySelector() {
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Button className="p-0">
+        <Button
+          variant={"sidebar"}
+          size={"sidebar"}
+          className="bg-secondary min-w-[80px]"
+        >
           {selectedPriority ? (
             <>{selectedPriority.label}</>
           ) : (
-            <>+ Set Priority</>
+            <>
+              <Triangle className="w-4 h-4 mr-1" /> Set Priority
+            </>
           )}
         </Button>
       </DrawerTrigger>

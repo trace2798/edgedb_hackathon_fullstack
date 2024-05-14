@@ -6,7 +6,7 @@ interface PageProps {}
 const Page: FC<PageProps> = ({}) => {
   return (
     <>
-      <div className="mt-12 lg:mt-0 dark:bg-zinc-900 min-h-screen flex-flex-col rounded-xl">
+      <div className="pt-[50px] lg:mt-0 dark:bg-zinc-900 min-h-screen flex-flex-col rounded-xl">
         <div className="px-5 py-2 border border-secondary text-sm flex justify-between">
           <h1>All Issues</h1>
           <AddIssueButton />

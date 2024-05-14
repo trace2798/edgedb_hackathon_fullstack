@@ -23,6 +23,7 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { PrioritySelector } from "@/app/(main)/workspace/[workspaceId]/issues/_components/priority-selector";
+import { AssigneeSelector } from "@/app/(main)/workspace/[workspaceId]/issues/_components/assignee";
 
 interface IssueModalProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -112,7 +113,7 @@ export function IssueModal({ className, ...props }: IssueModalProps) {
                         <FormControl>
                           <Textarea
                             id="description"
-                            placeholder="Add description...(optional)"
+                            placeholder="Add description...(optional) [max 250 words]"
                             autoCorrect="off"
                             disabled={isLoading}
                             className="border-none focus-none"
@@ -124,9 +125,10 @@ export function IssueModal({ className, ...props }: IssueModalProps) {
                     )}
                   />
                 </div>
-                <div className="flex space-x-2">
+                <div className="flex space-x-2 mt-3">
                   <StatusSelector />
                   <PrioritySelector />
+                  <AssigneeSelector />
                 </div>
                 <Button disabled={isLoading} className="mt-5">
                   {isLoading && <Spinner />}
