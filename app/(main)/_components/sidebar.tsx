@@ -7,6 +7,7 @@ import UserAccountNav from "@/components/user-account-nav";
 import e, { createClient } from "@/dbschema/edgeql-js";
 import { SelectWorkspaceBox } from "./select-workspace-box";
 import BoardListByWorkspace from "./boardlist-by-workspace";
+import { SubSidebarItem } from "./sub-sidebar-item";
 
 type Props = {
   className?: string;
@@ -53,6 +54,10 @@ export const Sidebar = async ({ className, workspaceId }: Props) => {
           />
         </div>
         <SidebarItem label="Issues" href="/issues" />
+        <div className="ml-5 flex flex-col border-l-2 ">
+          <SubSidebarItem label="Active" href="/active" />
+          <SubSidebarItem label="Backlog" href="/backlog" />
+        </div>
         <Separator />
         <BoardListByWorkspace currentWorkspaceId={workspaceId} />
         <Separator />
