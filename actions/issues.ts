@@ -82,3 +82,70 @@ export async function createIssue(
     return "Error Creating Issue";
   }
 }
+
+export async function updatePriority(
+  id: string,
+  priority: string,
+  userId: string
+) {
+  try {
+    console.log(id);
+    console.log(priority, "PRIORITY");
+    console.log(userId, "USER ID");
+
+    const user = await e
+      .select(e.User, (user) => ({
+        id: true,
+        email: true,
+        name: true,
+        filter_single: e.op(user.id, "=", e.uuid(userId)),
+      }))
+      .run(client);
+    if (!user) {
+      return "User Not Found";
+    }
+    const issue = await e
+      .select(e.Issue, (issue) => ({
+        id: true,
+        title: true,
+        priority: true,
+        workspaceId: true,
+        filter_single: e.op(issue.id, "=", e.uuid(id)),
+      }))
+      .run(client);
+    console.log(issue);
+
+    const updateIssuePriority = await e
+      .update(e.Issue, () => ({
+        filter_single: { id: e.uuid(id) },
+        set: {
+          priority: priority as string,
+        },
+      }))
+      .run(client);
+    console.log(updateIssuePriority);
+
+    const activity = await e
+      .insert(e.Activity, {
+        message:
+          `${user.name} updated priority for issue: "${issue?.title}". Priority changed to: ${priority} from ${issue?.priority}  ` as string,
+        workspace: e.select(e.Workspace, (workspace) => ({
+          filter_single: e.op(
+            workspace.id,
+            "=",
+            e.uuid(issue?.workspaceId as string)
+          ),
+        })),
+        user: e.select(e.User, (user) => ({
+          filter_single: e.op(user.id, "=", e.uuid(userId)),
+        })),
+      })
+      .run(client);
+    console.log(activity);
+
+    return "Issue Priority Updated";
+  } catch (error) {
+    console.error(error);
+    return "Error Updating Priority";
+  }
+}

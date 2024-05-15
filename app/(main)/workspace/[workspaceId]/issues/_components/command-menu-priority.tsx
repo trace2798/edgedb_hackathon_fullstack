@@ -1,21 +1,29 @@
 "use client";
+import { updatePriority } from "@/actions/issues";
 import { Button } from "@/components/ui/button";
 import {
   Command,
-  CommandDialog,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
-  CommandList,
 } from "@/components/ui/command";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Priority, priorities } from "@/lib/constant";
+import { useCurrentUser } from "@/hooks/use-current-user";
+import { priorities } from "@/lib/constant";
 import { cn } from "@/lib/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Check,
   MoreHorizontal,
@@ -24,16 +32,10 @@ import {
   SignalLow,
   SignalMedium,
 } from "lucide-react";
-import { FC, useEffect, useRef, useState } from "react";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { FC, useEffect, useRef } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 const formSchema = z.object({
@@ -56,6 +58,8 @@ const CommandMenuPriority: FC<CommandMenuPriorityProps> = ({
   id,
   currentPriority,
 }) => {
+  const user = useCurrentUser();
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -63,19 +67,42 @@ const CommandMenuPriority: FC<CommandMenuPriorityProps> = ({
       priority: currentPriority,
     },
   });
-  const [open, setOpen] = useState(false);
+  type FormData = z.infer<typeof formSchema>;
   const isHoveredRef = useRef(false);
   const currentPriorityInfo = priorities.find(
     (priority) => priority.value === currentPriority
   );
   const PriorityIcon =
     priorityIcons[currentPriority as keyof typeof priorityIcons];
+  const { watch } = form;
+  const watchedPriority = watch("priority");
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-  }
+  useEffect(() => {
+    if (watchedPriority !== currentPriority) {
+      onSubmit({ id, priority: watchedPriority });
+    }
+  }, [watchedPriority]);
+
+  const onSubmit: SubmitHandler<FormData> = async (values) => {
+    try {
+      console.log(values);
+      const response = await updatePriority(
+        values.id,
+        values.priority,
+        user?.id as string
+      );
+      if (response === "Issue Priority Updated") {
+        toast.success("Priority updated");
+        router.refresh();
+      } else {
+        toast.error(response);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Error updating priority.");
+    }
+  };
+  const isLoading = form.formState.isSubmitting;
 
   return (
     <>
@@ -126,6 +153,7 @@ const CommandMenuPriority: FC<CommandMenuPriorityProps> = ({
                         <CommandGroup>
                           {priorities.map((priority) => (
                             <CommandItem
+                              disabled={isLoading}
                               value={priority.label}
                               key={priority.value}
                               className="flex justify-between"

@@ -1,3 +1,8 @@
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import e, { createClient } from "@/dbschema/edgeql-js";
 import { format } from "date-fns";
 import {
@@ -14,13 +19,7 @@ import {
 } from "lucide-react";
 import { Member } from "../members/_components/members/column";
 import AddIssueButton from "./_components/add-issue-button";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
 import CommandMenuPriority from "./_components/command-menu-priority";
-import { CommandDialogDemo } from "./_components/command-demo";
 
 const client = createClient();
 
@@ -140,14 +139,8 @@ const Page = async ({ params }: { params: { workspaceId: string } }) => {
             );
           })}
         </div>
-        {/* <CommandDialogDemo/> */}
       </div>
     </>
   );
 };
 export default Page;
-// Map statuses to an object
-
-// import { HelpCircle, Circle, ArrowUpCircle, CheckCircle2, XCircle } from 'lucide-react'; // import the icons
-
-//                   {statusIcon && <statusIcon />} {/* render the icon */}
