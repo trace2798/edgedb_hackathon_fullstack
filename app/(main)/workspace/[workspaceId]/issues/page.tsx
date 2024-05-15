@@ -20,24 +20,10 @@ import {
 import { Member } from "../members/_components/members/column";
 import AddIssueButton from "./_components/add-issue-button";
 import CommandMenuPriority from "./_components/command-menu-priority";
+import CommandMenuStatus from "./_components/command-menu-issue";
 
 const client = createClient();
 
-const statusIcons = {
-  backlog: HelpCircle,
-  todo: Circle,
-  "in progress": ArrowUpCircle,
-  done: CheckCircle2,
-  canceled: XCircle,
-};
-
-const priorityIcons = {
-  low: SignalLow,
-  medium: SignalMedium,
-  high: Signal,
-  urgent: ShieldAlert,
-  "no priority": MoreHorizontal,
-};
 const Page = async ({ params }: { params: { workspaceId: string } }) => {
   const members = await e
     .select(e.WorkspaceMember, (workspaceMember) => ({
@@ -83,23 +69,23 @@ const Page = async ({ params }: { params: { workspaceId: string } }) => {
           <AddIssueButton members={members as Member[]} />
         </div>
         <div>
-          {issues.map((issue) => {
-            const StatusIcon =
-              statusIcons[issue.status as keyof typeof statusIcons];
-            const PriorityIcon =
-              priorityIcons[issue.priority as keyof typeof priorityIcons];
+          {issues.map((issue, index) => {
             return (
-              <div className="px-5 py-2 border border-secondary text-sm flex justify-between dark:bg-zinc-950 items-center dark:hover:bg-zinc-800 hover:cursor-pointer">
+              <div
+                key={index}
+                className="px-5 py-2 border border-secondary text-sm flex justify-between dark:bg-zinc-950 items-center dark:hover:bg-zinc-800 hover:cursor-pointer"
+              >
                 <div className="flex  justify-between items-center">
                   <div className="flex space-x-3 w-18 mr-5">
                     {" "}
-                    {/* {PriorityIcon && <PriorityIcon className="w-4 h-4 mr-1" />} */}
                     <CommandMenuPriority
                       id={issue.id as string}
                       currentPriority={issue.priority as string}
                     />
-                    {StatusIcon && <StatusIcon className="w-4 h-4 mr-1" />}
-                    
+                    <CommandMenuStatus
+                      id={issue.id as string}
+                      currentStatus={issue.status as string}
+                    />
                   </div>
                   <div className="line-clamp-1">{issue.title}</div>
                 </div>
