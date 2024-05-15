@@ -32,7 +32,7 @@ export function SelectWorkspaceBox({
   };
   return (
     <Select onValueChange={(value) => handleWorkspaceSelection(value)}>
-      <SelectTrigger className="max-w-[160px]">
+      <SelectTrigger className="max-w-[160px] max-lg:bg-inherit dark:border-zinc-700 border-neutral-400">
         <SelectValue placeholder={currentWorkspaceName} />
       </SelectTrigger>
       <SelectContent>

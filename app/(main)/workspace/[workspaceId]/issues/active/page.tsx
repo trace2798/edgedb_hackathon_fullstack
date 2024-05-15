@@ -9,6 +9,7 @@ import AddIssueButton from "../_components/add-issue-button";
 import { Member } from "../../members/_components/members/column";
 import CommandMenuPriority from "../_components/command-menu-priority";
 import CommandMenuStatus from "../_components/command-menu-issue";
+import DeleteIssueButton from "../_components/delete-issue-button";
 
 const client = createClient();
 
@@ -70,6 +71,7 @@ const ActivePage = async ({ params }: { params: { workspaceId: string } }) => {
                 <div className="flex  justify-between items-center">
                   <div className="flex space-x-3 w-18 mr-5">
                     {" "}
+                    <DeleteIssueButton issueId={issue.id as string} />
                     <CommandMenuPriority
                       id={issue.id as string}
                       currentPriority={issue.priority as string}

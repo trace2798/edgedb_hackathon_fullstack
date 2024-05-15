@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Trash } from "lucide-react";
 import { FC } from "react";
 import {
@@ -39,14 +39,14 @@ const DeleteIssueButton: FC<DeleteIssueButtonProps> = ({ issueId }) => {
     <>
       <div className="">
         <AlertDialog>
-          <AlertDialogTrigger>
-            <Button
-              variant="sidebar"
-              size={"sidebar"}
-              className="text-muted-foreground hover:text-red-400 "
-            >
-              <Trash className="w-4 h-4 text-muted-foreground hover:text-red-400 opacity-0 hover:opacity-100 flex" />
-            </Button>
+          <AlertDialogTrigger
+            className={buttonVariants({
+              variant: "sidebar",
+              size: "sidebar",
+              className: "text-muted-foreground hover:text-red-400 ",
+            })}
+          >
+            <Trash className="w-4 h-4 text-muted-foreground hover:text-red-400 opacity-0 hover:opacity-100 flex" />
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
