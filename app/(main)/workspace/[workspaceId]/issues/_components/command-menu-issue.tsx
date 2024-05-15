@@ -68,7 +68,6 @@ const CommandMenuStatus: FC<CommandMenuStatusProps> = ({
     },
   });
   type FormData = z.infer<typeof formSchema>;
-  const isHoveredRef = useRef(false);
   const StatusIcon = statusIcons[currentStatus as keyof typeof statusIcons];
   const { watch } = form;
   const watchedStatus = watch("status");
@@ -103,12 +102,6 @@ const CommandMenuStatus: FC<CommandMenuStatusProps> = ({
   return (
     <>
       <div
-        onMouseEnter={() => {
-          isHoveredRef.current = true;
-        }}
-        onMouseLeave={() => {
-          isHoveredRef.current = false;
-        }}
         className="flex items-center space-x-4"
       >
         <Form {...form}>

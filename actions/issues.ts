@@ -212,3 +212,50 @@ export async function updateStatus(id: string, status: string, userId: string) {
     return "Error Updating Status";
   }
 }
+
+export async function deleteIssue(id: string, currentUserId: string) {
+  try {
+    const issue = await e
+      .select(e.Issue, (issue) => ({
+        id: true,
+        title: true,
+        status: true,
+        workspaceId: true,
+        workspaceMember: true,
+        filter_single: e.op(issue.id, "=", e.uuid(id)),
+      }))
+      .run(client);
+    console.log(issue);
+    if (!issue) {
+      return "Issue Not Found";
+    }
+
+    const currentUserMemberInfo = await e
+      .select(e.WorkspaceMember, (wspm) => ({
+        id: true,
+        memberRole: true,
+        filter_single: e.op(
+          e.op(wspm.workspaceId, "=", e.uuid(issue?.workspaceId as string)),
+          "and",
+          e.op(wspm.userId, "=", e.uuid(currentUserId))
+        ),
+      }))
+      .run(client);
+    console.log(currentUserMemberInfo);
+    if (
+      issue.workspaceMember.id === currentUserMemberInfo?.id ||
+      currentUserMemberInfo?.memberRole === "owner"
+    ) {
+      await e
+        .delete(e.Issue, (issue) => ({
+          filter_single: e.op(issue.id, "=", e.uuid(id)),
+        }))
+        .run(client);
+      return "Done";
+    } else {
+      return "You do not have permission to delete this issue.";
+    }
+  } catch (error) {
+    return "Error Deleting Issue";
+  }
+}

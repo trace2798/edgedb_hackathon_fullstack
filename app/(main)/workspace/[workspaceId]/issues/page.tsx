@@ -9,8 +9,31 @@ import { Member } from "../members/_components/members/column";
 import AddIssueButton from "./_components/add-issue-button";
 import CommandMenuStatus from "./_components/command-menu-issue";
 import CommandMenuPriority from "./_components/command-menu-priority";
+import DeleteIssueButton from "./_components/delete-issue-button";
+import { Suspense, cache } from "react";
 
 const client = createClient();
+
+export const revalidate = 3600;
+
+const getIssues = cache(async (workspaceId: string) => {
+  const issues = await e
+    .select(e.Issue, (issue) => ({
+      id: true,
+      title: true,
+      status: true,
+      priority: true,
+      created: true,
+      updated: true,
+      filter: e.op(issue.workspaceId, "=", e.uuid(workspaceId)),
+      order_by: {
+        expression: issue.created,
+        direction: e.DESC,
+      },
+    }))
+    .run(client);
+  return issues;
+});
 
 const Page = async ({ params }: { params: { workspaceId: string } }) => {
   const members = await e
@@ -33,22 +56,9 @@ const Page = async ({ params }: { params: { workspaceId: string } }) => {
     }))
     .run(client);
   console.log(members);
-  const issues = await e
-    .select(e.Issue, (issue) => ({
-      id: true,
-      title: true,
-      status: true,
-      priority: true,
-      created: true,
-      updated: true,
-      filter: e.op(issue.workspaceId, "=", e.uuid(params.workspaceId)),
-      order_by: {
-        expression: issue.created,
-        direction: e.DESC,
-      },
-    }))
-    .run(client);
+  const issues = await getIssues(params.workspaceId);
   console.log(issues);
+  const skeleton = 'w-full h-6 animate-pulse rounded bg-neutral-200 dark:bg-neutral-700';
   return (
     <>
       <div className="pt-[50px] lg:pt-0 lg:mt-0 dark:bg-[#0f1011] min-h-screen flex-flex-col rounded-2xl">
@@ -56,63 +66,77 @@ const Page = async ({ params }: { params: { workspaceId: string } }) => {
           <h1>All Issues</h1>
           <AddIssueButton members={members as Member[]} />
         </div>
-        <div>
-          {issues.map((issue, index) => {
-            return (
-              <div
-                key={index}
-                className="px-5 py-2 border border-secondary text-sm flex justify-between dark:bg-zinc-950 items-center dark:hover:bg-zinc-800 hover:cursor-pointer"
-              >
-                <div className="flex  justify-between items-center">
-                  <div className="flex space-x-3 w-18 mr-5">
-                    {" "}
-                    <CommandMenuPriority
-                      id={issue.id as string}
-                      currentPriority={issue.priority as string}
-                    />
-                    <CommandMenuStatus
-                      id={issue.id as string}
-                      currentStatus={issue.status as string}
-                    />
+        <Suspense
+          fallback={
+            <div className="flex h-[188px] w-[200px] flex-col gap-2">
+              <div className={skeleton} />
+              <div className={skeleton} />
+              <div className={skeleton} />
+              <div className={skeleton} />
+              <div className={skeleton} />
+              <div className={skeleton} />
+            </div>
+          }
+        >
+          <div>
+            {issues.map((issue, index) => {
+              return (
+                <div
+                  key={index}
+                  className="px-5 py-2 border border-secondary text-sm flex justify-between dark:bg-zinc-950 items-center dark:hover:bg-zinc-800 hover:cursor-pointer"
+                >
+                  <div className="flex  justify-between items-center">
+                    <div className="flex space-x-1 mr-5">
+                      {" "}
+                      <DeleteIssueButton issueId={issue.id as string} />
+                      <CommandMenuPriority
+                        id={issue.id as string}
+                        currentPriority={issue.priority as string}
+                      />
+                      <CommandMenuStatus
+                        id={issue.id as string}
+                        currentStatus={issue.status as string}
+                      />
+                    </div>
+                    <div className="line-clamp-1">{issue.title}</div>
                   </div>
-                  <div className="line-clamp-1">{issue.title}</div>
-                </div>
 
-                <div className="lg:flex space-x-3 hidden">
-                  <HoverCard>
-                    <HoverCardTrigger asChild>
-                      <h1>
-                        {format(new Date(issue.created as Date), "MMM dd")}
-                      </h1>
-                    </HoverCardTrigger>
-                    <HoverCardContent className="w-fit dark:bg-zinc-800 text-sm py-1 px-2">
-                      Created on:{" "}
-                      {format(
-                        new Date(issue.created as Date),
-                        "MMM dd, yyyy HH:mm"
-                      )}
-                    </HoverCardContent>
-                  </HoverCard>
+                  <div className="lg:flex space-x-3 hidden">
+                    <HoverCard>
+                      <HoverCardTrigger asChild>
+                        <h1>
+                          {format(new Date(issue.created as Date), "MMM dd")}
+                        </h1>
+                      </HoverCardTrigger>
+                      <HoverCardContent className="w-fit dark:bg-zinc-800 text-sm py-1 px-2">
+                        Created on:{" "}
+                        {format(
+                          new Date(issue.created as Date),
+                          "MMM dd, yyyy HH:mm"
+                        )}
+                      </HoverCardContent>
+                    </HoverCard>
 
-                  <HoverCard>
-                    <HoverCardTrigger asChild>
-                      <h1>
-                        {format(new Date(issue.updated as Date), "MMM dd")}
-                      </h1>
-                    </HoverCardTrigger>
-                    <HoverCardContent className="w-fit text-sm py-1 px-2">
-                      Updated on:{" "}
-                      {format(
-                        new Date(issue.updated as Date),
-                        "MMM dd, yyyy HH:mm"
-                      )}
-                    </HoverCardContent>
-                  </HoverCard>
+                    <HoverCard>
+                      <HoverCardTrigger asChild>
+                        <h1>
+                          {format(new Date(issue.updated as Date), "MMM dd")}
+                        </h1>
+                      </HoverCardTrigger>
+                      <HoverCardContent className="w-fit text-sm py-1 px-2">
+                        Updated on:{" "}
+                        {format(
+                          new Date(issue.updated as Date),
+                          "MMM dd, yyyy HH:mm"
+                        )}
+                      </HoverCardContent>
+                    </HoverCard>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        </Suspense>
       </div>
     </>
   );
