@@ -48,7 +48,7 @@ interface CommandMenuStatusProps {
 }
 
 const statusIcons = {
-  backlog: HelpCircle,
+  future: HelpCircle,
   todo: Circle,
   "in progress": ArrowUpCircle,
   done: CheckCircle2,

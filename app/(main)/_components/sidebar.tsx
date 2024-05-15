@@ -55,10 +55,10 @@ export const Sidebar = async ({ className, workspaceId }: Props) => {
         </div>
         <SidebarItem label="Issues" href="/issues" />
         <div className="ml-5 flex flex-col border-l-2 ">
-          <SubSidebarItem label="Active" href="/active" />
-          <SubSidebarItem label="Backlog" href="/backlog" />
+          <SidebarItem label="Active" href="/issues/active" />
+          <SidebarItem label="Future" href="/issues/future" />
         </div>
-        <Separator />
+        {/* <Separator /> */}
         <BoardListByWorkspace currentWorkspaceId={workspaceId} />
         <Separator />
       </div>

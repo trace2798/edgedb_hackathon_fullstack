@@ -20,8 +20,8 @@ export type Status = {
 
 export const statuses: Status[] = [
   {
-    value: "backlog",
-    label: "Backlog",
+    value: "future",
+    label: "Future",
     icon: HelpCircle,
   },
   {

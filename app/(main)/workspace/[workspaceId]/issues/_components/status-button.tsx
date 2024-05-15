@@ -27,8 +27,8 @@ type Status = {
 
 const statuses: Status[] = [
   {
-    value: "backlog",
-    label: "Backlog",
+    value: "future",
+    label: "Future",
   },
   {
     value: "todo",

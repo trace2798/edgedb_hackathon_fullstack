@@ -5,22 +5,10 @@ import {
 } from "@/components/ui/hover-card";
 import e, { createClient } from "@/dbschema/edgeql-js";
 import { format } from "date-fns";
-import {
-  ArrowUpCircle,
-  CheckCircle2,
-  Circle,
-  HelpCircle,
-  MoreHorizontal,
-  ShieldAlert,
-  Signal,
-  SignalLow,
-  SignalMedium,
-  XCircle,
-} from "lucide-react";
 import { Member } from "../members/_components/members/column";
 import AddIssueButton from "./_components/add-issue-button";
-import CommandMenuPriority from "./_components/command-menu-priority";
 import CommandMenuStatus from "./_components/command-menu-issue";
+import CommandMenuPriority from "./_components/command-menu-priority";
 
 const client = createClient();
 

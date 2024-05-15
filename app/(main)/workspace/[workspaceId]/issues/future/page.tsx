@@ -44,7 +44,7 @@ const ActivePage = async ({ params }: { params: { workspaceId: string } }) => {
       filter: e.op(
         e.op(issue.workspaceId, "=", e.uuid(params.workspaceId)),
         "and",
-        e.op(issue.status, "!=", e.str("future"))
+        e.op(issue.status, "=", e.str("future"))
       ),
       order_by: {
         expression: issue.created,
@@ -57,7 +57,7 @@ const ActivePage = async ({ params }: { params: { workspaceId: string } }) => {
     <>
       <div className="pt-[50px] lg:pt-0 lg:mt-0 dark:bg-[#0f1011] min-h-screen flex-flex-col rounded-2xl">
         <div className="px-5 py-2 border border-secondary text-sm flex justify-between">
-          <h1>Active Issues</h1>
+          <h1>Future Issues</h1>
           <AddIssueButton members={members as Member[]} />
         </div>
         <div>
