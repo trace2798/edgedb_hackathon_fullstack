@@ -19,6 +19,8 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import CommandMenuPriority from "./_components/command-menu-priority";
+import { CommandDialogDemo } from "./_components/command-demo";
 
 const client = createClient();
 
@@ -88,12 +90,17 @@ const Page = async ({ params }: { params: { workspaceId: string } }) => {
             const PriorityIcon =
               priorityIcons[issue.priority as keyof typeof priorityIcons];
             return (
-              <div className="px-5 py-2 border border-secondary text-sm flex justify-between dark:bg-zinc-950 items-center">
+              <div className="px-5 py-2 border border-secondary text-sm flex justify-between dark:bg-zinc-950 items-center dark:hover:bg-zinc-800 hover:cursor-pointer">
                 <div className="flex  justify-between items-center">
                   <div className="flex space-x-3 w-18 mr-5">
                     {" "}
-                    {PriorityIcon && <PriorityIcon className="w-4 h-4 mr-1" />}
+                    {/* {PriorityIcon && <PriorityIcon className="w-4 h-4 mr-1" />} */}
+                    <CommandMenuPriority
+                      id={issue.id as string}
+                      currentPriority={issue.priority as string}
+                    />
                     {StatusIcon && <StatusIcon className="w-4 h-4 mr-1" />}
+                    
                   </div>
                   <div className="line-clamp-1">{issue.title}</div>
                 </div>
@@ -133,6 +140,7 @@ const Page = async ({ params }: { params: { workspaceId: string } }) => {
             );
           })}
         </div>
+        {/* <CommandDialogDemo/> */}
       </div>
     </>
   );

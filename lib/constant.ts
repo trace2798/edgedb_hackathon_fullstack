@@ -50,30 +50,36 @@ export type Priority = {
   value: string;
   label: string;
   icon: LucideIcon;
+  id?: number;
 };
 
 export const priorities: Priority[] = [
   {
+    id: 1,
     value: "no priority",
     label: "No Priority",
     icon: MoreHorizontal,
   },
   {
+    id: 2,
     value: "urgent",
     label: "Urgent",
     icon: ShieldAlert,
   },
   {
+    id: 3,
     value: "high",
     label: "High",
     icon: Signal,
   },
   {
+    id: 4,
     value: "medium",
     label: "Medium",
     icon: SignalMedium,
   },
   {
+    id: 5,
     value: "low",
     label: "Low",
     icon: SignalLow,
