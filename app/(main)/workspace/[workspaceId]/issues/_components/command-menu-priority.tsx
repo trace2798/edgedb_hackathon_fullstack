@@ -1,6 +1,6 @@
 "use client";
 import { updatePriority } from "@/actions/issues";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -37,6 +37,11 @@ import { FC, useEffect, useRef } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 
 const formSchema = z.object({
   id: z.string(),
@@ -68,10 +73,7 @@ const CommandMenuPriority: FC<CommandMenuPriorityProps> = ({
     },
   });
   type FormData = z.infer<typeof formSchema>;
-  const isHoveredRef = useRef(false);
-  const currentPriorityInfo = priorities.find(
-    (priority) => priority.value === currentPriority
-  );
+
   const PriorityIcon =
     priorityIcons[currentPriority as keyof typeof priorityIcons];
   const { watch } = form;
@@ -106,15 +108,7 @@ const CommandMenuPriority: FC<CommandMenuPriorityProps> = ({
 
   return (
     <>
-      <div
-        onMouseEnter={() => {
-          isHoveredRef.current = true;
-        }}
-        onMouseLeave={() => {
-          isHoveredRef.current = false;
-        }}
-        className="flex items-center space-x-4"
-      >
+      <div className="flex items-center space-x-4">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
@@ -134,15 +128,28 @@ const CommandMenuPriority: FC<CommandMenuPriorityProps> = ({
                           role="combobox"
                           className="text-muted-foreground hover:text-indigo-400"
                         >
-                          {field.value ? (
-                            <>
-                              {PriorityIcon && (
-                                <PriorityIcon className="w-4 h-4 mr-1" />
+                          <HoverCard>
+                            <HoverCardTrigger>
+                              {field.value ? (
+                                <>
+                                  {PriorityIcon && (
+                                    <PriorityIcon className="w-4 h-4 mr-1" />
+                                  )}
+                                </>
+                              ) : (
+                                "Priority"
                               )}
-                            </>
-                          ) : (
-                            "Priority"
-                          )}
+                            </HoverCardTrigger>
+                            <HoverCardContent
+                              className={buttonVariants({
+                                variant: "sidebar",
+                                size: "sidebar",
+                                className: "w-fit px-2 dark:bg-black",
+                              })}
+                            >
+                              Click to change priority
+                            </HoverCardContent>
+                          </HoverCard>
                         </Button>
                       </FormControl>
                     </PopoverTrigger>

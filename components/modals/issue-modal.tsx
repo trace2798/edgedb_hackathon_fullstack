@@ -1,6 +1,7 @@
 "use client";
 
-import { AssigneeSelector } from "@/app/(main)/workspace/[workspaceId]/issues/_components/assignee";
+import { createIssue } from "@/actions/issues";
+import { Member } from "@/app/(main)/workspace/[workspaceId]/members/_components/members/column";
 import {
   Command,
   CommandEmpty,
@@ -26,7 +27,9 @@ import { useIssues } from "@/hooks/use-issues";
 import { priorities, statuses } from "@/lib/constant";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Check, ListTodo } from "lucide-react";
+import { format } from "date-fns";
+import { Check } from "lucide-react";
+import { User } from "next-auth";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -34,11 +37,9 @@ import { toast } from "sonner";
 import * as z from "zod";
 import { Spinner } from "../spinner";
 import { Button } from "../ui/button";
+import { Calendar } from "../ui/calendar";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
-import { Member } from "@/app/(main)/workspace/[workspaceId]/members/_components/members/column";
-import { User } from "next-auth";
-import { createIssue } from "@/actions/issues";
 
 interface IssueModalProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -48,6 +49,7 @@ const formSchema = z.object({
   status: z.string().min(2).max(50),
   priority: z.string().min(2).max(50),
   assignee: z.string().min(2).max(50),
+  duedate: z.date().optional(),
 });
 
 export function IssueModal({ className, ...props }: IssueModalProps) {
@@ -74,6 +76,7 @@ export function IssueModal({ className, ...props }: IssueModalProps) {
       status: "todo",
       priority: "no priority",
       assignee: membershipIdOfCurrentUser as string,
+      duedate: undefined,
     },
   });
   type FormData = z.infer<typeof formSchema>;
@@ -90,7 +93,8 @@ export function IssueModal({ className, ...props }: IssueModalProps) {
         values.description,
         values.status,
         values.priority,
-        values.assignee
+        values.assignee,
+        values.duedate
       );
       form.reset();
       toast.success("Issue Created.");
@@ -159,7 +163,7 @@ export function IssueModal({ className, ...props }: IssueModalProps) {
                     )}
                   />
                 </div>
-                <div className="flex space-x-2 mt-3">
+                <div className="flex flex-wrap gap-x-3 gap-y-3 mt-3">
                   <FormField
                     control={form.control}
                     name="status"
@@ -349,6 +353,42 @@ export function IssueModal({ className, ...props }: IssueModalProps) {
                                 ))}
                               </CommandGroup>
                             </Command>
+                          </PopoverContent>
+                        </Popover>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="duedate"
+                    render={({ field }) => (
+                      <FormItem>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                variant="sidebar"
+                                size={"sidebar"}
+                                role="combobox"
+                                className="bg-secondary min-w-[80px]"
+                              >
+                                {field.value ? (
+                                  format(field.value, "PPP")
+                                ) : (
+                                  <span>Due Date</span>
+                                )}
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-fit p-0">
+                            <Calendar
+                              mode="single"
+                              selected={field.value}
+                              onSelect={field.onChange}
+                              disabled={(date) => date < new Date()}
+                              initialFocus
+                            />
                           </PopoverContent>
                         </Popover>
                         <FormMessage />

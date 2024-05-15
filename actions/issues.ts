@@ -9,7 +9,8 @@ export async function createIssue(
   description: string,
   status: string,
   priority: string,
-  assigneeId: string
+  assigneeId: string,
+  duedate: Date | undefined
 ) {
   try {
     console.log(userId, "USER ID");
@@ -17,6 +18,7 @@ export async function createIssue(
     console.log(status, "STATUS");
     console.log(priority, "PRIORITY");
     console.log(assigneeId, "ASSIGNEE ID");
+    console.log(duedate, "DUE DATE");
     const user = await e
       .select(e.User, (user) => ({
         id: true,
@@ -44,6 +46,7 @@ export async function createIssue(
         description: description as string,
         status: status as string,
         priority: priority as string,
+        duedate: duedate as Date | undefined,
         workspace: e.select(e.Workspace, (workspace) => ({
           filter_single: e.op(
             workspace.id,

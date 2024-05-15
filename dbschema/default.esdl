@@ -141,6 +141,7 @@ module default {
       default := "todo";
     }
     description: str;
+    duedate: datetime;
     required priority: str {
       default := "no priority";
     }

@@ -1,6 +1,6 @@
 "use client";
 import { updateStatus } from "@/actions/issues";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -15,6 +15,11 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import {
   Popover,
   PopoverContent,
@@ -101,9 +106,7 @@ const CommandMenuStatus: FC<CommandMenuStatusProps> = ({
 
   return (
     <>
-      <div
-        className="flex items-center space-x-4"
-      >
+      <div className="flex items-center space-x-4">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
@@ -123,15 +126,28 @@ const CommandMenuStatus: FC<CommandMenuStatusProps> = ({
                           role="combobox"
                           className="text-muted-foreground hover:text-indigo-400"
                         >
-                          {field.value ? (
-                            <>
-                              {StatusIcon && (
-                                <StatusIcon className="w-4 h-4 mr-1" />
+                          <HoverCard>
+                            <HoverCardTrigger>
+                              {field.value ? (
+                                <>
+                                  {StatusIcon && (
+                                    <StatusIcon className="w-4 h-4 mr-1" />
+                                  )}
+                                </>
+                              ) : (
+                                "Status"
                               )}
-                            </>
-                          ) : (
-                            "Status"
-                          )}
+                            </HoverCardTrigger>
+                            <HoverCardContent
+                              className={buttonVariants({
+                                variant: "sidebar",
+                                size: "sidebar",
+                                className: "w-fit px-2 dark:bg-black",
+                              })}
+                            >
+                              Click to change status
+                            </HoverCardContent>
+                          </HoverCard>
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
