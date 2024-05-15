@@ -14,26 +14,10 @@ import { Suspense, cache } from "react";
 
 const client = createClient();
 
-export const revalidate = 3600;
+// const getIssues = cache(async (workspaceId: string) => {
 
-const getIssues = cache(async (workspaceId: string) => {
-  const issues = await e
-    .select(e.Issue, (issue) => ({
-      id: true,
-      title: true,
-      status: true,
-      priority: true,
-      created: true,
-      updated: true,
-      filter: e.op(issue.workspaceId, "=", e.uuid(workspaceId)),
-      order_by: {
-        expression: issue.created,
-        direction: e.DESC,
-      },
-    }))
-    .run(client);
-  return issues;
-});
+//   return issues;
+// });
 
 const Page = async ({ params }: { params: { workspaceId: string } }) => {
   const members = await e
@@ -56,9 +40,24 @@ const Page = async ({ params }: { params: { workspaceId: string } }) => {
     }))
     .run(client);
   console.log(members);
-  const issues = await getIssues(params.workspaceId);
+  const issues = await e
+    .select(e.Issue, (issue) => ({
+      id: true,
+      title: true,
+      status: true,
+      priority: true,
+      created: true,
+      updated: true,
+      filter: e.op(issue.workspaceId, "=", e.uuid(params.workspaceId)),
+      order_by: {
+        expression: issue.created,
+        direction: e.DESC,
+      },
+    }))
+    .run(client);
   console.log(issues);
-  const skeleton = 'w-full h-6 animate-pulse rounded bg-neutral-200 dark:bg-neutral-700';
+  const skeleton =
+    "w-full h-6 animate-pulse rounded bg-neutral-200 dark:bg-neutral-700";
   return (
     <>
       <div className="pt-[50px] lg:pt-0 lg:mt-0 dark:bg-[#0f1011] min-h-screen flex-flex-col rounded-2xl">

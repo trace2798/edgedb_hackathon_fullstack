@@ -20,17 +20,41 @@ export const Sidebar = async ({ className, workspaceId }: Props) => {
   const session = await auth();
   console.log(workspaceId);
   const workspaces = await e
-    .select(e.Workspace, (workspace) => ({
-      id: true,
-      name: true,
-      filter: e.op(workspace.user.id, "=", e.uuid(session?.user?.id as string)),
-      order_by: {
-        expression: workspace.created,
-        direction: e.DESC,
-      },
-    }))
-    .run(client);
-  console.log(workspaces);
+  .select(e.Workspace, (workspace) => ({
+    id: true,
+    name: true,
+    filter: e.op(workspace.user.id, "=", e.uuid(session?.user?.id as string)),
+    order_by: {
+      expression: workspace.created,
+      direction: e.DESC,
+    },
+  }))
+  .run(client);
+console.log(workspaceId);
+console.log(workspaces);
+
+const workspaceMember = await e
+  .select(e.Workspace, (workspace) => ({
+    id: true,
+    name: true,
+    filter: e.op(
+      e.op(
+        workspace.workspaceMember.user.id,
+        "=",
+        e.uuid(session?.user?.id as string)
+      ),
+      "and",
+      e.op(workspace.user.id, "!=", e.uuid(session?.user?.id as string))
+    ),
+    order_by: {
+      expression: workspace.created,
+      direction: e.DESC,
+    },
+  }))
+  .run(client);
+console.log(workspaceMember);
+const combinedWorkspaces = [...workspaces, ...workspaceMember];
+console.log(combinedWorkspaces);
   return (
     <div
       className={cn(
@@ -49,7 +73,7 @@ export const Sidebar = async ({ className, workspaceId }: Props) => {
         <Separator />
         <div className="hidden lg:flex">
           <SelectWorkspaceBox
-            workspace={workspaces}
+            workspace={combinedWorkspaces}
             currentWorkspaceId={workspaceId}
           />
         </div>

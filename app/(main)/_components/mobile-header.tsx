@@ -23,11 +23,35 @@ export const MobileHeader = async ({
     }))
     .run(client);
   console.log(workspaceId);
+  console.log(workspaces);
+
+  const workspaceMember = await e
+    .select(e.Workspace, (workspace) => ({
+      id: true,
+      name: true,
+      filter: e.op(
+        e.op(
+          workspace.workspaceMember.user.id,
+          "=",
+          e.uuid(session?.user?.id as string)
+        ),
+        "and",
+        e.op(workspace.user.id, "!=", e.uuid(session?.user?.id as string))
+      ),
+      order_by: {
+        expression: workspace.created,
+        direction: e.DESC,
+      },
+    }))
+    .run(client);
+  console.log(workspaceMember);
+  const combinedWorkspaces = [...workspaces, ...workspaceMember];
+  console.log(combinedWorkspaces);
   return (
     <nav className="lg:hidden px-6 h-[50px] flex items-center justify-between bg-secondary border-b fixed top-0 w-full z-50">
       <MobileSidebar workspaceId={workspaceId} />
       <SelectWorkspaceBox
-        workspace={workspaces}
+        workspace={combinedWorkspaces}
         currentWorkspaceId={workspaceId}
       />
       <Link href={"/"}>
