@@ -50,6 +50,7 @@ const formSchema = z.object({
 interface CommandMenuPriorityProps {
   id: string;
   currentPriority: string;
+  displayTitle?: boolean;
 }
 
 const priorityIcons = {
@@ -62,6 +63,7 @@ const priorityIcons = {
 const CommandMenuPriority: FC<CommandMenuPriorityProps> = ({
   id,
   currentPriority,
+  displayTitle = false,
 }) => {
   const user = useCurrentUser();
   const router = useRouter();
@@ -129,11 +131,16 @@ const CommandMenuPriority: FC<CommandMenuPriorityProps> = ({
                           className="text-muted-foreground hover:text-indigo-400"
                         >
                           <HoverCard>
-                            <HoverCardTrigger>
+                            <HoverCardTrigger className="flex items-center">
                               {field.value ? (
                                 <>
                                   {PriorityIcon && (
                                     <PriorityIcon className="w-4 h-4" />
+                                  )}
+                                  {displayTitle && (
+                                    <span className="ml-2 capitalize text-sm">
+                                      {field.value.replace("-", " ")}
+                                    </span>
                                   )}
                                 </>
                               ) : (

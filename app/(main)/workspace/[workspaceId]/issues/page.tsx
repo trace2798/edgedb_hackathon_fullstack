@@ -5,22 +5,16 @@ import {
 } from "@/components/ui/hover-card";
 import e, { createClient } from "@/dbschema/edgeql-js";
 import { format } from "date-fns";
+import Link from "next/link";
+import { Suspense } from "react";
 import { Member } from "../members/_components/members/column";
 import AddIssueButton from "./_components/add-issue-button";
 import CommandMenuStatus from "./_components/command-menu-issue";
 import CommandMenuPriority from "./_components/command-menu-priority";
 import DeleteIssueButton from "./_components/delete-issue-button";
-import { Suspense, cache } from "react";
-// import { Link } from "lucide-react";
-import Link from "next/link";
 import LinkAlert from "./_components/link-alert";
 
 const client = createClient();
-
-// const getIssues = cache(async (workspaceId: string) => {
-
-//   return issues;
-// });
 
 const Page = async ({ params }: { params: { workspaceId: string } }) => {
   const members = await e
@@ -111,6 +105,29 @@ const Page = async ({ params }: { params: { workspaceId: string } }) => {
                     </div>
                   </Link>
                   <div className="flex space-x-3">
+                    <div>
+                      {issue.duedate ? (
+                        <HoverCard>
+                          <HoverCardTrigger asChild>
+                            <h1 className="w-[60px] px-1">
+                              {format(
+                                new Date(issue.duedate as Date),
+                                "MMM dd"
+                              )}
+                            </h1>
+                          </HoverCardTrigger>
+                          <HoverCardContent className="w-fit text-sm py-1 px-2">
+                            Due on:{" "}
+                            {format(
+                              new Date(issue.duedate as Date),
+                              "MMM dd, yyyy"
+                            )}
+                          </HoverCardContent>
+                        </HoverCard>
+                      ) : (
+                        <h1 className="w-[60px] px-1"></h1>
+                      )}
+                    </div>
                     <div className="hidden lg:flex">
                       <HoverCard>
                         <HoverCardTrigger asChild>
@@ -126,29 +143,6 @@ const Page = async ({ params }: { params: { workspaceId: string } }) => {
                           )}
                         </HoverCardContent>
                       </HoverCard>
-                    </div>
-                    <div>
-                      {issue.duedate ? (
-                        <HoverCard>
-                          <HoverCardTrigger asChild>
-                            <h1 className="w-[60px] px-1">
-                              {format(
-                                new Date(issue.duedate as Date),
-                                "MMM dd"
-                              )}
-                            </h1>
-                          </HoverCardTrigger>
-                          <HoverCardContent className="w-fit text-sm py-1 px-3">
-                            Due on:{" "}
-                            {format(
-                              new Date(issue.duedate as Date),
-                              "MMM dd, yyyy"
-                            )}
-                          </HoverCardContent>
-                        </HoverCard>
-                      ) : (
-                        <h1 className="w-[60px] px-1"></h1>
-                      )}
                     </div>
                   </div>
                 </div>

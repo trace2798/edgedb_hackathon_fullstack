@@ -51,6 +51,7 @@ const formSchema = z.object({
 interface CommandMenuStatusProps {
   id: string;
   currentStatus: string;
+  displayTitle?: boolean;
 }
 
 const statusIcons = {
@@ -64,6 +65,7 @@ const statusIcons = {
 const CommandMenuStatus: FC<CommandMenuStatusProps> = ({
   id,
   currentStatus,
+  displayTitle = false,
 }) => {
   const user = useCurrentUser();
   const router = useRouter();
@@ -129,11 +131,16 @@ const CommandMenuStatus: FC<CommandMenuStatusProps> = ({
                           className="text-muted-foreground hover:text-indigo-400"
                         >
                           <HoverCard>
-                            <HoverCardTrigger>
+                            <HoverCardTrigger className="flex items-center">
                               {field.value ? (
                                 <>
                                   {StatusIcon && (
                                     <StatusIcon className="w-4 h-4" />
+                                  )}
+                                  {displayTitle && (
+                                    <span className="ml-2 capitalize text-sm">
+                                      {field.value.replace("-", " ")}
+                                    </span>
                                   )}
                                 </>
                               ) : (
