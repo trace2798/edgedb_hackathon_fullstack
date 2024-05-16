@@ -37,6 +37,7 @@ import CommandMenuStatus from "../../_components/command-menu-issue";
 import CommandMenuPriority from "../../_components/command-menu-priority";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
+import ChangeAssignee from "../../_components/assignee-button";
 
 interface IssueContentProps {
   issue: any;
@@ -337,6 +338,11 @@ const IssueContent: FC<IssueContentProps> = ({ issue, members }) => {
               id={issue.id as string}
               currentPriority={issue.priority as string}
               displayTitle={true}
+            />
+            <ChangeAssignee
+              id={issue.id as string}
+              currentAssigneeId={issue.assigneeId as string}
+              members={members}
             />
           </div>
         </div>
