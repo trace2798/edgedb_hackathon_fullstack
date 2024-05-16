@@ -157,6 +157,7 @@ module default {
     required link workspace -> Workspace {
       on target delete delete source;
     }
+    assigneeId: uuid;
     required workspaceMember: WorkspaceMember;
   }
 }

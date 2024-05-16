@@ -60,6 +60,7 @@ export async function createIssue(
         workspaceMember: e.select(e.WorkspaceMember, (member) => ({
           filter_single: e.op(member.id, "=", e.uuid(assigneeId as string)),
         })),
+        assigneeId: e.uuid(assigneeId as string),
       })
       .run(client);
     console.log(newIssue);
@@ -219,7 +220,11 @@ export async function updateStatus(id: string, status: string, userId: string) {
   }
 }
 
-export async function updateDueDate(id: string, duedate: Date | undefined, userId: string) {
+export async function updateDueDate(
+  id: string,
+  duedate: Date | undefined,
+  userId: string
+) {
   try {
     console.log(id);
     // console.log(status, "Status");

@@ -38,6 +38,7 @@ interface ChangeDueDateProps {
 }
 
 const ChangeDueDate: FC<ChangeDueDateProps> = ({ id, currentDueDate }) => {
+  console.log(currentDueDate);
   const user = useCurrentUser();
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -130,7 +131,7 @@ const ChangeDueDate: FC<ChangeDueDateProps> = ({ id, currentDueDate }) => {
                     <PopoverContent className="w-fit p-0">
                       <Calendar
                         mode="single"
-                        selected={field.value}
+                        selected={field.value ?? new Date()}
                         onSelect={field.onChange}
                         disabled={(date) => date < new Date() || isLoading}
                         initialFocus

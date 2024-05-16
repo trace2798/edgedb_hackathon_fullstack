@@ -35,6 +35,8 @@ import { Member } from "../../../members/_components/members/column";
 import ChangeDueDate from "../../_components/change-due-date";
 import CommandMenuStatus from "../../_components/command-menu-issue";
 import CommandMenuPriority from "../../_components/command-menu-priority";
+import { format } from "date-fns";
+import { Calendar } from "@/components/ui/calendar";
 
 interface IssueContentProps {
   issue: any;
@@ -46,7 +48,7 @@ const formSchema = z.object({
   description: z.string().min(0).max(250),
   status: z.string().min(2).max(50),
   priority: z.string().min(2).max(50),
-  assignee: z.string().min(2).max(50),
+  assigneeId: z.string().min(2).max(50),
   duedate: z.date().optional(),
   urls: z
     .array(
@@ -58,6 +60,7 @@ const formSchema = z.object({
 });
 
 const IssueContent: FC<IssueContentProps> = ({ issue, members }) => {
+  console.log(issue);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -67,7 +70,7 @@ const IssueContent: FC<IssueContentProps> = ({ issue, members }) => {
       description: issue.description || "",
       status: issue.status,
       priority: issue.priority,
-      assignee: issue.assignee || ("" as string),
+      assigneeId: issue.assigneeId || ("" as string),
       duedate: issue.duedate || undefined,
       urls: issue.urls || [],
     },
@@ -121,72 +124,62 @@ const IssueContent: FC<IssueContentProps> = ({ issue, members }) => {
   const isLoading = form.formState.isSubmitting;
   return (
     <>
-      <div>
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col w-full grid-cols-12 gap-2 px-2 py-0 border-none rounded-lg md:px-0 focus-within:shadow-sm border-zinc-800"
-          >
-            <div className="grid gap-3">
-              <div className="grid gap-1">
-                <div className="flex lg:flex-row space-x-5">
-                  <div className="w-3/4 space-y-10">
-                    <FormField
-                      control={form.control}
-                      name="title"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormControl>
-                            <Input
-                              id="title"
-                              placeholder="Issue Title"
-                              type="text"
-                              autoCorrect="off"
-                              disabled={isLoading}
-                              className="border-none text-neutral-100 text-3xl"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="description"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormControl>
-                            <Textarea
-                              id="description"
-                              placeholder="Add description...(optional) [max 250 words]"
-                              autoCorrect="off"
-                              disabled={isLoading}
-                              className="border-none focus-none text-xl"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+      <div className="flex flex-col md:flex-row">
+        <div className="w-3/4 space-x-5">
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="flex flex-col w-full grid-cols-12 gap-2 px-2 py-0 border-none rounded-lg md:px-0 focus-within:shadow-sm border-zinc-800"
+            >
+              <div className="grid gap-3">
+                <div className="grid gap-1">
+                  <div className="flex lg:flex-row space-x-5">
+                    <div className="w-full pr-5 space-y-2">
+                      <FormField
+                        control={form.control}
+                        name="title"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <Input
+                                id="title"
+                                placeholder="Issue Title"
+                                type="text"
+                                autoCorrect="off"
+                                disabled={isLoading}
+                                className="border-none text-neutral-100 text-3xl"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="description"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <Textarea
+                                id="description"
+                                placeholder="Add description...(optional) [max 250 words]"
+                                autoCorrect="off"
+                                disabled={isLoading}
+                                className="border-none focus-none text-xl"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
                   </div>
-                  <div className="flex flex-col w-1/4 space-y-5">
-                    <h1>Properties</h1>
-                    <CommandMenuStatus
-                      id={issue.id as string}
-                      currentStatus={issue.status as string}
-                      displayTitle={true}
-                    />
-                    <CommandMenuPriority
-                      id={issue.id as string}
-                      currentPriority={issue.priority as string}
-                      displayTitle={true}
-                    />
-
+                  <div className="flex space-x-5">
                     <FormField
                       control={form.control}
-                      name="assignee"
+                      name="assigneeId"
                       render={({ field }) => (
                         <FormItem>
                           <Popover>
@@ -218,7 +211,7 @@ const IssueContent: FC<IssueContentProps> = ({ issue, members }) => {
                                       key={member.id}
                                       className="flex justify-between"
                                       onSelect={() => {
-                                        form.setValue("assignee", member.id);
+                                        form.setValue("assigneeId", member.id);
                                       }}
                                     >
                                       <div className="flex items-center">
@@ -242,64 +235,111 @@ const IssueContent: FC<IssueContentProps> = ({ issue, members }) => {
                         </FormItem>
                       )}
                     />
-                    <ChangeDueDate
-                      id={issue.id}
-                      currentDueDate={issue.duedate}
-                    />
-                  </div>
-                </div>
-                <div className="mt-3">
-                  {fields.map((field, index) => (
                     <FormField
                       control={form.control}
-                      key={field.id}
-                      name={`urls.${index}.value`}
+                      name="duedate"
                       render={({ field }) => (
-                        <FormItem className="flex flex-col">
-                          <FormLabel className={cn(index !== 0 && "sr-only")}>
-                            Links
-                          </FormLabel>
-                          <div className="flex items-center justify-between">
-                            <FormControl>
-                              <Input
-                                placeholder="https://"
-                                className="w-3/4"
-                                {...field}
+                        <FormItem>
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <FormControl>
+                                <Button
+                                  variant="sidebar"
+                                  size={"sidebar"}
+                                  role="combobox"
+                                  className="bg-secondary min-w-[80px] hover:text-sm hover:text-indigo-400 hover:bg-inherit"
+                                >
+                                  {field.value ? (
+                                    format(field.value, "MMM dd")
+                                  ) : (
+                                    <span>Due Date</span>
+                                  )}
+                                </Button>
+                              </FormControl>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-fit p-0">
+                              <Calendar
+                                mode="single"
+                                selected={field.value}
+                                onSelect={field.onChange}
+                                disabled={(date) => date < new Date()}
+                                initialFocus
                               />
-                            </FormControl>
-
-                            <Button
-                              type="button"
-                              variant="sidebar"
-                              size="sidebar"
-                              onClick={() => remove(index)}
-                            >
-                              Remove URL
-                            </Button>
-                          </div>
+                            </PopoverContent>
+                          </Popover>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
-                  ))}
-                  <Button
-                    type="button"
-                    variant="sidebar"
-                    size="sidebar"
-                    className="mt-2 bg-secondary min-w-[80px] hover:text-sm hover:text-indigo-400 hover:bg-inherit"
-                    onClick={() => append({ value: "" })}
-                  >
-                    Add Link
+                  </div>
+                  <div className="mt-3">
+                    {fields.map((field, index) => (
+                      <FormField
+                        control={form.control}
+                        key={field.id}
+                        name={`urls.${index}.value`}
+                        render={({ field }) => (
+                          <FormItem className="flex flex-col">
+                            <FormLabel className={cn(index !== 0 && "sr-only")}>
+                              Links
+                            </FormLabel>
+                            <div className="flex items-center justify-between">
+                              <FormControl>
+                                <Input
+                                  placeholder="https://"
+                                  className="w-3/4"
+                                  {...field}
+                                />
+                              </FormControl>
+
+                              <Button
+                                type="button"
+                                variant="sidebar"
+                                size="sidebar"
+                                onClick={() => remove(index)}
+                              >
+                                Remove URL
+                              </Button>
+                            </div>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    ))}
+                    <Button
+                      type="button"
+                      variant="sidebar"
+                      size="sidebar"
+                      className="mt-2 bg-secondary min-w-[80px] hover:text-sm hover:text-indigo-400 hover:bg-inherit"
+                      onClick={() => append({ value: "" })}
+                    >
+                      Add Link
+                    </Button>
+                  </div>
+                  <Button disabled={isLoading} className="mt-5">
+                    {isLoading && <Spinner />}
+                    Update Issue
                   </Button>
                 </div>
-                <Button disabled={isLoading} className="mt-5">
-                  {isLoading && <Spinner />}
-                  Update Issue
-                </Button>
               </div>
-            </div>
-          </form>
-        </Form>
+            </form>
+          </Form>
+        </div>
+        <div>
+          <div className="flex flex-col w-1/4 space-y-5">
+            <h1>Properties</h1>
+            <CommandMenuStatus
+              id={issue.id as string}
+              currentStatus={issue.status as string}
+              displayTitle={true}
+            />
+            <CommandMenuPriority
+              id={issue.id as string}
+              currentPriority={issue.priority as string}
+              displayTitle={true}
+            />
+          </div>
+        </div>
       </div>
     </>
   );

@@ -20,6 +20,7 @@ const Page: FC<PageProps> = async ({ params }) => {
       created: true,
       updated: true,
       duedate: true,
+      assigneeId: true,
       urls: true,
       filter_single: e.op(issue.id, "=", e.uuid(params.issueId)),
       order_by: {

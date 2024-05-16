@@ -49,7 +49,7 @@ const formSchema = z.object({
   description: z.string().min(0).max(250),
   status: z.string().min(2).max(50),
   priority: z.string().min(2).max(50),
-  assignee: z.string().min(2).max(50),
+  assigneeId: z.string().min(2).max(50),
   duedate: z.date().optional(),
   urls: z
     .array(
@@ -73,7 +73,7 @@ export function IssueModal({ className, ...props }: IssueModalProps) {
   console.log(membershipIdOfCurrentUser);
 
   useEffect(() => {
-    form.setValue("assignee", membershipIdOfCurrentUser);
+    form.setValue("assigneeId", membershipIdOfCurrentUser);
   }, [membershipIdOfCurrentUser]);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -84,7 +84,7 @@ export function IssueModal({ className, ...props }: IssueModalProps) {
       description: "",
       status: "todo",
       priority: "no priority",
-      assignee: membershipIdOfCurrentUser as string,
+      assigneeId: membershipIdOfCurrentUser as string,
       duedate: undefined,
       urls: [],
     },
@@ -124,7 +124,7 @@ export function IssueModal({ className, ...props }: IssueModalProps) {
         values.description,
         values.status,
         values.priority,
-        values.assignee,
+        values.assigneeId,
         values.duedate,
         urls
         // values.urls?.map((url) => url.value)
@@ -336,7 +336,7 @@ export function IssueModal({ className, ...props }: IssueModalProps) {
                   />
                   <FormField
                     control={form.control}
-                    name="assignee"
+                    name="assigneeId"
                     render={({ field }) => (
                       <FormItem>
                         <Popover>
@@ -368,7 +368,7 @@ export function IssueModal({ className, ...props }: IssueModalProps) {
                                     key={member.id}
                                     className="flex justify-between"
                                     onSelect={() => {
-                                      form.setValue("assignee", member.id);
+                                      form.setValue("assigneeId", member.id);
                                     }}
                                   >
                                     <div className="flex items-center">
