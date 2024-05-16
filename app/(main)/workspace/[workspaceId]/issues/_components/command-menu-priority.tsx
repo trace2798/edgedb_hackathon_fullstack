@@ -133,7 +133,7 @@ const CommandMenuPriority: FC<CommandMenuPriorityProps> = ({
                               {field.value ? (
                                 <>
                                   {PriorityIcon && (
-                                    <PriorityIcon className="w-4 h-4 mr-1" />
+                                    <PriorityIcon className="w-4 h-4" />
                                   )}
                                 </>
                               ) : (

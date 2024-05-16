@@ -11,6 +11,8 @@ import CommandMenuStatus from "./_components/command-menu-issue";
 import CommandMenuPriority from "./_components/command-menu-priority";
 import DeleteIssueButton from "./_components/delete-issue-button";
 import { Suspense, cache } from "react";
+import { Link } from "lucide-react";
+import LinkAlert from "./_components/link-alert";
 
 const client = createClient();
 
@@ -49,6 +51,7 @@ const Page = async ({ params }: { params: { workspaceId: string } }) => {
       created: true,
       updated: true,
       duedate: true,
+      urls: true,
       filter: e.op(issue.workspaceId, "=", e.uuid(params.workspaceId)),
       order_by: {
         expression: issue.created,
@@ -96,6 +99,10 @@ const Page = async ({ params }: { params: { workspaceId: string } }) => {
                       <CommandMenuStatus
                         id={issue.id as string}
                         currentStatus={issue.status as string}
+                      />
+                      <LinkAlert
+                        id={issue.id as string}
+                        currentUrls={issue.urls as string[]}
                       />
                     </div>
                     <div className="line-clamp-1">{issue.title}</div>

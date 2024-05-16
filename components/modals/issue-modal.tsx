@@ -9,18 +9,14 @@ import {
   CommandInput,
   CommandItem,
 } from "@/components/ui/command";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
+  FormMessage,
 } from "@/components/ui/form";
 import {
   Popover,
@@ -90,7 +86,7 @@ export function IssueModal({ className, ...props }: IssueModalProps) {
       priority: "no priority",
       assignee: membershipIdOfCurrentUser as string,
       duedate: undefined,
-      urls: [{ value: "" }],
+      urls: [],
     },
   });
   type FormData = z.infer<typeof formSchema>;
@@ -106,7 +102,7 @@ export function IssueModal({ className, ...props }: IssueModalProps) {
   const onSubmit: SubmitHandler<FormData> = async (values) => {
     try {
       setLoading(true);
-      const urls = values.urls?.map((url) => {
+      let urls = values.urls?.map((url) => {
         if (
           !url.value.startsWith("http://") &&
           !url.value.startsWith("https://")
@@ -115,6 +111,12 @@ export function IssueModal({ className, ...props }: IssueModalProps) {
         }
         return url.value;
       });
+
+      // If the URLs array only contains an empty string, set it to undefined
+      if (urls?.length === 0) {
+        urls = undefined;
+      }
+
       console.log(values);
       await createIssue(
         user?.id as string,

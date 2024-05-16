@@ -133,7 +133,7 @@ const CommandMenuStatus: FC<CommandMenuStatusProps> = ({
                               {field.value ? (
                                 <>
                                   {StatusIcon && (
-                                    <StatusIcon className="w-4 h-4 mr-1" />
+                                    <StatusIcon className="w-4 h-4" />
                                   )}
                                 </>
                               ) : (
