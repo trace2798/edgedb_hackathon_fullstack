@@ -11,7 +11,8 @@ import CommandMenuStatus from "./_components/command-menu-issue";
 import CommandMenuPriority from "./_components/command-menu-priority";
 import DeleteIssueButton from "./_components/delete-issue-button";
 import { Suspense, cache } from "react";
-import { Link } from "lucide-react";
+// import { Link } from "lucide-react";
+import Link from "next/link";
 import LinkAlert from "./_components/link-alert";
 
 const client = createClient();
@@ -88,26 +89,27 @@ const Page = async ({ params }: { params: { workspaceId: string } }) => {
                   key={index}
                   className="px-5 py-2 border border-secondary text-sm flex justify-between dark:bg-zinc-950 items-center dark:hover:bg-zinc-800 hover:cursor-pointer"
                 >
-                  <div className="flex  justify-between items-center">
-                    <div className="flex space-x-1 mr-5">
-                      {" "}
-                      <DeleteIssueButton issueId={issue.id as string} />
-                      <CommandMenuPriority
-                        id={issue.id as string}
-                        currentPriority={issue.priority as string}
-                      />
-                      <CommandMenuStatus
-                        id={issue.id as string}
-                        currentStatus={issue.status as string}
-                      />
-                      <LinkAlert
-                        id={issue.id as string}
-                        currentUrls={issue.urls as string[]}
-                      />
+                  <Link href={`issues/${issue.id}`}>
+                    <div className="flex  justify-between items-center">
+                      <div className="flex space-x-1 mr-5">
+                        {" "}
+                        <DeleteIssueButton issueId={issue.id as string} />
+                        <CommandMenuPriority
+                          id={issue.id as string}
+                          currentPriority={issue.priority as string}
+                        />
+                        <CommandMenuStatus
+                          id={issue.id as string}
+                          currentStatus={issue.status as string}
+                        />
+                        <LinkAlert
+                          id={issue.id as string}
+                          currentUrls={issue.urls as string[]}
+                        />
+                      </div>
+                      <div className="line-clamp-1">{issue.title}</div>
                     </div>
-                    <div className="line-clamp-1">{issue.title}</div>
-                  </div>
-
+                  </Link>
                   <div className="flex space-x-3">
                     <div className="hidden lg:flex">
                       <HoverCard>
