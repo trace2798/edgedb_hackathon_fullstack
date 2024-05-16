@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import e, { createClient } from "@/dbschema/edgeql-js";
 import { ChevronDown, ChevronRight, ChevronUp } from "lucide-react";
 import Link from "next/link";
@@ -58,21 +58,50 @@ const IssueIdLayout = async ({ children, params }: Props) => {
   const nextIssueId = allIssues[currentIssueIndex + 1]?.id;
   return (
     <>
-      <div className="px-5 py-2 border border-secondary text-sm flex justify-between dark:bg-zinc-950 items-center ">
+      <div className="lg:px-5 py-2 mt-10 lg:mt-0 border border-secondary text-sm flex justify-between dark:bg-zinc-950 items-center ">
         <div className="flex  justify-between items-center">
           <Link href={`/workspace/${params.workspaceId}`}>
-            <div>{workspace?.name}</div>
+            <div
+              className={buttonVariants({
+                variant: "sidebar",
+                size: "sidebar",
+                className: "w-fit px-2 text-muted-foreground",
+              })}
+            >
+              {workspace?.name}
+            </div>
           </Link>
           <ChevronRight className="h-4 w-4" />
-          <Link href={`/workspace/${params.workspaceId}/issues`}>
+          <Link
+            href={`/workspace/${params.workspaceId}/issues`}
+            className={buttonVariants({
+              variant: "sidebar",
+              size: "sidebar",
+              className: "w-fit px-2 text-muted-foreground",
+            })}
+          >
             <div>Issues</div>
           </Link>
           <ChevronRight className="h-4 w-4" />
-          <div>{issue?.title}</div>
+          <div
+            className={buttonVariants({
+              variant: "sidebar",
+              size: "sidebar",
+              className: "w-fit px-2 text-indigo-400",
+            })}
+          >
+            {issue?.title}
+          </div>
         </div>
-        <div className="flex space-x-1 items-center">
-          <div>
-            {currentIssueIndex + 1}/{totalIssues}
+        <div className="flex flex-col md:flex-row space-x-1 items-center">
+          <div
+            className={buttonVariants({
+              variant: "sidebar",
+              size: "sidebar",
+              className: "w-fit px-2 text-muted-foreground",
+            })}
+          >
+            <span className="text-sm">{currentIssueIndex + 1}</span>&nbsp;/&nbsp;<span className="text-sm text-primary">{totalIssues}</span>
           </div>
           <div>
             {prevIssueId ? (
