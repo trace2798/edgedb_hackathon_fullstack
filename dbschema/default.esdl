@@ -142,6 +142,7 @@ module default {
     }
     description: str;
     duedate: datetime;
+    urls: array<str>;
     required priority: str {
       default := "no priority";
     }

@@ -20,7 +20,7 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
         special:
           "hover:bg-accent hover:text-accent-foreground hover:text-indigo-400 text-indigo-400",
-        sidebar: "font-light bg-inherit text-primary",
+        sidebar: "font-light bg-inherit text-primary text-xs",
       },
       size: {
         default: "h-10 px-4 py-2",

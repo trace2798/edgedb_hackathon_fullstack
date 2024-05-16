@@ -36,9 +36,10 @@ import {
   Circle,
   HelpCircle,
   XCircle,
+  CircleArrowOutUpRight,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { FC, useEffect, useRef } from "react";
+import { FC, useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -58,6 +59,7 @@ const statusIcons = {
   "in progress": ArrowUpCircle,
   done: CheckCircle2,
   canceled: XCircle,
+  "in review": CircleArrowOutUpRight,
 };
 const CommandMenuStatus: FC<CommandMenuStatusProps> = ({
   id,

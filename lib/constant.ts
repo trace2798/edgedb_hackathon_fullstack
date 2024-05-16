@@ -10,6 +10,7 @@ import {
   Signal,
   SignalLow,
   SignalMedium,
+  CircleArrowOutUpRight,
 } from "lucide-react";
 
 export type Status = {
@@ -43,6 +44,11 @@ export const statuses: Status[] = [
     value: "canceled",
     label: "Canceled",
     icon: XCircle,
+  },
+  {
+    value: "in review",
+    label: "In Review",
+    icon: CircleArrowOutUpRight,
   },
 ];
 

@@ -9,12 +9,19 @@ import {
   CommandInput,
   CommandItem,
 } from "@/components/ui/command";
-import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import {
@@ -28,11 +35,11 @@ import { priorities, statuses } from "@/lib/constant";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
-import { Check } from "lucide-react";
+import { Check, MoreHorizontal } from "lucide-react";
 import { User } from "next-auth";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
 import { Spinner } from "../spinner";
@@ -40,6 +47,23 @@ import { Button } from "../ui/button";
 import { Calendar } from "../ui/calendar";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface IssueModalProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -50,6 +74,13 @@ const formSchema = z.object({
   priority: z.string().min(2).max(50),
   assignee: z.string().min(2).max(50),
   duedate: z.date().optional(),
+  urls: z
+    .array(
+      z.object({
+        value: z.string().url({ message: "Please enter a valid URL." }),
+      })
+    )
+    .optional(),
 });
 
 export function IssueModal({ className, ...props }: IssueModalProps) {
@@ -63,6 +94,7 @@ export function IssueModal({ className, ...props }: IssueModalProps) {
     user as User
   ) as string;
   console.log(membershipIdOfCurrentUser);
+
   useEffect(() => {
     form.setValue("assignee", membershipIdOfCurrentUser);
   }, [membershipIdOfCurrentUser]);
@@ -77,12 +109,19 @@ export function IssueModal({ className, ...props }: IssueModalProps) {
       priority: "no priority",
       assignee: membershipIdOfCurrentUser as string,
       duedate: undefined,
+      urls: [{ value: "" }],
     },
   });
   type FormData = z.infer<typeof formSchema>;
   {
     console.log(form.getValues());
   }
+  const { fields, append, remove } = useFieldArray({
+    name: "urls",
+    control: form.control,
+  });
+  console.log(fields);
+  console.log(append);
   const onSubmit: SubmitHandler<FormData> = async (values) => {
     try {
       setLoading(true);
@@ -94,7 +133,8 @@ export function IssueModal({ className, ...props }: IssueModalProps) {
         values.status,
         values.priority,
         values.assignee,
-        values.duedate
+        values.duedate,
+        values.urls?.map((url) => url.value)
       );
       form.reset();
       toast.success("Issue Created.");
@@ -176,7 +216,7 @@ export function IssueModal({ className, ...props }: IssueModalProps) {
                                 variant="sidebar"
                                 size={"sidebar"}
                                 role="combobox"
-                                className="bg-secondary min-w-[80px]"
+                                className="bg-secondary min-w-[80px] hover:text-sm hover:text-indigo-400 hover:bg-inherit"
                               >
                                 {field.value
                                   ? statuses.find(
@@ -244,7 +284,7 @@ export function IssueModal({ className, ...props }: IssueModalProps) {
                                 variant="sidebar"
                                 size={"sidebar"}
                                 role="combobox"
-                                className="bg-secondary min-w-[80px]"
+                                className="bg-secondary min-w-[80px] hover:text-sm hover:text-indigo-400 hover:bg-inherit"
                               >
                                 {field.value
                                   ? priorities.find(
@@ -313,7 +353,7 @@ export function IssueModal({ className, ...props }: IssueModalProps) {
                                 variant="sidebar"
                                 size={"sidebar"}
                                 role="combobox"
-                                className="bg-secondary min-w-[80px]"
+                                className="bg-secondary min-w-[80px] hover:text-sm hover:text-indigo-400 hover:bg-inherit"
                               >
                                 {field.value
                                   ? members?.find(
@@ -371,10 +411,10 @@ export function IssueModal({ className, ...props }: IssueModalProps) {
                                 variant="sidebar"
                                 size={"sidebar"}
                                 role="combobox"
-                                className="bg-secondary min-w-[80px]"
+                                className="bg-secondary min-w-[80px] hover:text-sm hover:text-indigo-400 hover:bg-inherit"
                               >
                                 {field.value ? (
-                                  format(field.value, "PPP")
+                                  format(field.value, "MMM dd")
                                 ) : (
                                   <span>Due Date</span>
                                 )}
@@ -395,6 +435,113 @@ export function IssueModal({ className, ...props }: IssueModalProps) {
                       </FormItem>
                     )}
                   />
+
+                  {/* <AlertDialog>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <MoreHorizontal />
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        <AlertDialogTrigger  
+                        // onClick={() => append({ value: "" })}
+                        >
+                          <DropdownMenuItem>Add Link</DropdownMenuItem>
+                        </AlertDialogTrigger>
+                      </DropdownMenuContent>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>Add Link</AlertDialogHeader>
+                        <div>
+                          {fields.map((field, index) => (
+                            <FormField
+                              control={form.control}
+                              key={field.id}
+                              name={`urls.${index}.value`}
+                              render={({ field }) => (
+                                <FormItem className="flex flex-col">
+                                  <FormLabel
+                                    className={cn(index !== 0 && "sr-only")}
+                                  >
+                                    Links
+                                  </FormLabel>
+                                  <div className="flex items-center justify-between">
+                                    <FormControl>
+                                      <Input
+                                        placeholder="https://"
+                                        className="w-3/4"
+                                        {...field}
+                                      />
+                                    </FormControl>
+
+                                    <Button
+                                      type="button"
+                                      variant="sidebar"
+                                      size="sidebar"
+                                      onClick={() => remove(index)}
+                                    >
+                                      Remove URL
+                                    </Button>
+                                  </div>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                          ))}
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                              // onClick={() => append({ value: "" })}
+                            >
+                              Add Link
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </div>
+                      </AlertDialogContent>
+                    </DropdownMenu>
+                  </AlertDialog> */}
+                </div>
+                <div className="mt-3">
+                  {fields.map((field, index) => (
+                    <FormField
+                      control={form.control}
+                      key={field.id}
+                      name={`urls.${index}.value`}
+                      render={({ field }) => (
+                        <FormItem className="flex flex-col">
+                          <FormLabel className={cn(index !== 0 && "sr-only")}>
+                            Links
+                          </FormLabel>
+                          <div className="flex items-center justify-between">
+                            <FormControl>
+                              <Input
+                                placeholder="https://"
+                                className="w-3/4"
+                                {...field}
+                              />
+                            </FormControl>
+
+                            <Button
+                              type="button"
+                              variant="sidebar"
+                              size="sidebar"
+                              onClick={() => remove(index)}
+                            >
+                              Remove URL
+                            </Button>
+                          </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  ))}
+                  <Button
+                    type="button"
+                    variant="sidebar"
+                    size="sidebar"
+                    className="mt-2 bg-secondary min-w-[80px] hover:text-sm hover:text-indigo-400 hover:bg-inherit"
+                    onClick={() => append({ value: "" })}
+                  >
+                    Add Link
+                  </Button>
                 </div>
                 <Button disabled={isLoading} className="mt-5">
                   {isLoading && <Spinner />}

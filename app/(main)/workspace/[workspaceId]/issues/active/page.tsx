@@ -42,6 +42,7 @@ const ActivePage = async ({ params }: { params: { workspaceId: string } }) => {
       priority: true,
       created: true,
       updated: true,
+      duedate: true,
       filter: e.op(
         e.op(issue.workspaceId, "=", e.uuid(params.workspaceId)),
         "and",
@@ -84,36 +85,43 @@ const ActivePage = async ({ params }: { params: { workspaceId: string } }) => {
                   <div className="line-clamp-1">{issue.title}</div>
                 </div>
 
-                <div className="lg:flex space-x-3 hidden">
-                  <HoverCard>
-                    <HoverCardTrigger asChild>
-                      <h1>
-                        {format(new Date(issue.created as Date), "MMM dd")}
-                      </h1>
-                    </HoverCardTrigger>
-                    <HoverCardContent className="w-fit dark:bg-zinc-800 text-sm py-1 px-2">
-                      Created on:{" "}
-                      {format(
-                        new Date(issue.created as Date),
-                        "MMM dd, yyyy HH:mm"
-                      )}
-                    </HoverCardContent>
-                  </HoverCard>
-
-                  <HoverCard>
-                    <HoverCardTrigger asChild>
-                      <h1>
-                        {format(new Date(issue.updated as Date), "MMM dd")}
-                      </h1>
-                    </HoverCardTrigger>
-                    <HoverCardContent className="w-fit text-sm py-1 px-2">
-                      Updated on:{" "}
-                      {format(
-                        new Date(issue.updated as Date),
-                        "MMM dd, yyyy HH:mm"
-                      )}
-                    </HoverCardContent>
-                  </HoverCard>
+                <div className="flex space-x-3">
+                  <div className="hidden lg:flex">
+                    <HoverCard>
+                      <HoverCardTrigger asChild>
+                        <h1 className="w-[60px] px-1">
+                          {format(new Date(issue.updated as Date), "MMM dd")}
+                        </h1>
+                      </HoverCardTrigger>
+                      <HoverCardContent className="w-fit text-sm py-1 px-2">
+                        Updated on:{" "}
+                        {format(
+                          new Date(issue.updated as Date),
+                          "MMM dd, yyyy"
+                        )}
+                      </HoverCardContent>
+                    </HoverCard>
+                  </div>
+                  <div>
+                    {issue.duedate ? (
+                      <HoverCard>
+                        <HoverCardTrigger asChild>
+                          <h1 className="w-[60px] px-1">
+                            {format(new Date(issue.duedate as Date), "MMM dd")}
+                          </h1>
+                        </HoverCardTrigger>
+                        <HoverCardContent className="w-fit text-sm py-1 px-3">
+                          Due on:{" "}
+                          {format(
+                            new Date(issue.duedate as Date),
+                            "MMM dd, yyyy"
+                          )}
+                        </HoverCardContent>
+                      </HoverCard>
+                    ) : (
+                      <h1 className="w-[60px] px-1"></h1>
+                    )}
+                  </div>
                 </div>
               </div>
             );

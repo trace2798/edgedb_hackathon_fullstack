@@ -101,22 +101,8 @@ const Page = async ({ params }: { params: { workspaceId: string } }) => {
                     <div className="line-clamp-1">{issue.title}</div>
                   </div>
 
-                  <div className="lg:flex space-x-3 hidden">
-                    {/* <HoverCard>
-                      <HoverCardTrigger asChild>
-                        <h1>
-                          {format(new Date(issue.created as Date), "MMM dd")}
-                        </h1>
-                      </HoverCardTrigger>
-                      <HoverCardContent className="w-fit dark:bg-zinc-800 text-sm py-1 px-2">
-                        Created on:{" "}
-                        {format(
-                          new Date(issue.created as Date),
-                          "MMM dd, yyyy"
-                        )}
-                      </HoverCardContent>
-                    </HoverCard> */}
-                    <div>
+                  <div className="flex space-x-3">
+                    <div className="hidden lg:flex">
                       <HoverCard>
                         <HoverCardTrigger asChild>
                           <h1 className="w-[60px] px-1">
