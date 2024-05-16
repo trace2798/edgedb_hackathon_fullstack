@@ -12,17 +12,15 @@ import {
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTrigger,
+  DialogHeader
 } from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  FormMessage
 } from "@/components/ui/form";
 import {
   Popover,
@@ -35,7 +33,7 @@ import { priorities, statuses } from "@/lib/constant";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
-import { Check, MoreHorizontal } from "lucide-react";
+import { Check } from "lucide-react";
 import { User } from "next-auth";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -47,23 +45,6 @@ import { Button } from "../ui/button";
 import { Calendar } from "../ui/calendar";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 
 interface IssueModalProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -77,7 +58,7 @@ const formSchema = z.object({
   urls: z
     .array(
       z.object({
-        value: z.string().url({ message: "Please enter a valid URL." }),
+        value: z.string(),
       })
     )
     .optional(),
@@ -125,6 +106,15 @@ export function IssueModal({ className, ...props }: IssueModalProps) {
   const onSubmit: SubmitHandler<FormData> = async (values) => {
     try {
       setLoading(true);
+      const urls = values.urls?.map((url) => {
+        if (
+          !url.value.startsWith("http://") &&
+          !url.value.startsWith("https://")
+        ) {
+          return "https://" + url.value;
+        }
+        return url.value;
+      });
       console.log(values);
       await createIssue(
         user?.id as string,
@@ -134,7 +124,8 @@ export function IssueModal({ className, ...props }: IssueModalProps) {
         values.priority,
         values.assignee,
         values.duedate,
-        values.urls?.map((url) => url.value)
+        urls
+        // values.urls?.map((url) => url.value)
       );
       form.reset();
       toast.success("Issue Created.");
