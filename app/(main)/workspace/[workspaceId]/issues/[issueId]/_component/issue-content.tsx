@@ -35,6 +35,7 @@ import CommandMenuPriority from "../../_components/command-menu-priority";
 
 import ActivityAccordian from "./activity-accordian";
 import LinkAccordian from "./link-accordian";
+import { FileUpload } from "@/components/file-upload";
 
 interface IssueContentProps {
   issue: any;
@@ -236,6 +237,13 @@ const IssueContent: FC<IssueContentProps> = ({ issue, members }) => {
               members={members}
             />
             <AddLinkModal issueId={issue.id as string} />
+            {/* <FileUpload
+              endpoint="cardFile"
+              value={""}
+              onChange={(value) => {
+                console.log(value);
+              }}
+            /> */}
           </div>
         </div>
       </div>
