@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/dialog";
 import { Link } from "lucide-react";
 import { FC, useState } from "react";
-import { toast } from "sonner";
 
 interface LinkAlertProps {
   id: string;

@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { WorkspaceModal } from "../modals/workspaces-modal";
 import { IssueModal } from "../modals/issue-modal";
+import { WorkspaceModal } from "../modals/workspaces-modal";
 
 export const ModalProvider = () => {
   const [isMounted, setIsMounted] = useState(false);

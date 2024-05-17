@@ -137,15 +137,16 @@ module default {
 
   type Issue {
     required title: str;
-    required status: str {
-      default := "todo";
-    }
+   required status: str {
+    default := "todo";
+    index on (.status);
+  }
     description: str;
     duedate: datetime;
-    urls: array<str>;
     required priority: str {
-      default := "no priority";
-    }
+    default := "no priority";
+    index on (.priority);
+  }
     required workspaceId := .workspace.id;
     created: datetime {
       rewrite insert using (datetime_of_statement());
@@ -159,7 +160,31 @@ module default {
     }
     assigneeId: uuid;
     required workspaceMember: WorkspaceMember;
+    multi websiteaddresses := .<issue[is WebsiteAddress];
+    multi issueactivity := .<issue[is IssueActivity];
   }
+
+  type WebsiteAddress {
+    required url: str;
+    description: str;
+    required link issue -> Issue {
+      on target delete delete source;
+    }
+  }
+
+  type IssueActivity {
+    required message: str;
+    required link issue -> Issue {
+      on target delete delete source;
+    }
+    created: cal::local_datetime {
+    default := cal::to_local_datetime(datetime_current(), 'UTC');
+  }
+  updated: cal::local_datetime {
+    default := cal::to_local_datetime(datetime_current(), 'UTC');
+  }
+  }
+
 }
 
  

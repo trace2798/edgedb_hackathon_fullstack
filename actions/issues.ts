@@ -10,8 +10,7 @@ export async function createIssue(
   status: string,
   priority: string,
   assigneeId: string,
-  duedate: Date | undefined,
-  urls: string[] | undefined
+  duedate: Date | undefined
 ) {
   try {
     console.log(userId, "USER ID");
@@ -20,7 +19,6 @@ export async function createIssue(
     console.log(priority, "PRIORITY");
     console.log(assigneeId, "ASSIGNEE ID");
     console.log(duedate, "DUE DATE");
-    console.log(urls, "URLS");
     const user = await e
       .select(e.User, (user) => ({
         id: true,
@@ -49,7 +47,6 @@ export async function createIssue(
         status: status as string,
         priority: priority as string,
         duedate: duedate as Date | undefined,
-        urls: urls as string[] | undefined,
         workspace: e.select(e.Workspace, (workspace) => ({
           filter_single: e.op(
             workspace.id,
@@ -82,6 +79,14 @@ export async function createIssue(
       })
       .run(client);
     console.log(activity);
+    const issueActivity = await e
+      .insert(e.IssueActivity, {
+        message: `${user.name} created this issue.` as string,
+        issue: e.select(e.Issue, (iss) => ({
+          filter_single: e.op(iss.id, "=", e.uuid(newIssue?.id as string)),
+        })),
+      })
+      .run(client);
 
     return "Issue Created";
   } catch (error) {
@@ -132,23 +137,15 @@ export async function updatePriority(
       .run(client);
     console.log(updateIssuePriority);
 
-    const activity = await e
-      .insert(e.Activity, {
+    const issueActivity = await e
+      .insert(e.IssueActivity, {
         message:
-          `Priority changed from: ${issue?.priority} to: ${priority}. For issue: "${issue?.title}" by  ${user.name}.` as string,
-        workspace: e.select(e.Workspace, (workspace) => ({
-          filter_single: e.op(
-            workspace.id,
-            "=",
-            e.uuid(issue?.workspaceId as string)
-          ),
-        })),
-        user: e.select(e.User, (user) => ({
-          filter_single: e.op(user.id, "=", e.uuid(userId)),
+          `${user.name} created Priority from: ${issue?.priority} to: ${priority}.` as string,
+        issue: e.select(e.Issue, (iss) => ({
+          filter_single: e.op(iss.id, "=", e.uuid(issue?.id as string)),
         })),
       })
       .run(client);
-    console.log(activity);
 
     return "Issue Priority Updated";
   } catch (error) {
@@ -195,23 +192,15 @@ export async function updateStatus(id: string, status: string, userId: string) {
       .run(client);
     console.log(updateIssuePriority);
 
-    const activity = await e
-      .insert(e.Activity, {
+    const issueActivity = await e
+      .insert(e.IssueActivity, {
         message:
-          `Status changed from: ${issue?.status} to: ${status}. For issue: "${issue?.title}" by  ${user.name}.` as string,
-        workspace: e.select(e.Workspace, (workspace) => ({
-          filter_single: e.op(
-            workspace.id,
-            "=",
-            e.uuid(issue?.workspaceId as string)
-          ),
-        })),
-        user: e.select(e.User, (user) => ({
-          filter_single: e.op(user.id, "=", e.uuid(userId)),
+          `${user.name} created Status from: ${issue?.status} to: ${status}.` as string,
+        issue: e.select(e.Issue, (iss) => ({
+          filter_single: e.op(iss.id, "=", e.uuid(issue?.id as string)),
         })),
       })
       .run(client);
-    console.log(activity);
 
     return "Issue Status Updated";
   } catch (error) {
@@ -220,7 +209,11 @@ export async function updateStatus(id: string, status: string, userId: string) {
   }
 }
 
-export async function updateAssigneeId(id: string, assigneeId: string, userId: string) {
+export async function updateAssigneeId(
+  id: string,
+  assigneeId: string,
+  userId: string
+) {
   try {
     console.log(id);
     console.log(assigneeId, "Status");
@@ -248,6 +241,14 @@ export async function updateAssigneeId(id: string, assigneeId: string, userId: s
       .run(client);
     console.log(issue);
 
+    const member = await e
+      .select(e.WorkspaceMember, (member) => ({
+        id: true,
+        name: true,
+        filter_single: e.op(member.id, "=", e.uuid(assigneeId)),
+      }))
+      .run(client);
+    console.log(member);
     const updateIssueAssignee = await e
       .update(e.Issue, () => ({
         filter_single: { id: e.uuid(id) },
@@ -258,23 +259,15 @@ export async function updateAssigneeId(id: string, assigneeId: string, userId: s
       .run(client);
     console.log(updateIssueAssignee);
 
-    // const activity = await e
-    //   .insert(e.Activity, {
-    //     message:
-    //       `Status changed from: ${issue?.status} to: ${status}. For issue: "${issue?.title}" by  ${user.name}.` as string,
-    //     workspace: e.select(e.Workspace, (workspace) => ({
-    //       filter_single: e.op(
-    //         workspace.id,
-    //         "=",
-    //         e.uuid(issue?.workspaceId as string)
-    //       ),
-    //     })),
-    //     user: e.select(e.User, (user) => ({
-    //       filter_single: e.op(user.id, "=", e.uuid(userId)),
-    //     })),
-    //   })
-    //   .run(client);
-    // console.log(activity);
+    const issueActivity = await e
+      .insert(e.IssueActivity, {
+        message:
+          `${user.name} assigneed this issue to: ${member?.name}.` as string,
+        issue: e.select(e.Issue, (iss) => ({
+          filter_single: e.op(iss.id, "=", e.uuid(issue?.id as string)),
+        })),
+      })
+      .run(client);
 
     return "Issue Assignee Updated";
   } catch (error) {
@@ -325,23 +318,14 @@ export async function updateDueDate(
       .run(client);
     console.log(updateIssueDueDate);
 
-    const activity = await e
-      .insert(e.Activity, {
-        message:
-          `Due Date changed from: ${issue?.duedate} to: ${duedate}. For issue: "${issue?.title}" by  ${user.name}.` as string,
-        workspace: e.select(e.Workspace, (workspace) => ({
-          filter_single: e.op(
-            workspace.id,
-            "=",
-            e.uuid(issue?.workspaceId as string)
-          ),
-        })),
-        user: e.select(e.User, (user) => ({
-          filter_single: e.op(user.id, "=", e.uuid(userId)),
+    const issueActivity = await e
+      .insert(e.IssueActivity, {
+        message: `${user.name} updated due-date to: ${duedate}` as string,
+        issue: e.select(e.Issue, (iss) => ({
+          filter_single: e.op(iss.id, "=", e.uuid(issue?.id as string)),
         })),
       })
       .run(client);
-    console.log(activity);
 
     return "Issue Due Date Updated";
   } catch (error) {
@@ -397,6 +381,68 @@ export async function deleteIssue(id: string, currentUserId: string) {
   }
 }
 
+export async function updateIssue(
+  id: string,
+  userId: string,
+  title: string,
+  description: string,
+  duedate: Date | undefined
+) {
+  try {
+    console.log(id);
+    console.log(userId, "USER ID");
+    console.log(title, "CONTENT");
+    console.log(duedate, "DUE DATE");
+    const issue = await e
+      .select(e.Issue, (issue) => ({
+        id: true,
+        title: true,
+        status: true,
+        workspaceId: true,
+        workspaceMember: true,
+        filter_single: e.op(issue.id, "=", e.uuid(id)),
+      }))
+      .run(client);
+    console.log(issue);
+    const user = await e
+      .select(e.User, (user) => ({
+        id: true,
+        email: true,
+        name: true,
+        filter_single: e.op(user.id, "=", e.uuid(userId)),
+      }))
+      .run(client);
+    if (!user) {
+      return "User Not Found";
+    }
+
+    const updatedIssue = await e
+      .update(e.Issue, () => ({
+        filter_single: { id: e.uuid(id) },
+        set: {
+          title: title,
+          description: description,
+          duedate: duedate,
+        },
+      }))
+      .run(client);
+    console.log(updatedIssue);
+
+    const issueActivity = await e
+      .insert(e.IssueActivity, {
+        message: `${user.name} updated the issue.` as string,
+        issue: e.select(e.Issue, (iss) => ({
+          filter_single: e.op(iss.id, "=", e.uuid(issue?.id as string)),
+        })),
+      })
+      .run(client);
+
+    return "Issue Updated";
+  } catch (error) {
+    console.error(error);
+    return "Error Updating Issue";
+  }
+}
 // export async function deleteLinkFromIssue(
 //   id: string,
 //   currentUserId: string,

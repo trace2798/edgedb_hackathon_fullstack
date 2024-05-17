@@ -51,13 +51,6 @@ const formSchema = z.object({
   priority: z.string().min(2).max(50),
   assigneeId: z.string().min(2).max(50),
   duedate: z.date().optional(),
-  urls: z
-    .array(
-      z.object({
-        value: z.string(),
-      })
-    )
-    .optional(),
 });
 
 export function IssueModal({ className, ...props }: IssueModalProps) {
@@ -86,36 +79,15 @@ export function IssueModal({ className, ...props }: IssueModalProps) {
       priority: "no priority",
       assigneeId: membershipIdOfCurrentUser as string,
       duedate: undefined,
-      urls: [],
     },
   });
   type FormData = z.infer<typeof formSchema>;
   {
     console.log(form.getValues());
   }
-  const { fields, append, remove } = useFieldArray({
-    name: "urls",
-    control: form.control,
-  });
-  console.log(fields);
-  console.log(append);
   const onSubmit: SubmitHandler<FormData> = async (values) => {
     try {
       setLoading(true);
-      let urls = values.urls?.map((url) => {
-        if (
-          !url.value.startsWith("http://") &&
-          !url.value.startsWith("https://")
-        ) {
-          return "https://" + url.value;
-        }
-        return url.value;
-      });
-
-      // If the URLs array only contains an empty string, set it to undefined
-      if (urls?.length === 0) {
-        urls = undefined;
-      }
 
       console.log(values);
       await createIssue(
@@ -125,9 +97,7 @@ export function IssueModal({ className, ...props }: IssueModalProps) {
         values.status,
         values.priority,
         values.assigneeId,
-        values.duedate,
-        urls
-        // values.urls?.map((url) => url.value)
+        values.duedate
       );
       form.reset();
       toast.success("Issue Created.");
@@ -492,50 +462,7 @@ export function IssueModal({ className, ...props }: IssueModalProps) {
                     </DropdownMenu>
                   </AlertDialog> */}
                 </div>
-                <div className="mt-3">
-                  {fields.map((field, index) => (
-                    <FormField
-                      control={form.control}
-                      key={field.id}
-                      name={`urls.${index}.value`}
-                      render={({ field }) => (
-                        <FormItem className="flex flex-col">
-                          <FormLabel className={cn(index !== 0 && "sr-only")}>
-                            Links
-                          </FormLabel>
-                          <div className="flex items-center justify-between">
-                            <FormControl>
-                              <Input
-                                placeholder="https://"
-                                className="w-3/4"
-                                {...field}
-                              />
-                            </FormControl>
 
-                            <Button
-                              type="button"
-                              variant="sidebar"
-                              size="sidebar"
-                              onClick={() => remove(index)}
-                            >
-                              Remove URL
-                            </Button>
-                          </div>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  ))}
-                  <Button
-                    type="button"
-                    variant="sidebar"
-                    size="sidebar"
-                    className="mt-2 bg-secondary min-w-[80px] hover:text-sm hover:text-indigo-400 hover:bg-inherit"
-                    onClick={() => append({ value: "" })}
-                  >
-                    Add Link
-                  </Button>
-                </div>
                 <Button disabled={isLoading} className="mt-5">
                   {isLoading && <Spinner />}
                   Create Issue

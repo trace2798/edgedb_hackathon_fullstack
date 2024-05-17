@@ -125,7 +125,7 @@ const ChangeAssignee: FC<ChangeAssigneeProps> = ({
                           className="text-muted-foreground hover:text-indigo-400"
                         >
                           <HoverCard>
-                            <HoverCardTrigger className="flex items-center">
+                            <HoverCardTrigger className="flex items-center capitalize text-sm">
                               {field.value
                                 ? members?.find(
                                     (member) =>

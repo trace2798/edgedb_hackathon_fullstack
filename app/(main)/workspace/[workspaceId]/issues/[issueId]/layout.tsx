@@ -29,7 +29,7 @@ const IssueIdLayout = async ({ children, params }: Props) => {
       created: true,
       updated: true,
       duedate: true,
-      urls: true,
+      // urls: true,
       filter: e.op(issue.workspaceId, "=", e.uuid(params.workspaceId)),
       order_by: {
         expression: issue.created,

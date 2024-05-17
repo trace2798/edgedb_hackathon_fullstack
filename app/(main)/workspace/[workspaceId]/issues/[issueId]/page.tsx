@@ -21,12 +21,23 @@ const Page: FC<PageProps> = async ({ params }) => {
       updated: true,
       duedate: true,
       assigneeId: true,
-      urls: true,
+      // urls: true,
       filter_single: e.op(issue.id, "=", e.uuid(params.issueId)),
-      order_by: {
-        expression: issue.created,
-        direction: e.DESC,
+      websiteaddresses: {
+        id: true,
+        url: true,
+        description: true,
       },
+      issueactivity: {
+        id: true,
+        message: true,
+        // created: true,
+        // filter_single: e.op(issue.id, "=", e.uuid(params.issueId)),
+        // order_by: {
+        //   expression: issue.issueactivity.created,
+        //   direction: e.DESC,
+        // },
+      }
     }))
     .run(client);
   console.log(issue);
