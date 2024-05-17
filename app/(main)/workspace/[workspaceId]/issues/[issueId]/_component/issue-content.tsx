@@ -35,6 +35,7 @@ import CommandMenuPriority from "../../_components/command-menu-priority";
 
 import { deleteWebLink } from "@/actions/links";
 import LinkAccordian from "./link-accordian";
+import ActivityAccordian from "./activity-accordian";
 
 interface IssueContentProps {
   issue: any;
@@ -189,6 +190,7 @@ const IssueContent: FC<IssueContentProps> = ({ issue, members }) => {
             </form>
           </Form>
           <LinkAccordian issue={issue} />
+          <ActivityAccordian issue={issue} />
         </div>
         <div>
           <div className="flex flex-col w-1/4 space-y-5 pl-3">
