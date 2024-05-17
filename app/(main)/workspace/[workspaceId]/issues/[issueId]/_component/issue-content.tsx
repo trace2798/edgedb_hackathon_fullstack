@@ -3,7 +3,7 @@ import { updateIssue } from "@/actions/issues";
 import AddLinkModal from "@/components/modals/add-link-modal";
 import { Spinner } from "@/components/spinner";
 
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Form,
@@ -24,7 +24,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 
 import { useRouter } from "next/navigation";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -33,9 +33,8 @@ import ChangeAssignee from "../../_components/assignee-button";
 import CommandMenuStatus from "../../_components/command-menu-issue";
 import CommandMenuPriority from "../../_components/command-menu-priority";
 
-import { deleteWebLink } from "@/actions/links";
-import LinkAccordian from "./link-accordian";
 import ActivityAccordian from "./activity-accordian";
+import LinkAccordian from "./link-accordian";
 
 interface IssueContentProps {
   issue: any;
@@ -50,10 +49,13 @@ const formSchema = z.object({
 });
 
 const IssueContent: FC<IssueContentProps> = ({ issue, members }) => {
+  const [isModified, setIsModified] = useState(false);
+
   const user = useCurrentUser();
   console.log(issue);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -67,7 +69,20 @@ const IssueContent: FC<IssueContentProps> = ({ issue, members }) => {
   {
     console.log(form.getValues());
   }
+  const { watch } = form;
+  const watchedFields = watch();
+  useEffect(() => {
+    const initialValues = {
+      id: issue.id || "",
+      title: issue.title || "",
+      description: issue.description || "",
+      duedate: issue.duedate || undefined,
+    };
 
+    setIsModified(
+      JSON.stringify(watchedFields) !== JSON.stringify(initialValues)
+    );
+  }, [watchedFields]);
   const onSubmit: SubmitHandler<FormData> = async (values) => {
     try {
       setLoading(true);
@@ -81,7 +96,8 @@ const IssueContent: FC<IssueContentProps> = ({ issue, members }) => {
       );
       form.reset();
       toast.success("Issue Updated.");
-      router.refresh();
+      window.location.reload();
+      setIsModified(false);
     } catch (error) {
       console.error(error);
       toast.error("Error creating Workspace.");
@@ -92,7 +108,7 @@ const IssueContent: FC<IssueContentProps> = ({ issue, members }) => {
   return (
     <>
       <div className="flex flex-col md:flex-row">
-        <div className="w-3/4 space-x-5">
+        <div className="md:w-3/4 space-x-5">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
@@ -108,13 +124,13 @@ const IssueContent: FC<IssueContentProps> = ({ issue, members }) => {
                         render={({ field }) => (
                           <FormItem>
                             <FormControl>
-                              <Input
+                              <Textarea
                                 id="title"
                                 placeholder="Issue Title"
-                                type="text"
+                                // type="text"
                                 autoCorrect="off"
                                 disabled={isLoading}
-                                className="border-none text-neutral-100 text-3xl"
+                                className="border-none text-neutral-100 text-3xl h-full"
                                 {...field}
                               />
                             </FormControl>
@@ -181,10 +197,19 @@ const IssueContent: FC<IssueContentProps> = ({ issue, members }) => {
                       )}
                     />
                   </div>
-                  <Button disabled={isLoading} className="mt-5">
-                    {isLoading && <Spinner />}
-                    Update Issue
-                  </Button>
+                  {isModified && (
+                    <Button
+                      disabled={!isModified || isLoading}
+                      className="mt-5"
+                    >
+                      {isLoading && <Spinner />}
+                      Update Issue
+                    </Button>
+                  )}
+                  {/* <Button disabled={isLoading} className="mt-5">
+                      {isLoading && <Spinner />}
+                      Update Issue
+                    </Button> */}
                 </div>
               </div>
             </form>

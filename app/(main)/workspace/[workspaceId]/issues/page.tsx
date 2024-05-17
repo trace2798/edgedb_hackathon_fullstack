@@ -12,7 +12,6 @@ import AddIssueButton from "./_components/add-issue-button";
 import CommandMenuStatus from "./_components/command-menu-issue";
 import CommandMenuPriority from "./_components/command-menu-priority";
 import DeleteIssueButton from "./_components/delete-issue-button";
-import LinkAlert from "./_components/link-alert";
 
 const client = createClient();
 

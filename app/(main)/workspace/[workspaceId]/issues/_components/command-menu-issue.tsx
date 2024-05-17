@@ -135,7 +135,23 @@ const CommandMenuStatus: FC<CommandMenuStatusProps> = ({
                               {field.value ? (
                                 <>
                                   {StatusIcon && (
-                                    <StatusIcon className="w-4 h-4" />
+                                    <StatusIcon
+                                      className={`w-h h-4 text-xs capitalize ${
+                                        field.value === "future"
+                                          ? "text-blue-500" // Blue for future tasks
+                                          : field.value === "todo"
+                                          ? "text-yellow-200" // Yellow for tasks that are to do
+                                          : field.value === "in progress"
+                                          ? "text-orange-600" // Orange for tasks in progress
+                                          : field.value === "done"
+                                          ? "text-indigo-500" // Green for done tasks
+                                          : field.value === "canceled"
+                                          ? "text-red-500" // Red for canceled tasks
+                                          : field.value === "in review"
+                                          ? "text-green-500" // Purple for tasks in review
+                                          : ""
+                                      }`}
+                                    />
                                   )}
                                   {displayTitle && (
                                     <span className="ml-2 capitalize text-sm">

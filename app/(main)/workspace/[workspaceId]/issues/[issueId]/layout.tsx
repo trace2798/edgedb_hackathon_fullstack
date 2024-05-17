@@ -80,7 +80,7 @@ const IssueIdLayout = async ({ children, params }: Props) => {
               className: "w-fit px-2 text-muted-foreground",
             })}
           >
-            <div>Issues</div>
+            <div>Tasks</div>
           </Link>
           <ChevronRight className="h-4 w-4" />
           <div
@@ -101,7 +101,9 @@ const IssueIdLayout = async ({ children, params }: Props) => {
               className: "w-fit px-2 text-muted-foreground",
             })}
           >
-            <span className="text-sm">{currentIssueIndex + 1}</span>&nbsp;/&nbsp;<span className="text-sm text-primary">{totalIssues}</span>
+            <span className="text-sm">{currentIssueIndex + 1}</span>
+            &nbsp;/&nbsp;
+            <span className="text-sm text-primary">{totalIssues}</span>
           </div>
           <div>
             {prevIssueId ? (

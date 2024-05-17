@@ -77,7 +77,7 @@ console.log(combinedWorkspaces);
             currentWorkspaceId={workspaceId}
           />
         </div>
-        <SidebarItem label="Issues" href="/issues" />
+        <SidebarItem label="Tasks" href="/issues" />
         <div className="ml-5 flex flex-col border-l-2 ">
           <SidebarItem label="Active" href="/issues/active" />
           <SidebarItem label="Future" href="/issues/future" />

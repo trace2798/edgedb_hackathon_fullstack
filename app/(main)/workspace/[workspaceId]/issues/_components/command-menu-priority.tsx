@@ -135,7 +135,21 @@ const CommandMenuPriority: FC<CommandMenuPriorityProps> = ({
                               {field.value ? (
                                 <>
                                   {PriorityIcon && (
-                                    <PriorityIcon className="w-4 h-4" />
+                                    <PriorityIcon
+                                      className={`w-h h-4 text-xs capitalize ${
+                                        field.value === "low"
+                                          ? "text-green-500" // Green for low priority
+                                          : field.value === "medium"
+                                          ? "text-yellow-200" // Yellow for medium priority
+                                          : field.value === "high"
+                                          ? "text-orange-300" // Orange for high priority
+                                          : field.value === "urgent"
+                                          ? "text-red-700" // Red for urgent
+                                          : field.value === "no priority"
+                                          ? "text-gray-500" // Gray for no priority
+                                          : ""
+                                      }`}
+                                    />
                                   )}
                                   {displayTitle && (
                                     <span className="ml-2 capitalize text-sm">
