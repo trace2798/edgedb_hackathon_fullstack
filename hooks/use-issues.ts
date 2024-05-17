@@ -19,14 +19,17 @@ import { create } from "zustand";
 
 type IssuesStore = {
   members?: Member[];
+  defaultStatus: string;
   isOpen: boolean;
-  onOpen: (members: Member[]) => void;
+  onOpen: (members: Member[], defaultStatus: string) => void;
   onClose: () => void;
 };
 
 export const useIssues = create<IssuesStore>((set) => ({
   members: [],
   isOpen: false,
-  onOpen: (members: Member[]) => set({ isOpen: true, members}),
+  defaultStatus: "",
+  onOpen: (members: Member[], defaultStatus?: string) =>
+    set({ isOpen: true, members, defaultStatus }),
   onClose: () => set({ isOpen: false }),
 }));

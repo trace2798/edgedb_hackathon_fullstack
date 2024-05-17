@@ -12,6 +12,14 @@ import AddIssueButton from "./_components/add-issue-button";
 import CommandMenuStatus from "./_components/command-menu-issue";
 import CommandMenuPriority from "./_components/command-menu-priority";
 import DeleteIssueButton from "./_components/delete-issue-button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import AddTaskButtonFooter from "./_components/add-task-button-footer";
 
 const client = createClient();
 
@@ -60,8 +68,8 @@ const Page = async ({ params }: { params: { workspaceId: string } }) => {
     <>
       <div className="pt-[50px] lg:pt-0 lg:mt-0 dark:bg-[#0f1011] min-h-screen flex-flex-col rounded-2xl">
         <div className="px-5 py-2 border border-secondary text-sm flex justify-between">
-          <h1>All Issues</h1>
-          <AddIssueButton members={members as Member[]} />
+          <h1>All Tasks</h1>
+          <AddIssueButton members={members as Member[]} defaultStatus="todo" />
         </div>
         <Suspense
           fallback={
@@ -76,6 +84,38 @@ const Page = async ({ params }: { params: { workspaceId: string } }) => {
           }
         >
           <div>
+            {issues.length === 0 && (
+              <div className="h-screen flex flex-col items-center justify-center ">
+                <Card className="bg-secondary max-w-lg">
+                  <CardHeader className="space-y-5">
+                    <CardTitle>Tasks</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3 text-muted-foreground">
+                    <p>
+                      Tasks are fundamental units of work, each serving a
+                      specific purpose towards achieving a larger goal. They
+                      vary in complexity and duration, ranging from simple,
+                      short-term actions to intricate, long-term projects.
+                    </p>
+                    <p>
+                      Effective task management involves prioritizing,
+                      scheduling, and tracking progress, which enhances
+                      productivity and ensures timely completion. Tasks, whether
+                      individual or collaborative, are the building blocks that
+                      drive progress and success in any endeavor.
+                    </p>
+                  </CardContent>
+                  <CardFooter>
+                    {" "}
+                    <AddTaskButtonFooter
+                      members={members as Member[]}
+                      defaultStatus="future"
+                      title="Add A Task"
+                    />
+                  </CardFooter>
+                </Card>
+              </div>
+            )}
             {issues.map((issue, index) => {
               return (
                 <div

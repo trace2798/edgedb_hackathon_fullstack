@@ -56,6 +56,8 @@ const formSchema = z.object({
 export function IssueModal({ className, ...props }: IssueModalProps) {
   const issues = useIssues();
   const members = useIssues((state) => state.members);
+  const defaultStatus = useIssues((state) => state.defaultStatus);
+  console.log(defaultStatus);
   console.log(members);
   const user = useCurrentUser();
   console.log(user);
@@ -67,7 +69,8 @@ export function IssueModal({ className, ...props }: IssueModalProps) {
 
   useEffect(() => {
     form.setValue("assigneeId", membershipIdOfCurrentUser);
-  }, [membershipIdOfCurrentUser]);
+    form.setValue("status", defaultStatus);
+  }, [membershipIdOfCurrentUser, defaultStatus]);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -75,7 +78,7 @@ export function IssueModal({ className, ...props }: IssueModalProps) {
     defaultValues: {
       title: "",
       description: "",
-      status: "todo",
+      status: defaultStatus as string,
       priority: "no priority",
       assigneeId: membershipIdOfCurrentUser as string,
       duedate: undefined,
@@ -100,7 +103,7 @@ export function IssueModal({ className, ...props }: IssueModalProps) {
         values.duedate
       );
       form.reset();
-      toast.success("Issue Created.");
+      toast.success("Task Created.");
       router.refresh();
       issues.onClose();
     } catch (error) {
@@ -115,7 +118,7 @@ export function IssueModal({ className, ...props }: IssueModalProps) {
       <DialogContent className="">
         <DialogHeader className="border-b pb-3">
           <h2 className="text-lg font-medium text-neutral-200">
-            Create an Issue
+            Create a Task
           </h2>
         </DialogHeader>
         <Form {...form}>
@@ -133,7 +136,7 @@ export function IssueModal({ className, ...props }: IssueModalProps) {
                       <FormControl>
                         <Input
                           id="title"
-                          placeholder="Issue Title"
+                          placeholder="Task Title"
                           type="text"
                           autoCorrect="off"
                           disabled={isLoading}
@@ -465,7 +468,7 @@ export function IssueModal({ className, ...props }: IssueModalProps) {
 
                 <Button disabled={isLoading} className="mt-5">
                   {isLoading && <Spinner />}
-                  Create Issue
+                  Create Task
                 </Button>
               </div>
             </div>

@@ -5,13 +5,13 @@ import { Plus } from "lucide-react";
 import { FC } from "react";
 import { Member } from "../../members/_components/members/column";
 
-interface AddIssueButtonProps {
+interface AddTaskButtonFooterProps {
   members: Member[];
   defaultStatus: string;
-  title?: string;
+  title: string;
 }
 
-const AddIssueButton: FC<AddIssueButtonProps> = ({
+const AddTaskButtonFooter: FC<AddTaskButtonFooterProps> = ({
   members,
   defaultStatus,
   title,
@@ -23,15 +23,12 @@ const AddIssueButton: FC<AddIssueButtonProps> = ({
         onClick={() => {
           issues.onOpen(members, defaultStatus);
         }}
-        variant={"sidebar"}
-        size={"sidebar"}
-        className=" items-middle flex justify-start hover:text-indigo-400 hover:bg-secondary"
+        className=" items-middle flex justify-start px-3 py-1 h-8 bg-blue-500 text-neutral-300 hover:bg-blue-600"
       >
-        <Plus className="h-4 w-4 mr-3" />
-        Add {title} Task
+        {title}
       </Button>
     </>
   );
 };
 
-export default AddIssueButton;
+export default AddTaskButtonFooter;
