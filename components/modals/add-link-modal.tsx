@@ -28,6 +28,11 @@ import { toast } from "sonner";
 import { Spinner } from "../spinner";
 import { Textarea } from "../ui/textarea";
 import { useCurrentUser } from "@/hooks/use-current-user";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "../ui/hover-card";
 
 const formSchema = z.object({
   url: z.string().min(2),
@@ -39,7 +44,7 @@ interface AddLinkModalProps {
 }
 
 const AddLinkModal: FC<AddLinkModalProps> = ({ issueId }) => {
-  const user = useCurrentUser()
+  const user = useCurrentUser();
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -52,8 +57,6 @@ const AddLinkModal: FC<AddLinkModalProps> = ({ issueId }) => {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
     let url = values.url;
     if (!url.startsWith("http://") && !url.startsWith("https://")) {
       url = "https://" + url;
@@ -62,7 +65,12 @@ const AddLinkModal: FC<AddLinkModalProps> = ({ issueId }) => {
     values.url = url;
 
     console.log(values);
-    const response = await createLink(user?.name as string, issueId, values.url, values.description);
+    const response = await createLink(
+      user?.name as string,
+      issueId,
+      values.url,
+      values.description
+    );
     if (response === "Done") {
       setOpen(false);
       toast.success("Link Added");
@@ -77,16 +85,29 @@ const AddLinkModal: FC<AddLinkModalProps> = ({ issueId }) => {
   return (
     <>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger
-          className={buttonVariants({
-            variant: "sidebar",
-            size: "sidebar",
-            className: "w-fit px-2 text-muted-foreground hover:text-indigo-400",
-          })}
-        >
-          {" "}
-          Add Link <ExternalLink className="h-4 w-4 ml-1" />
-        </DialogTrigger>
+        <HoverCard>
+          <HoverCardTrigger>
+            <DialogTrigger
+              className={buttonVariants({
+                variant: "sidebar",
+                size: "sidebar",
+                className:
+                  "w-fit px-2 text-muted-foreground hover:text-indigo-400",
+              })}
+            >
+              Add Link <ExternalLink className="h-4 w-4 ml-1" />
+            </DialogTrigger>
+          </HoverCardTrigger>
+          <HoverCardContent
+            className={buttonVariants({
+              variant: "sidebar",
+              size: "sidebar",
+              className: "w-fit px-2 dark:bg-black",
+            })}
+          >
+            Click to add website links
+          </HoverCardContent>
+        </HoverCard>{" "}
         <DialogContent className="">
           <DialogHeader className="border-b pb-3">
             <h2 className="text-lg font-medium text-neutral-200">Add link</h2>

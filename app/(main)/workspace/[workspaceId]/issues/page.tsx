@@ -1,4 +1,11 @@
 import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
@@ -9,17 +16,10 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { Member } from "../members/_components/members/column";
 import AddIssueButton from "./_components/add-issue-button";
+import AddTaskButtonFooter from "./_components/add-task-button-footer";
 import CommandMenuStatus from "./_components/command-menu-issue";
 import CommandMenuPriority from "./_components/command-menu-priority";
 import DeleteIssueButton from "./_components/delete-issue-button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import AddTaskButtonFooter from "./_components/add-task-button-footer";
 
 const client = createClient();
 

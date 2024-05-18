@@ -219,8 +219,8 @@ const IssueContent: FC<IssueContentProps> = ({ issue, members }) => {
           <ActivityAccordian issue={issue} />
         </div>
         <div>
-          <div className="flex flex-col w-1/4 space-y-5 pl-3">
-            <h1>Properties</h1>
+          <div className="flex flex-col w-1/4 space-y-3 pl-3">
+            {/* <h1>Properties</h1> */}
             <CommandMenuStatus
               id={issue.id as string}
               currentStatus={issue.status as string}
