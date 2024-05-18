@@ -9,7 +9,7 @@ export default async function Home() {
       {/* <main className=""> */}
       <main className="relative bg-black-100 flex justify-center items-center flex-col overflow-hidden mx-auto sm:px-10 px-5">
         {/* <a href="/workspace">Workspace</a> */}
-        <div className="max-w-7xl w-full">
+        {/* <div className="max-w-7xl w-full">
           <Spotlight
             className="-top-40 -left-10 md:-left-32 md:-top-20 h-screen"
             fill="white"
@@ -19,7 +19,8 @@ export default async function Home() {
             fill="purple"
           />
           <Spotlight className="left-80 top-28 h-[80vh] w-[50vw]" fill="blue" />
-        </div>
+        </div> */}
+        
       </main>
     </>
   );

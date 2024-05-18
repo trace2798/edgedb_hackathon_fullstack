@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { IssueModal } from "../modals/issue-modal";
 import { WorkspaceModal } from "../modals/workspaces-modal";
+import {AddBoardModal} from "../modals/add-board-modal";
 
 export const ModalProvider = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -19,6 +20,7 @@ export const ModalProvider = () => {
     <>
       <WorkspaceModal />
       <IssueModal />
+      <AddBoardModal/>
     </>
   );
 };

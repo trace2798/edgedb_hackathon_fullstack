@@ -92,6 +92,7 @@ module default {
     multi workspaceMember := .<workspace[is WorkspaceMember];
     multi activity := .<workspace[is Activity];
     multi issue := .<workspace[is Issue];
+    multi boards := .<workspace[is Board];
   }
 
   type WorkspaceMember {
@@ -116,6 +117,7 @@ module default {
       on target delete delete source;
     }
     multi issue := .<workspaceMember[is Issue];
+    multi boards := .<workspaceMember[is Board];
   }
 
   type Activity {
@@ -178,12 +180,32 @@ module default {
       on target delete delete source;
     }
     created: cal::local_datetime {
+      default := cal::to_local_datetime(datetime_current(), 'UTC');
+    }
+    updated: cal::local_datetime {
+      default := cal::to_local_datetime(datetime_current(), 'UTC');
+    }
+  }
+
+type Board {
+  required name: str;
+  description: str;
+  backgroundImage: str;
+  created: cal::local_datetime {
     default := cal::to_local_datetime(datetime_current(), 'UTC');
   }
   updated: cal::local_datetime {
     default := cal::to_local_datetime(datetime_current(), 'UTC');
+    rewrite update using (cal::to_local_datetime(datetime_current(), 'UTC'));
   }
+  required workspace -> Workspace {
+    on target delete delete source;
   }
+  creatorUserId: uuid;
+  required workspaceMember: WorkspaceMember;
+  index on (.workspace);
+}
+
 
 }
 

@@ -20,41 +20,41 @@ export const Sidebar = async ({ className, workspaceId }: Props) => {
   const session = await auth();
   console.log(workspaceId);
   const workspaces = await e
-  .select(e.Workspace, (workspace) => ({
-    id: true,
-    name: true,
-    filter: e.op(workspace.user.id, "=", e.uuid(session?.user?.id as string)),
-    order_by: {
-      expression: workspace.created,
-      direction: e.DESC,
-    },
-  }))
-  .run(client);
-console.log(workspaceId);
-console.log(workspaces);
+    .select(e.Workspace, (workspace) => ({
+      id: true,
+      name: true,
+      filter: e.op(workspace.user.id, "=", e.uuid(session?.user?.id as string)),
+      order_by: {
+        expression: workspace.created,
+        direction: e.DESC,
+      },
+    }))
+    .run(client);
+  console.log(workspaceId);
+  console.log(workspaces);
 
-const workspaceMember = await e
-  .select(e.Workspace, (workspace) => ({
-    id: true,
-    name: true,
-    filter: e.op(
-      e.op(
-        workspace.workspaceMember.user.id,
-        "=",
-        e.uuid(session?.user?.id as string)
+  const workspaceMember = await e
+    .select(e.Workspace, (workspace) => ({
+      id: true,
+      name: true,
+      filter: e.op(
+        e.op(
+          workspace.workspaceMember.user.id,
+          "=",
+          e.uuid(session?.user?.id as string)
+        ),
+        "and",
+        e.op(workspace.user.id, "!=", e.uuid(session?.user?.id as string))
       ),
-      "and",
-      e.op(workspace.user.id, "!=", e.uuid(session?.user?.id as string))
-    ),
-    order_by: {
-      expression: workspace.created,
-      direction: e.DESC,
-    },
-  }))
-  .run(client);
-console.log(workspaceMember);
-const combinedWorkspaces = [...workspaces, ...workspaceMember];
-console.log(combinedWorkspaces);
+      order_by: {
+        expression: workspace.created,
+        direction: e.DESC,
+      },
+    }))
+    .run(client);
+  console.log(workspaceMember);
+  const combinedWorkspaces = [...workspaces, ...workspaceMember];
+  console.log(combinedWorkspaces);
   return (
     <div
       className={cn(
@@ -83,7 +83,8 @@ console.log(combinedWorkspaces);
           <SidebarItem label="Future" href="/issues/future" />
         </div>
         {/* <Separator /> */}
-        <BoardListByWorkspace currentWorkspaceId={workspaceId} />
+        <SidebarItem label="Boards" href="/boards" />
+        {/* <BoardListByWorkspace currentWorkspaceId={workspaceId} /> */}
         <Separator />
       </div>
       <div className="divide-x-4">
