@@ -2,7 +2,7 @@ import {
   ArrowUpCircle,
   CheckCircle2,
   Circle,
-  HelpCircle,
+  CircleDotDashed,
   LucideIcon,
   XCircle,
   MoreHorizontal,
@@ -23,7 +23,7 @@ export const statuses: Status[] = [
   {
     value: "future",
     label: "Future",
-    icon: HelpCircle,
+    icon: CircleDotDashed,
   },
   {
     value: "todo",

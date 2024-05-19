@@ -1,5 +1,5 @@
 "use client";
-import { updateAssigneeId, updateStatus } from "@/actions/issues";
+import { updateAssigneeId } from "@/actions/issues";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Command,
@@ -26,17 +26,10 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useCurrentUser } from "@/hooks/use-current-user";
-import { statuses } from "@/lib/constant";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  ArrowUpCircle,
-  Check,
-  CheckCircle2,
-  Circle,
-  HelpCircle,
-  XCircle,
-  CircleArrowOutUpRight,
+  Check
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { FC, useEffect } from "react";

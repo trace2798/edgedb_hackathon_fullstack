@@ -1,13 +1,13 @@
-import { cn } from "@/lib/utils";
-import Link from "next/link";
-import { SidebarItem } from "./sidebar-item";
 import { auth } from "@/auth";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import UserAccountNav from "@/components/user-account-nav";
 import e, { createClient } from "@/dbschema/edgeql-js";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
+import { BoardListName } from "../workspace/[workspaceId]/boards/_components/board-list-name";
 import { SelectWorkspaceBox } from "./select-workspace-box";
-import BoardListByWorkspace from "./boardlist-by-workspace";
-import { SubSidebarItem } from "./sub-sidebar-item";
+import { SidebarItem } from "./sidebar-item";
 
 type Props = {
   className?: string;
@@ -82,9 +82,10 @@ export const Sidebar = async ({ className, workspaceId }: Props) => {
           <SidebarItem label="Active" href="/issues/active" />
           <SidebarItem label="Future" href="/issues/future" />
         </div>
-        {/* <Separator /> */}
         <SidebarItem label="Boards" href="/boards" />
-        {/* <BoardListByWorkspace currentWorkspaceId={workspaceId} /> */}
+        <ScrollArea className="ml-5 max-h-72 flex flex-col border-l-2 ">
+          <BoardListName params={{ workspaceId }} />
+        </ScrollArea>
         <Separator />
       </div>
       <div className="divide-x-4">

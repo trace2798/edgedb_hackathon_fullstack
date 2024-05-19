@@ -34,7 +34,7 @@ import {
   Check,
   CheckCircle2,
   Circle,
-  HelpCircle,
+  CircleDotDashed,
   XCircle,
   CircleArrowOutUpRight,
 } from "lucide-react";
@@ -55,7 +55,7 @@ interface CommandMenuStatusProps {
 }
 
 const statusIcons = {
-  future: HelpCircle,
+  future: CircleDotDashed,
   todo: Circle,
   "in progress": ArrowUpCircle,
   done: CheckCircle2,
