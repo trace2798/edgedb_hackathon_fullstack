@@ -1,5 +1,7 @@
 import { FC } from "react";
 import e, { createClient } from "@/dbschema/edgeql-js";
+import { ListContainer } from "./_components/list/list-container";
+import { auth } from "@/auth";
 
 interface PageProps {
   params: { workspaceId: string; boardId: string };
@@ -8,6 +10,7 @@ interface PageProps {
 const client = createClient();
 
 const Page: FC<PageProps> = async ({ params }) => {
+  const session = await auth();
   const board = await e
     .select(e.Board, (board) => ({
       id: true,
@@ -21,9 +24,17 @@ const Page: FC<PageProps> = async ({ params }) => {
     }))
     .run(client);
   console.log(board);
+  const lists = [] as any;
   return (
     <>
-      <h1>Page</h1>
+      <div className="p-4 h-full overflow-x-auto">
+        <ListContainer
+          boardId={params.boardId}
+          data={lists}
+          tenant_id={params.workspaceId}
+          userInfo={session?.user}
+        />
+      </div>
     </>
   );
 };
