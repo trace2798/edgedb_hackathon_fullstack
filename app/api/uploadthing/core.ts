@@ -10,7 +10,7 @@ const handleAuth = async () => {
 };
 
 export const ourFileRouter = {
-  boardImage: f({ image: { maxFileSize: "4MB", maxFileCount: 1 } })
+  boardImage: f({ image: { maxFileSize: "2MB", maxFileCount: 1 } })
     .middleware(() => handleAuth())
     .onUploadComplete(() => {}),
   cardFile: f(["image", "pdf"])

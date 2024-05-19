@@ -1,64 +1,87 @@
 "use client";
 
-import { toast } from "sonner";
-import { MoreHorizontal, X } from "lucide-react";
-
-// import { deleteBoard } from "@/actions/delete-board";
-// import { useAction } from "@/hooks/use-action";
-import { Button } from "@/components/ui/button";
+import { Activity, MoreHorizontalIcon, Settings, Trash } from "lucide-react";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useState } from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { deleteBoard } from "@/actions/board";
+import Link from "next/link";
 interface BoardOptionsProps {
   id: string;
-};
+  workspaceId: string;
+}
 
-export const BoardOptions = ({ id }: BoardOptionsProps) => {
-  // const { execute, isLoading } = useAction(deleteBoard, {
-  //   onError: (error) => {
-  //     toast.error(error);
-  //   }
-  // });
-
-  // const onDelete = () => {
-  //   execute({ id });
-  // };
+export const BoardOptions = ({ id, workspaceId }: BoardOptionsProps) => {
+  const router = useRouter();
+  const [isActivityHovered, setIsActivityHovered] = useState(false);
+  const [isDeleteHovered, setIsDeleteHovered] = useState(false);
 
   return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button className="h-auto w-auto p-2" >
-          <MoreHorizontal className="h-4 w-4" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent 
-        className="px-0 pt-3 pb-3" 
-        side="bottom" 
-        align="start"
-      >
-        <div className="text-sm font-medium text-center text-neutral-600 pb-4">
-          Board actions
-        </div>
-        {/* <PopoverClose asChild>
-          <Button 
-            className="h-auto w-auto p-2 absolute top-2 right-2 text-neutral-600"
-            variant="ghost"
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <MoreHorizontalIcon className="w-4 h-4 text-muted-foreground hover:text-primary hover:cursor-pointer pr-1" />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-56  z-[120]">
+        <DropdownMenuLabel>Board Options</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          <DropdownMenuItem
+            className={`hover:cursor-pointer ${
+              isDeleteHovered ? "blur-lg" : ""
+            }`}
+            onMouseEnter={() => setIsActivityHovered(true)}
+            onMouseLeave={() => setIsActivityHovered(false)}
           >
-            <X className="h-4 w-4" />
-          </Button>
-        </PopoverClose> */}
-        <Button
-          variant="ghost"
-          // onClick={onDelete}
-          // disabled={isLoading}
-          className="rounded-none w-full h-auto p-2 px-5 justify-start font-normal text-sm"
-        >
-          Delete this board
-        </Button>
-      </PopoverContent>
-    </Popover>
+            <Activity className="mr-2 h-4 w-4" />
+            <span>Activity</span>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <Link href={`/workspace/${workspaceId}/boards/${id}/settings`}>
+            <DropdownMenuItem
+              className={`hover:cursor-pointer ${
+                isDeleteHovered ? "blur-lg" : ""
+              }`}
+              onMouseEnter={() => setIsActivityHovered(true)}
+              onMouseLeave={() => setIsActivityHovered(false)}
+            >
+              <Settings className="mr-2 h-4 w-4" />
+              <span>Settings</span>
+            </DropdownMenuItem>
+          </Link>
+          {/* <DropdownMenuItem
+            className={`text-red-500 hover:cursor-pointer ${
+              isActivityHovered ? "blur" : ""
+            }`}
+            onMouseEnter={() => setIsDeleteHovered(true)}
+            onMouseLeave={() => setIsDeleteHovered(false)}
+            onClick={() => console.log("Delete")}
+          >
+            <Trash className="mr-2 h-4 w-4" />
+            <span>Delete</span>
+          </DropdownMenuItem> */}
+        </DropdownMenuGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };

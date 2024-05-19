@@ -107,3 +107,17 @@ export async function updateBoardName(boardId: string, name: string) {
     return "Error creating Board";
   }
 }
+
+export async function deleteBoard(boardId: string) {
+  try {
+
+    await e
+      .delete(e.Board, (board) => ({
+        filter_single: e.op(board.id, "=", e.uuid(boardId)),
+      }))
+      .run(client);
+    return "Done";
+  } catch (error) {
+    return "Error deleting Board";
+  }
+}

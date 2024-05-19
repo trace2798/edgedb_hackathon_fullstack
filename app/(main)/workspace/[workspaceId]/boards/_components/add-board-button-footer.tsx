@@ -3,24 +3,23 @@ import { Button } from "@/components/ui/button";
 import { useIssues } from "@/hooks/use-issues";
 import { FC } from "react";
 import { Member } from "../../members/_components/members/column";
+import { useBoards } from "@/hooks/use-boards";
 
-interface AddTaskButtonFooterProps {
+interface AddBoardButtonFooterProps {
   members: Member[];
-  defaultStatus: string;
   title: string;
 }
 
-const AddTaskButtonFooter: FC<AddTaskButtonFooterProps> = ({
+const AddBoardButtonFooter: FC<AddBoardButtonFooterProps> = ({
   members,
-  defaultStatus,
   title,
 }) => {
-  const issues = useIssues();
+  const board = useBoards();
   return (
     <>
       <Button
         onClick={() => {
-          issues.onOpen(members, defaultStatus);
+          board.onOpen(members);
         }}
         className=" items-middle flex justify-start px-3 py-1 h-8 bg-blue-500 text-neutral-300 hover:bg-blue-600"
       >
@@ -30,4 +29,4 @@ const AddTaskButtonFooter: FC<AddTaskButtonFooterProps> = ({
   );
 };
 
-export default AddTaskButtonFooter;
+export default AddBoardButtonFooter;

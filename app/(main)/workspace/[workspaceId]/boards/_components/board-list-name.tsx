@@ -1,7 +1,9 @@
 import { buttonVariants } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import e, { createClient } from "@/dbschema/edgeql-js";
+import { MoreHorizontalIcon } from "lucide-react";
 import Link from "next/link";
+import { BoardOptions } from "../[boardId]/_components/board-options";
 
 const client = createClient();
 
@@ -26,17 +28,23 @@ export const BoardListName = async ({
   return (
     <div className="flex flex-col">
       {boards.map((board) => (
-        <Link key={board.id} href={`/workspace/${params.workspaceId}/boards/${board.id}`}>
-          <p
-            className={buttonVariants({
-              variant: "sidebar",
-              size: "sidebar",
-              className: "justify-start hover:bg-secondary",
-            })}
-          >
-            {board.name}
-          </p>
-        </Link>
+        <div
+          key={board.id}
+          className="flex flex-row justify-between items-center  hover:bg-secondary rounded-md"
+        >
+          <Link href={`/workspace/${params.workspaceId}/boards/${board.id}`}>
+            <p
+              className={buttonVariants({
+                variant: "sidebar",
+                size: "sidebar",
+                className: "justify-start",
+              })}
+            >
+              {board.name}
+            </p>
+          </Link>
+          <BoardOptions id={board.id} workspaceId={params.workspaceId} />
+        </div>
       ))}
     </div>
   );
