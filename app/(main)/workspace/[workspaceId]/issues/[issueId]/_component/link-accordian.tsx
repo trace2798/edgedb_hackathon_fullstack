@@ -37,6 +37,7 @@ const LinkAccordian: FC<LinkAccordianProps> = ({ issue }) => {
       toast.error("Error removing web link.");
     }
   };
+  console.log(issue.websiteaddresses);
   return (
     <>
       <div>
@@ -52,52 +53,49 @@ const LinkAccordian: FC<LinkAccordianProps> = ({ issue }) => {
               Links
             </AccordionTrigger>
             <AccordionContent className="space-y-3">
-              {issue.websiteaddresses.lenght > 0 &&
-                issue.websiteaddresses?.map(
-                  (link: { id: string; url: string; description: string }) => (
-                    <>
-                      <div
-                        key={link.id}
-                        className="flex flex-col text-ellipsis overflow-hidden border rounded-xl px-3 py-1 "
-                      >
-                        <div className="flex justify-between">
-                          <div className=" overflow-hidden h-6">
-                            <HoverCard>
-                              <HoverCardTrigger asChild>
-                                <a
-                                  href={link.url}
-                                  target="_blank"
-                                  className="text-base hover:text-indigo-400 "
-                                >
-                                  {link.description}
-                                </a>
-                              </HoverCardTrigger>
-                              <HoverCardContent>
-                                <p>{link.description}</p>
-                              </HoverCardContent>
-                            </HoverCard>
-                          </div>
-                          <div className="flex space-x-2 items-center">
+              {issue.websiteaddresses?.map(
+                (link: { id: string; url: string; description: string }) => (
+                  <div
+                    key={link.id}
+                    className="flex flex-col text-ellipsis overflow-hidden border rounded-xl px-2 py-1"
+                  >
+                    <div className="flex justify-between items-center">
+                      <div className="overflow-hidden h-6">
+                        <HoverCard>
+                          <HoverCardTrigger>
                             <a
                               href={link.url}
                               target="_blank"
-                              className="text-base hover:text-indigo-400 "
+                              className=" hover:text-indigo-400 text-sm"
                             >
-                              <ExternalLink className="w-4 h-4" />
+                              {link.description || link.url}
                             </a>
-                            <Button
-                              onClick={() => removeWebLink(link.id)}
-                              variant={"sidebar"}
-                              size={"sidebar"}
-                            >
-                              Remove
-                            </Button>
-                          </div>
-                        </div>
+                          </HoverCardTrigger>
+                          <HoverCardContent className="break-words text-sm">
+                            <p>{link.description || link.url}</p>
+                          </HoverCardContent>
+                        </HoverCard>
                       </div>
-                    </>
-                  )
-                )}
+                      <div className="flex space-x-2 items-center">
+                        <a
+                          href={link.url}
+                          target="_blank"
+                          className="text-base hover:text-indigo-400 "
+                        >
+                          <ExternalLink className="w-4 h-4" />
+                        </a>
+                        <Button
+                          onClick={() => removeWebLink(link.id)}
+                          variant={"sidebar"}
+                          size={"sidebar"}
+                        >
+                          Remove
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                )
+              )}
               {issue.websiteaddresses.length === 0 && (
                 <div className="flex flex-col items-center justify-center">
                   <h1>No links added</h1>

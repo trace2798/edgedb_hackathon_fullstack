@@ -66,3 +66,44 @@ export async function createBoard(
     return "Error creating Board";
   }
 }
+
+export async function updateBoardName(boardId: string, name: string) {
+  try {
+    console.log(name, "NAME");
+
+    // const verifyMember = await e
+    //   .select(e.WorkspaceMember, (member) => ({
+    //     id: true,
+    //     email: true,
+    //     name: true,
+    //     workspaceId: true,
+    //     filter_single: e.op(member.id, "=", e.uuid(currentUsersMembershipId)),
+    //   }))
+    //   .run(client);
+    // console.log(verifyMember);
+    // if (!verifyMember) {
+    //   return "Member not found";
+    // }
+    const board = await e
+      .select(e.Board, (board) => ({
+        id: true,
+        filter_single: e.op(board.id, "=", e.uuid(boardId)),
+      }))
+      .run(client);
+    console.log(board);
+
+    const updateBoardTitle = await e
+      .update(e.Board, () => ({
+        filter_single: { id: e.uuid(boardId) },
+        set: {
+          name: name as string,
+        },
+      }))
+      .run(client);
+    console.log(updateBoardTitle);
+
+    return "Done";
+  } catch (error) {
+    return "Error creating Board";
+  }
+}

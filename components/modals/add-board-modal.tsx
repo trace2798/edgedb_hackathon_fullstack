@@ -160,6 +160,7 @@ export function AddBoardModal({ className, ...props }: AddBoardModalProps) {
                               endpoint="boardImage"
                               value={field.value as string}
                               onChange={field.onChange}
+                              title="Add  Image"
                             />
                           </FormControl>
                           <FormMessage />

@@ -92,7 +92,7 @@ const AddLinkModal: FC<AddLinkModalProps> = ({ issueId }) => {
                 variant: "sidebar",
                 size: "sidebar",
                 className:
-                  "w-fit px-2 text-muted-foreground hover:text-indigo-400",
+                  "w-fit px-2 text-muted-foreground hover:text-indigo-400 font-normal",
               })}
             >
               Add Link <ExternalLink className="h-4 w-4 ml-1" />

@@ -12,7 +12,6 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import {
   Popover,
   PopoverContent,
@@ -35,7 +34,6 @@ import CommandMenuPriority from "../../_components/command-menu-priority";
 
 import ActivityAccordian from "./activity-accordian";
 import LinkAccordian from "./link-accordian";
-import { FileUpload } from "@/components/file-upload";
 
 interface IssueContentProps {
   issue: any;
@@ -108,8 +106,8 @@ const IssueContent: FC<IssueContentProps> = ({ issue, members }) => {
 
   return (
     <>
-      <div className="flex flex-col md:flex-row">
-        <div className="md:w-3/4 space-x-5">
+      <div className="grid grid-cols-1 lg:grid-cols-2">
+        <div className="w-full">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
@@ -207,20 +205,35 @@ const IssueContent: FC<IssueContentProps> = ({ issue, members }) => {
                       Update Issue
                     </Button>
                   )}
-                  {/* <Button disabled={isLoading} className="mt-5">
-                      {isLoading && <Spinner />}
-                      Update Issue
-                    </Button> */}
                 </div>
               </div>
             </form>
           </Form>
+
+          <div className="grid grid-cols-1 gap-3 mt-5 lg:hidden">
+            <CommandMenuStatus
+              id={issue.id as string}
+              currentStatus={issue.status as string}
+              displayTitle={true}
+            />
+            <CommandMenuPriority
+              id={issue.id as string}
+              currentPriority={issue.priority as string}
+              displayTitle={true}
+            />
+            <ChangeAssignee
+              id={issue.id as string}
+              currentAssigneeId={issue.assigneeId as string}
+              members={members}
+            />
+            <AddLinkModal issueId={issue.id as string} />
+          </div>
+
           <LinkAccordian issue={issue} />
           <ActivityAccordian issue={issue} />
         </div>
-        <div>
-          <div className="flex flex-col w-1/4 space-y-3 pl-3">
-            {/* <h1>Properties</h1> */}
+        <div className="max-w-sm hidden lg:block">
+          <div className="flex flex-col w-full space-y-3 pl-3 justify-end">
             <CommandMenuStatus
               id={issue.id as string}
               currentStatus={issue.status as string}

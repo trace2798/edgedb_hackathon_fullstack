@@ -36,7 +36,7 @@ const ActivityAccordian: FC<ActivityAccordianProps> = ({ issue }) => {
                       className="flex flex-col text-ellipsis overflow-hidden border rounded-xl px-3 py-1 "
                     >
                       <div className="flex justify-between">
-                        <div className=" overflow-hidden h-6">
+                        <div className=" overflow-hidden h-6 text-sm">
                           {activity.message}
                         </div>
                       </div>

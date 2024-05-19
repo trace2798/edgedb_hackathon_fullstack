@@ -1,6 +1,6 @@
 "use client";
 
-import { FileIcon, Paperclip, X } from "lucide-react";
+import { FileIcon, ImageIcon, Paperclip, X } from "lucide-react";
 import Image from "next/image";
 
 import { UploadButton, UploadDropzone } from "@/lib/uploadthing";
@@ -13,9 +13,10 @@ interface FileUploadProps {
   onChange: (url?: string) => void;
   value: string;
   endpoint: "cardFile" | "boardImage";
+  title: string
 }
 
-export const FileUpload = ({ onChange, value, endpoint }: FileUploadProps) => {
+export const FileUpload = ({ onChange, value, endpoint, title }: FileUploadProps) => {
   const fileType = value?.split(".").pop();
   console.log(value, fileType);
   if (value && fileType !== "pdf") {
@@ -71,7 +72,7 @@ export const FileUpload = ({ onChange, value, endpoint }: FileUploadProps) => {
           size={"sidebar"}
           className="text-muted-foreground hover:text-indigo-400"
         >
-          <Paperclip className="h-4 w-4" />
+          <ImageIcon className="h-4 w-4 mr-1" /> {title}
         </Button>
       </DialogTrigger>
       <DialogContent>

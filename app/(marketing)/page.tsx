@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import Button from "@/components/animation/button";
 import { Spotlight } from "@/components/spotlight";
 
 export default async function Home() {
@@ -20,7 +21,11 @@ export default async function Home() {
           />
           <Spotlight className="left-80 top-28 h-[80vh] w-[50vw]" fill="blue" />
         </div> */}
-        
+        {/* <div className="h-screen flex items-center">
+
+        <Button hueValue={0}>Generate Site</Button>
+        </div> */}
+  
       </main>
     </>
   );

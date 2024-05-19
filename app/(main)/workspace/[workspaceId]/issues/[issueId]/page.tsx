@@ -31,12 +31,6 @@ const Page: FC<PageProps> = async ({ params }) => {
       issueactivity: {
         id: true,
         message: true,
-        // created: true,
-        // filter_single: e.op(issue.id, "=", e.uuid(params.issueId)),
-        // order_by: {
-        //   expression: issue.issueactivity.created,
-        //   direction: e.DESC,
-        // },
       }
     }))
     .run(client);
@@ -64,7 +58,7 @@ const Page: FC<PageProps> = async ({ params }) => {
     .run(client);
   return (
     <>
-      <div className="mx-[15vw] pt-14">
+      <div className="mx-5 lg:ml-[15vw] pt-14">
         <IssueContent issue={issue} members={members as Member[]} />
       </div>
     </>
