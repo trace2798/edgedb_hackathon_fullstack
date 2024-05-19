@@ -93,6 +93,7 @@ module default {
     multi activity := .<workspace[is Activity];
     multi issue := .<workspace[is Issue];
     multi boards := .<workspace[is Board];
+    multi lists := .<workspace[is List];
   }
 
   type WorkspaceMember {
@@ -118,6 +119,7 @@ module default {
     }
     multi issue := .<workspaceMember[is Issue];
     multi boards := .<workspaceMember[is Board];
+    
   }
 
   type Activity {
@@ -139,7 +141,7 @@ module default {
 
   type Issue {
     required title: str;
-   required status: str {
+    required status: str {
     default := "todo";
     index on (.status);
   }
@@ -203,7 +205,29 @@ type Board {
   }
   creatorUserId: uuid;
   required workspaceMember: WorkspaceMember;
+  multi lists := .<board[is List];
   index on (.workspace);
+}
+
+type List {
+  required name: str;
+  required order: int64;
+  required workspaceId := .workspace.id;
+  required boardId := .board.id;
+  created: cal::local_datetime {
+    default := cal::to_local_datetime(datetime_current(), 'UTC');
+  }
+  updated: cal::local_datetime {
+    default := cal::to_local_datetime(datetime_current(), 'UTC');
+    rewrite update using (cal::to_local_datetime(datetime_current(), 'UTC'));
+  }
+  required workspace -> Workspace {
+    on target delete delete source;
+  }
+  required board -> Board {
+    on target delete delete source;
+  }
+  index on (.board);
 }
 
 
