@@ -20,7 +20,6 @@ export async function createCard(title: string, listId: string) {
     const lastCard = await e
       .select(e.Card, (card) => ({
         order: true,
-
         filter_single: e.op(card.list.id, "=", e.uuid(listId)),
         order_by: {
           expression: card.order,
@@ -68,6 +67,58 @@ export async function deleteCard(
         filter_single: e.op(card.id, "=", e.uuid(id)),
       }))
       .run(client);
+    revalidatePath(`/workspace/${workspaceId}/board/${boardId}`);
+    return "Done";
+  } catch (error) {
+    return "Error Deleting Card";
+  }
+}
+
+export async function cardToCopy(
+  id: string,
+  workspaceId: string,
+  boardId: string,
+  listId: string
+) {
+  try {
+    const card = await e
+      .select(e.Card, (card) => ({
+        ...e.Card["*"],
+        filter_single: e.op(card.id, "=", e.uuid(id)),
+      }))
+      .run(client);
+    console.log(card);
+    if(!card) {
+      return "Error: Card not found";
+    }
+    const lastCard = await e
+      .select(e.Card, (card) => ({
+        order: true,
+        filter_single: e.op(card.list.id, "=", e.uuid(listId)),
+        order_by: {
+          expression: card.order,
+          direction: e.DESC,
+        },
+        limit: 1,
+      }))
+      .run(client);
+    console.log(lastCard);
+    const newOrder = lastCard ? lastCard.order + 1 : 1;
+    const createCard = await e
+    .insert(e.Card, {
+      title: `${card.title} - Copy` as string,
+      order: newOrder as number,
+      list: e.select(e.List, (list) => ({
+        filter_single: e.op(list.id, "=", e.uuid(listId as string)),
+      })),
+    })
+    .run(client);
+  console.log(createCard);
+    // await e
+    //   .delete(e.Card, (card) => ({
+    //     filter_single: e.op(card.id, "=", e.uuid(id)),
+    //   }))
+    //   .run(client);
     revalidatePath(`/workspace/${workspaceId}/board/${boardId}`);
     return "Done";
   } catch (error) {

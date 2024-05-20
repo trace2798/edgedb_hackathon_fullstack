@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 // import { deleteCard } from "@/actions/delete-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useCardModal } from "@/hooks/use-card-modal";
-import { deleteCard } from "@/actions/card";
+import { cardToCopy, deleteCard } from "@/actions/card";
 
 interface ActionsProps {
   data: Card;
@@ -46,15 +46,23 @@ export const Actions = ({ data }: ActionsProps) => {
   //     }
   //   );
 
-  const onCopy = () => {
+  const onCopy = async () => {
     const boardId = params.boardId as string;
 
-    // executeCopyCard({
-    //   id: data.id,
-    //   boardId,
-    //   tenant_id: data.tenant_id,
-    //   list_id: data.list_id,
-    // });
+    const response = await cardToCopy(
+      data.id,
+      params.workspaceId as string,
+      params.boardId as string,
+      data.listId
+    );
+    console.log(response);
+    if (response === "Done") {
+      router.refresh();
+      cardModal.onClose();
+      toast.success(`Card Copied`);
+    } else {
+      toast.error(response);
+    }
   };
 
   const onDelete = async () => {
