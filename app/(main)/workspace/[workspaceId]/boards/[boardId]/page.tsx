@@ -24,14 +24,27 @@ const Page: FC<PageProps> = async ({ params }) => {
     }))
     .run(client);
   console.log(board);
-  const lists = [] as any;
+  // const lists = [] as any;
+  const lists = await e
+    .select(e.List, (list) => ({
+      id: true,
+      title: true,
+      order: true,
+      filter: e.op(list.board.id, "=", e.uuid(params.boardId)),
+      order_by: {
+        expression: list.order,
+        direction: e.ASC,
+      },
+    }))
+    .run(client);
+    console.log(lists);
   return (
     <>
       <div className="p-4 h-full overflow-x-auto">
         <ListContainer
           boardId={params.boardId}
           data={lists}
-          tenant_id={params.workspaceId}
+          workspaceId={params.workspaceId}
           userInfo={session?.user}
         />
       </div>

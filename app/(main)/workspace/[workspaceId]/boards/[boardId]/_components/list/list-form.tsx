@@ -13,8 +13,15 @@ import { FormInput } from "../form-input";
 import { FormSubmit } from "../form-submit";
 
 import { ListWrapper } from "./list-wrapper";
+import { createList } from "@/actions/lists";
 
-export const ListForm = ({ tenant_id }: { tenant_id: string }) => {
+export const ListForm = ({
+  boardId,
+  workspaceId,
+}: {
+  boardId: string;
+  workspaceId: string;
+}) => {
   const router = useRouter();
   const params = useParams();
 
@@ -44,7 +51,7 @@ export const ListForm = ({ tenant_id }: { tenant_id: string }) => {
   //     toast.error(error);
   //   },
   // });
-  const createList = ({ title, boardId, tenant_id }: any) => {};
+  // const createList = ({ title, boardId, tenant_id }: any) => {};
   const onKeyDown = (e: KeyboardEvent) => {
     if (e.key === "Escape") {
       disableEditing();
@@ -57,8 +64,18 @@ export const ListForm = ({ tenant_id }: { tenant_id: string }) => {
   const onSubmit = async (formData: FormData) => {
     console.log(formData);
     const title = formData.get("title") as string;
-    const boardId = formData.get("boardId") as string;
-    const tenant_id = formData.get("tenant_id") as string;
+    console.log(title);
+    // const boardId = formData.get("boardId") as string;
+    // const tenant_id = formData.get("tenant_id") as string;
+    const response = await createList(title, boardId, workspaceId);
+    console.log(response);
+    if (response === "Done") {
+      toast.success(`List "${title}" created`);
+      disableEditing();
+      router.refresh();
+    } else {
+      toast.error(response);
+    }
     // execute({
     //   title,
     //   boardId,
@@ -79,10 +96,10 @@ export const ListForm = ({ tenant_id }: { tenant_id: string }) => {
             // errors={fieldErrors}
             id="title"
             className="text-sm px-2 py-1 h-7 font-medium border-transparent hover:border-input focus:border-input transition"
-            placeholder="Enter list title..."
+            placeholder="Enter list name..."
           />
-          <input hidden value={params.boardId} name="boardId" />
-          <input hidden value={tenant_id} name="tenant_id" />
+          {/* <input hidden value={params.boardId} name="boardId" />
+          <input hidden value={tenant_id} name="tenant_id" /> */}
           <div className="flex items-center gap-x-1">
             <FormSubmit>Add list</FormSubmit>
             <Button onClick={disableEditing} size="sm" variant="ghost">

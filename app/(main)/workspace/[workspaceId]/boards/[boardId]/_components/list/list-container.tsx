@@ -13,9 +13,10 @@ import { ListForm } from "./list-form";
 import { ListItem } from "./list-item";
 
 interface ListContainerProps {
-  data: ListWithCards[];
+  // data: ListWithCards[];
+  data: any[]
   boardId: string;
-  tenant_id: string;
+  workspaceId: string;
   userInfo: any;
 }
 
@@ -30,12 +31,12 @@ function reorder<T>(list: T[], startIndex: number, endIndex: number) {
 export const ListContainer = ({
   data,
   boardId,
-  tenant_id,
+  workspaceId,
   userInfo,
 }: ListContainerProps) => {
   const [orderedData, setOrderedData] = useState(data);
 
-  const executeUpdateListOrder = ({items, boardId, tenant_id}: any) => {};
+  const executeUpdateListOrder = ({ items, boardId, workspaceId }: any) => {};
 
   //   const { execute: executeUpdateListOrder } = useAction(updateListOrder, {
   //     onSuccess: () => {
@@ -45,7 +46,7 @@ export const ListContainer = ({
   //       toast.error(error);
   //     },
   //   });
-  const executeUpdateCardOrder = ({items, boardId, tenant_id}: any) => {};
+  const executeUpdateCardOrder = ({ items, boardId, workspaceId }: any) => {};
   //   const { execute: executeUpdateCardOrder } = useAction(updateCardOrder, {
   //     onSuccess: () => {
   //       toast.success("Card reordered");
@@ -81,7 +82,7 @@ export const ListContainer = ({
       );
 
       setOrderedData(items);
-      executeUpdateListOrder({ items, boardId, tenant_id });
+      executeUpdateListOrder({ items, boardId, workspaceId });
     }
 
     // User moves a card
@@ -128,7 +129,7 @@ export const ListContainer = ({
         executeUpdateCardOrder({
           boardId: boardId,
           items: reorderedCards,
-          tenant_id: tenant_id,
+          workspaceId: workspaceId,
         });
         // User moves the card to another list
       } else {
@@ -154,7 +155,7 @@ export const ListContainer = ({
         executeUpdateCardOrder({
           boardId: boardId,
           items: destList.cards,
-          tenant_id: tenant_id,
+          workspaceId: workspaceId,
         });
       }
     }
@@ -180,7 +181,7 @@ export const ListContainer = ({
               );
             })}
             {provided.placeholder}
-            <ListForm tenant_id={tenant_id} />
+            <ListForm boardId={boardId} workspaceId={workspaceId} />
             <div className="flex-shrink-0 w-1" />
           </ol>
         )}

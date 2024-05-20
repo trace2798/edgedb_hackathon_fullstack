@@ -54,7 +54,7 @@ export const ListHeader = ({ data, onAddCard }: ListHeaderProps) => {
     if (title === data.title) {
       return disableEditing();
     }
-
+// const response = await updateList(id, title, boardId);  
     // execute({
     //   title,
     //   id,

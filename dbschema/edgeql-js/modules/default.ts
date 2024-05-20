@@ -65,8 +65,11 @@ export type $BoardλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f73840c
   "updated": $.PropertyDesc<_cal.$local_datetime, $.Cardinality.AtMostOne, false, false, false, true>;
   "workspace": $.LinkDesc<$Workspace, $.Cardinality.One, {}, false, false,  false, false>;
   "workspaceMember": $.LinkDesc<$WorkspaceMember, $.Cardinality.One, {}, false, false,  false, false>;
+  "lists": $.LinkDesc<$List, $.Cardinality.Many, {}, false, true,  false, false>;
   "<boards[is Workspace]": $.LinkDesc<$Workspace, $.Cardinality.Many, {}, false, false,  false, false>;
   "<boards[is WorkspaceMember]": $.LinkDesc<$WorkspaceMember, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<board[is List]": $.LinkDesc<$List, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<board": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
   "<boards": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
 }>;
 type $Board = $.ObjectType<"default::Board", $BoardλShape, null, [
@@ -117,6 +120,26 @@ type $IssueActivity = $.ObjectType<"default::IssueActivity", $IssueActivityλSha
 const $IssueActivity = $.makeType<$IssueActivity>(_.spec, "b17f1c26-141d-11ef-ba0a-e53b6b507fca", _.syntax.literal);
 
 const IssueActivity: $.$expr_PathNode<$.TypeSet<$IssueActivity, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($IssueActivity, $.Cardinality.Many), null);
+
+export type $ListλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588λShape & {
+  "boardId": $.PropertyDesc<_std.$uuid, $.Cardinality.One, false, true, false, false>;
+  "workspaceId": $.PropertyDesc<_std.$uuid, $.Cardinality.One, false, true, false, false>;
+  "created": $.PropertyDesc<_cal.$local_datetime, $.Cardinality.AtMostOne, false, false, false, true>;
+  "order": $.PropertyDesc<_std.$int64, $.Cardinality.One, false, false, false, false>;
+  "updated": $.PropertyDesc<_cal.$local_datetime, $.Cardinality.AtMostOne, false, false, false, true>;
+  "title": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
+  "workspace": $.LinkDesc<$Workspace, $.Cardinality.One, {}, false, false,  false, false>;
+  "board": $.LinkDesc<$Board, $.Cardinality.One, {}, false, false,  false, false>;
+  "<lists[is Board]": $.LinkDesc<$Board, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<lists[is Workspace]": $.LinkDesc<$Workspace, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<lists": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
+}>;
+type $List = $.ObjectType<"default::List", $ListλShape, null, [
+  ..._std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588['__exclusives__'],
+]>;
+const $List = $.makeType<$List>(_.spec, "791a68c9-1672-11ef-839a-116c36cdff47", _.syntax.literal);
+
+const List: $.$expr_PathNode<$.TypeSet<$List, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($List, $.Cardinality.Many), null);
 
 export type $SessionλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588λShape & {
   "userId": $.PropertyDesc<_std.$uuid, $.Cardinality.One, false, true, false, false>;
@@ -201,6 +224,8 @@ export type $WorkspaceλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f73
   "activity": $.LinkDesc<$Activity, $.Cardinality.Many, {}, false, true,  false, false>;
   "issue": $.LinkDesc<$Issue, $.Cardinality.Many, {}, false, true,  false, false>;
   "boards": $.LinkDesc<$Board, $.Cardinality.Many, {}, false, true,  false, false>;
+  "lists": $.LinkDesc<$List, $.Cardinality.Many, {}, false, true,  false, false>;
+  "<workspace[is List]": $.LinkDesc<$List, $.Cardinality.Many, {}, false, false,  false, false>;
   "<workspaces[is User]": $.LinkDesc<$User, $.Cardinality.Many, {}, false, false,  false, false>;
   "<workspace[is WorkspaceMember]": $.LinkDesc<$WorkspaceMember, $.Cardinality.Many, {}, false, false,  false, false>;
   "<workspace[is Activity]": $.LinkDesc<$Activity, $.Cardinality.Many, {}, false, false,  false, false>;
@@ -244,7 +269,7 @@ const WorkspaceMember: $.$expr_PathNode<$.TypeSet<$WorkspaceMember, $.Cardinalit
 
 
 
-export { MemberRole, $Account, Account, $Activity, Activity, $Board, Board, $Issue, Issue, $IssueActivity, IssueActivity, $Session, Session, $User, User, $VerificationToken, VerificationToken, $WebsiteAddress, WebsiteAddress, $Workspace, Workspace, $WorkspaceMember, WorkspaceMember };
+export { MemberRole, $Account, Account, $Activity, Activity, $Board, Board, $Issue, Issue, $IssueActivity, IssueActivity, $List, List, $Session, Session, $User, User, $VerificationToken, VerificationToken, $WebsiteAddress, WebsiteAddress, $Workspace, Workspace, $WorkspaceMember, WorkspaceMember };
 
 type __defaultExports = {
   "MemberRole": typeof MemberRole;
@@ -253,6 +278,7 @@ type __defaultExports = {
   "Board": typeof Board;
   "Issue": typeof Issue;
   "IssueActivity": typeof IssueActivity;
+  "List": typeof List;
   "Session": typeof Session;
   "User": typeof User;
   "VerificationToken": typeof VerificationToken;
@@ -267,6 +293,7 @@ const __defaultExports: __defaultExports = {
   "Board": Board,
   "Issue": Issue,
   "IssueActivity": IssueActivity,
+  "List": List,
   "Session": Session,
   "User": User,
   "VerificationToken": VerificationToken,

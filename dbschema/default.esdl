@@ -210,7 +210,7 @@ type Board {
 }
 
 type List {
-  required name: str;
+  required title: str;
   required order: int64;
   required workspaceId := .workspace.id;
   required boardId := .board.id;
