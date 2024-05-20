@@ -35,9 +35,18 @@ const Page: FC<PageProps> = async ({ params }) => {
         expression: list.order,
         direction: e.ASC,
       },
+      cards: e.select(e.Card, (card) => ({
+        id: true,
+        title: true,
+        order: true,
+        order_by: {
+          expression: card.order,
+          direction: e.ASC,
+        },
+      })),
     }))
     .run(client);
-    console.log(lists);
+  console.log(lists);
   return (
     <>
       <div className="p-4 h-full overflow-x-auto">

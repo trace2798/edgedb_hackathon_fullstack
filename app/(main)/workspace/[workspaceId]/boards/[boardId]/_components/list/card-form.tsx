@@ -11,11 +11,11 @@ import {
 import { useParams } from "next/navigation";
 import { useOnClickOutside, useEventListener } from "usehooks-ts";
 
-import { useAction } from "@/hooks/use-action";
-import { createCard } from "@/actions/create-card";
+// import { useAction } from "@/hooks/use-action";
+// import { createCard } from "@/actions/create-card";
 import { Button } from "@/components/ui/button";
-import { FormSubmit } from "@/components/form/form-submit";
-import { FormTextarea } from "@/components/form/form-textarea";
+import { FormSubmit } from "../form-submit";
+import { FormTextarea } from "../form-textarea";
 
 interface CardFormProps {
   listId: string;
@@ -35,16 +35,16 @@ export const CardForm = forwardRef<HTMLTextAreaElement, CardFormProps>(({
   const params = useParams();
   const formRef = useRef<ElementRef<"form">>(null);
 
-  const { execute, fieldErrors } = useAction(createCard, {
-    onSuccess: (data) => {
-      // console.log(data)
-      toast.success(`Card "${data[0].title}" created`);
-      formRef.current?.reset();
-    },
-    onError: (error) => {
-      toast.error(error);
-    },
-  });
+  // const { execute, fieldErrors } = useAction(createCard, {
+  //   onSuccess: (data) => {
+  //     // console.log(data)
+  //     toast.success(`Card "${data[0].title}" created`);
+  //     formRef.current?.reset();
+  //   },
+  //   onError: (error) => {
+  //     toast.error(error);
+  //   },
+  // });
 
   const onKeyDown = (e: KeyboardEvent) => {
     if (e.key === "Escape") {
@@ -67,7 +67,7 @@ export const CardForm = forwardRef<HTMLTextAreaElement, CardFormProps>(({
     const listId = formData.get("listId") as string;
     const boardId = params.boardId as string;
 
-    execute({ title, listId, boardId, tenant_id });
+    // execute({ title, listId, boardId, tenant_id });
   };
 
   if (isEditing) {
@@ -82,7 +82,7 @@ export const CardForm = forwardRef<HTMLTextAreaElement, CardFormProps>(({
           onKeyDown={onTextareakeyDown}
           ref={ref}
           placeholder="Enter a title for this card..."
-          errors={fieldErrors}
+          // errors={fieldErrors}
         />
         <input
           hidden

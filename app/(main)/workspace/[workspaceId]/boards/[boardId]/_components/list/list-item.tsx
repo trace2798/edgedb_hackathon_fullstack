@@ -53,25 +53,25 @@ export const ListItem = ({ data, index, userInfo }: ListItemProps) => {
                   {...provided.droppableProps}
                   className={cn(
                     "mx-1 px-1 py-0.5 flex flex-col gap-y-2",
-                    // data.cards.length > 0 ? "mt-2" : "mt-0"
+                    data.cards.length > 0 ? "mt-2" : "mt-0"
                   )}
                 >
-                  {/* {data.cards.map((card, index) => (
-                    <CardItem index={index} key={card.id} data={card} userInfo={userInfo} />
-                    // <h1 key={index}>{card.title}</h1>
-                  ))} */}
+                  {data.cards.map((card, index) => (
+                    // <CardItem index={index} key={card.id} data={card} userInfo={userInfo} />
+                    <h1 key={index}>{card.title}</h1>
+                  ))}
                   {provided.placeholder}
                 </ol>
               )}
             </Droppable>
-            {/* <CardForm
+            <CardForm
               listId={data.id}
               ref={textareaRef}
               isEditing={isEditing}
               enableEditing={enableEditing}
               disableEditing={disableEditing}
-              tenant_id={data.tenant_id}
-            /> */}
+              tenant_id={data.workspaceId}
+            />
           </div>
         </li>
       )}

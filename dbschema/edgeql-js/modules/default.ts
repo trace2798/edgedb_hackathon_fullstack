@@ -79,6 +79,24 @@ const $Board = $.makeType<$Board>(_.spec, "01469bc0-14ea-11ef-b733-c3a1def64096"
 
 const Board: $.$expr_PathNode<$.TypeSet<$Board, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($Board, $.Cardinality.Many), null);
 
+export type $CardλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588λShape & {
+  "listId": $.PropertyDesc<_std.$uuid, $.Cardinality.One, false, true, false, false>;
+  "created": $.PropertyDesc<_cal.$local_datetime, $.Cardinality.AtMostOne, false, false, false, true>;
+  "description": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "order": $.PropertyDesc<_std.$int64, $.Cardinality.One, false, false, false, false>;
+  "title": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
+  "updated": $.PropertyDesc<_cal.$local_datetime, $.Cardinality.AtMostOne, false, false, false, true>;
+  "list": $.LinkDesc<$List, $.Cardinality.One, {}, false, false,  false, false>;
+  "<cards[is List]": $.LinkDesc<$List, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<cards": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
+}>;
+type $Card = $.ObjectType<"default::Card", $CardλShape, null, [
+  ..._std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588['__exclusives__'],
+]>;
+const $Card = $.makeType<$Card>(_.spec, "4e718487-167a-11ef-bcf4-296946a64304", _.syntax.literal);
+
+const Card: $.$expr_PathNode<$.TypeSet<$Card, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($Card, $.Cardinality.Many), null);
+
 export type $IssueλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588λShape & {
   "assigneeId": $.PropertyDesc<_std.$uuid, $.Cardinality.AtMostOne, false, false, false, false>;
   "workspaceId": $.PropertyDesc<_std.$uuid, $.Cardinality.One, false, true, false, false>;
@@ -130,8 +148,11 @@ export type $ListλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f73840c2
   "title": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
   "workspace": $.LinkDesc<$Workspace, $.Cardinality.One, {}, false, false,  false, false>;
   "board": $.LinkDesc<$Board, $.Cardinality.One, {}, false, false,  false, false>;
+  "cards": $.LinkDesc<$Card, $.Cardinality.Many, {}, false, true,  false, false>;
   "<lists[is Board]": $.LinkDesc<$Board, $.Cardinality.Many, {}, false, false,  false, false>;
   "<lists[is Workspace]": $.LinkDesc<$Workspace, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<list[is Card]": $.LinkDesc<$Card, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<list": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
   "<lists": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
 }>;
 type $List = $.ObjectType<"default::List", $ListλShape, null, [
@@ -269,13 +290,14 @@ const WorkspaceMember: $.$expr_PathNode<$.TypeSet<$WorkspaceMember, $.Cardinalit
 
 
 
-export { MemberRole, $Account, Account, $Activity, Activity, $Board, Board, $Issue, Issue, $IssueActivity, IssueActivity, $List, List, $Session, Session, $User, User, $VerificationToken, VerificationToken, $WebsiteAddress, WebsiteAddress, $Workspace, Workspace, $WorkspaceMember, WorkspaceMember };
+export { MemberRole, $Account, Account, $Activity, Activity, $Board, Board, $Card, Card, $Issue, Issue, $IssueActivity, IssueActivity, $List, List, $Session, Session, $User, User, $VerificationToken, VerificationToken, $WebsiteAddress, WebsiteAddress, $Workspace, Workspace, $WorkspaceMember, WorkspaceMember };
 
 type __defaultExports = {
   "MemberRole": typeof MemberRole;
   "Account": typeof Account;
   "Activity": typeof Activity;
   "Board": typeof Board;
+  "Card": typeof Card;
   "Issue": typeof Issue;
   "IssueActivity": typeof IssueActivity;
   "List": typeof List;
@@ -291,6 +313,7 @@ const __defaultExports: __defaultExports = {
   "Account": Account,
   "Activity": Activity,
   "Board": Board,
+  "Card": Card,
   "Issue": Issue,
   "IssueActivity": IssueActivity,
   "List": List,
