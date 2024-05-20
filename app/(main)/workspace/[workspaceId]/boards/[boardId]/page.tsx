@@ -25,6 +25,29 @@ const Page: FC<PageProps> = async ({ params }) => {
     .run(client);
   console.log(board);
   // const lists = [] as any;
+  // const lists = await e
+  //   .select(e.List, (list) => ({
+  //     id: true,
+  //     title: true,
+  //     order: true,
+  //     filter: e.op(list.board.id, "=", e.uuid(params.boardId)),
+  //     order_by: {
+  //       expression: list.order,
+  //       direction: e.ASC,
+  //     },
+  //     cards: e.select(e.Card, (card) => ({
+  //       id: true,
+  //       title: true,
+  //       order: true,
+  //       listId: true,
+  //       // filter: e.op(card.list.id, "=", e.uuid(list.id)),
+  //       order_by: {
+  //         expression: card.order,
+  //         direction: e.ASC,
+  //       },
+  //     })),
+  //   }))
+  //   .run(client);
   const lists = await e
     .select(e.List, (list) => ({
       id: true,
@@ -39,6 +62,8 @@ const Page: FC<PageProps> = async ({ params }) => {
         id: true,
         title: true,
         order: true,
+        listId: true,
+        filter: e.op(card.list.id, "=", list.id),
         order_by: {
           expression: card.order,
           direction: e.ASC,
@@ -46,6 +71,7 @@ const Page: FC<PageProps> = async ({ params }) => {
       })),
     }))
     .run(client);
+
   console.log(lists);
   return (
     <>

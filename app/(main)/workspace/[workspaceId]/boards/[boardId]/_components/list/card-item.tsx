@@ -2,7 +2,7 @@
 
 import { Draggable } from "@hello-pangea/dnd";
 
-import { useCardModal } from "@/hooks/use-card-modal";
+// import { useCardModal } from "@/hooks/use-card-modal";
 import { Card } from "@/types";
 import { Separator } from "@/components/ui/separator";
 import { format } from "date-fns";
@@ -14,7 +14,7 @@ interface CardItemProps {
 }
 
 export const CardItem = ({ data, index, userInfo }: CardItemProps) => {
-  const cardModal = useCardModal();
+  // const cardModal = useCardModal();
 
   return (
     <Draggable draggableId={data.id} index={index}>
@@ -24,7 +24,7 @@ export const CardItem = ({ data, index, userInfo }: CardItemProps) => {
           {...provided.dragHandleProps}
           ref={provided.innerRef}
           role="button"
-          onClick={() => cardModal.onOpen(data.id, userInfo)}
+          // onClick={() => cardModal.onOpen(data.id, userInfo)}
           className="truncate border-2 border-transparent hover:border-black py-2 px-3 text-sm bg-white dark:bg-zinc-800 rounded-md shadow-sm"
         >
           {data.title}

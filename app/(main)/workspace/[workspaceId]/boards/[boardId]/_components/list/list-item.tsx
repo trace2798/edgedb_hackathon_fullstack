@@ -9,6 +9,7 @@ import { List, ListWithCards } from "@/types";
 import { CardForm } from "./card-form";
 // import { CardItem } from "./card-item";
 import { ListHeader } from "./list-header";
+import { CardItem } from "./card-item";
 
 interface ListItemProps {
   data: ListWithCards;
@@ -17,6 +18,7 @@ interface ListItemProps {
 }
 
 export const ListItem = ({ data, index, userInfo }: ListItemProps) => {
+  console.log(data);
   const textareaRef = useRef<ElementRef<"textarea">>(null);
   console.log(data);
   console.log(userInfo)
@@ -57,8 +59,8 @@ export const ListItem = ({ data, index, userInfo }: ListItemProps) => {
                   )}
                 >
                   {data.cards.map((card, index) => (
-                    // <CardItem index={index} key={card.id} data={card} userInfo={userInfo} />
-                    <h1 key={index}>{card.title}</h1>
+                    <CardItem index={index} key={card.id} data={card} userInfo={userInfo} />
+                    // <h1 key={index}>{card.title}</h1>
                   ))}
                   {provided.placeholder}
                 </ol>
