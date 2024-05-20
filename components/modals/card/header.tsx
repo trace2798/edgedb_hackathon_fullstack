@@ -3,10 +3,6 @@
 import { toast } from "sonner";
 import { ElementRef, useRef, useState } from "react";
 import { Layout } from "lucide-react";
-import { useParams } from "next/navigation";
-
-// import { CardWithList } from "@/types";
-// import { updateCard } from "@/actions/update-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { FormInput } from "@/app/(main)/workspace/[workspaceId]/boards/[boardId]/_components/form-input";
 import { Card } from "@/types";
@@ -20,7 +16,6 @@ interface HeaderProps {
 export const Header = ({ data }: HeaderProps) => {
 
   const user = useCurrentUser();
-  const params = useParams();
   const inputRef = useRef<ElementRef<"input">>(null);
 
   const [title, setTitle] = useState(data.title);

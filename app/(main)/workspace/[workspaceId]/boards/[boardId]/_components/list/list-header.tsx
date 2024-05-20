@@ -8,6 +8,7 @@ import { useState, useRef, ElementRef } from "react";
 // import { useAction } from "@/hooks/use-action";
 // import { updateList } from "@/actions/update-list";
 import { FormInput } from "../form-input";
+import { ListOptions } from "./list-options";
 
 // import { ListOptions } from "./list-options";
 
@@ -99,7 +100,7 @@ export const ListHeader = ({ data, onAddCard }: ListHeaderProps) => {
           {title}
         </div>
       )}
-      {/* <ListOptions onAddCard={onAddCard} data={data} /> */}
+      <ListOptions data={data} />
     </div>
   );
 };

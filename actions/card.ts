@@ -127,11 +127,6 @@ export async function cardToCopy(
       })
       .run(client);
     console.log(createCard);
-    // await e
-    //   .delete(e.Card, (card) => ({
-    //     filter_single: e.op(card.id, "=", e.uuid(id)),
-    //   }))
-    //   .run(client);
     revalidatePath(`/workspace/${workspaceId}/board/${boardId}`);
     return "Done";
   } catch (error) {

@@ -6,9 +6,6 @@ import { Header } from "./card/header";
 import { Description } from "./card/description";
 import { Actions } from "./card/actions";
 
-// import { Header } from "./header";
-// import { Description } from "./description";
-// import { Actions } from "./actions";
 // import { Activity } from "./activity";
 
 export const CardModal = () => {

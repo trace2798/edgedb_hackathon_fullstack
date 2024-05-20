@@ -65,8 +65,6 @@ export const ListForm = ({
     console.log(formData);
     const title = formData.get("title") as string;
     console.log(title);
-    // const boardId = formData.get("boardId") as string;
-    // const tenant_id = formData.get("tenant_id") as string;
     const response = await createList(title, boardId, workspaceId);
     console.log(response);
     if (response === "Done") {
@@ -76,11 +74,6 @@ export const ListForm = ({
     } else {
       toast.error(response);
     }
-    // execute({
-    //   title,
-    //   boardId,
-    //   tenant_id,
-    // });
   };
 
   if (isEditing) {
@@ -93,13 +86,10 @@ export const ListForm = ({
         >
           <FormInput
             ref={inputRef}
-            // errors={fieldErrors}
             id="title"
             className="text-sm px-2 py-1 h-7 font-medium border-transparent hover:border-input focus:border-input transition"
             placeholder="Enter list name..."
           />
-          {/* <input hidden value={params.boardId} name="boardId" />
-          <input hidden value={tenant_id} name="tenant_id" /> */}
           <div className="flex items-center gap-x-1">
             <FormSubmit>Add list</FormSubmit>
             <Button onClick={disableEditing} size="sm" variant="ghost">

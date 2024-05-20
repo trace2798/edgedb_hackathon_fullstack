@@ -10,16 +10,7 @@ export async function createList(
 ) {
   try {
     console.log(title, boardId, workspaceId);
-    // const issue = await e
-    //   .select(e.Issue, (issue) => ({
-    //     id: true,
-    //     title: true,
-    //     duedate: true,
-    //     workspaceId: true,
-    //     filter_single: e.op(issue.id, "=", e.uuid(issueId)),
-    //   }))
-    //   .run(client);
-    // console.log(issue);
+
     const board = await e
       .select(e.Board, (board) => ({
         id: true,
@@ -73,11 +64,11 @@ export async function createList(
   }
 }
 
-export async function deleteWebLink(id: string, currentUserId?: string) {
+export async function deleteList(id: string, currentUserId?: string) {
   try {
     await e
-      .delete(e.WebsiteAddress, (web) => ({
-        filter_single: e.op(web.id, "=", e.uuid(id)),
+      .delete(e.List, (list) => ({
+        filter_single: e.op(list.id, "=", e.uuid(id)),
       }))
       .run(client);
     return "Done";
