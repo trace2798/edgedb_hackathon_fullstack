@@ -10,33 +10,17 @@ import { useParams } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import { FormInput } from "@/app/(main)/workspace/[workspaceId]/boards/[boardId]/_components/form-input";
 import { Card } from "@/types";
+import { updateCardTitle } from "@/actions/card";
+import { useCurrentUser } from "@/hooks/use-current-user";
 
 interface HeaderProps {
   data: Card;
 }
 
 export const Header = ({ data }: HeaderProps) => {
-  //   const queryClient = useQueryClient();
+
+  const user = useCurrentUser();
   const params = useParams();
-
-  //   const { execute } = useAction(updateCard, {
-  //     onSuccess: (data) => {
-  //       queryClient.invalidateQueries({
-  //         queryKey: ["card", data.id]
-  //       });
-
-  //       queryClient.invalidateQueries({
-  //         queryKey: ["card-logs", data.id]
-  //       });
-
-  //       toast.success(`Renamed to "${data.title}"`);
-  //       setTitle(data.title);
-  //     },
-  //     onError: (error) => {
-  //       toast.error(error);
-  //     }
-  //   });
-
   const inputRef = useRef<ElementRef<"input">>(null);
 
   const [title, setTitle] = useState(data.title);
@@ -45,19 +29,19 @@ export const Header = ({ data }: HeaderProps) => {
     inputRef.current?.form?.requestSubmit();
   };
 
-  const onSubmit = (formData: FormData) => {
+  const onSubmit = async (formData: FormData) => {
     const title = formData.get("title") as string;
-    const boardId = params.boardId as string;
-
     if (title === data.title) {
       return;
     }
-
-    // execute({
-    //   title,
-    //   boardId,
-    //   id: data.id,
-    // });
+    console.log(title);
+    const response = await updateCardTitle(data.id, title, user?.id as string);
+    if (response === "Card Title Updated") {
+      toast.success(`Card Title Updated`);
+      setTitle(title);
+    } else {
+      toast.error(response);
+    }
   };
 
   return (
@@ -72,7 +56,6 @@ export const Header = ({ data }: HeaderProps) => {
             defaultValue={title}
             className="font-semibold dark:text-neutral-200 text-xl px-1 text-neutral-700 bg-transparent border-transparent relative -left-1.5 w-[95%] focus-visible:bg-inherit focus-visible:border-input mb-0.5 truncate"
           />
-          {/* <input hidden id="tenant_id" name="tenant_id" value={data.listId} /> */}
           <input hidden id="listId" name="listId" value={data.listId} />
         </form>
         <p className="text-sm text-muted-foreground">

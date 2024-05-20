@@ -234,3 +234,160 @@ export async function updateCardStatus(
     return "Error Updating Status";
   }
 }
+
+export async function updateCardAssigneeId(
+  id: string,
+  assigneeId: string,
+  userId: string
+) {
+  try {
+    console.log(id);
+    console.log(assigneeId, "assigneeId");
+    console.log(userId, "USER ID");
+
+    const user = await e
+      .select(e.User, (user) => ({
+        id: true,
+        email: true,
+        name: true,
+        filter_single: e.op(user.id, "=", e.uuid(userId)),
+      }))
+      .run(client);
+    if (!user) {
+      return "User Not Found";
+    }
+    const card = await e
+      .select(e.Card, (card) => ({
+        id: true,
+        title: true,
+        status: true,
+        filter_single: e.op(card.id, "=", e.uuid(id)),
+      }))
+      .run(client);
+    console.log(card);
+
+    const updateCardAssignee = await e
+      .update(e.Card, () => ({
+        filter_single: { id: e.uuid(id) },
+        set: {
+          assigneeId: assigneeId as string,
+        },
+      }))
+      .run(client);
+    console.log(updateCardAssignee);
+
+    return "Card Assignee Updated";
+  } catch (error) {
+    console.error(error);
+    return "Error Updating Assignee";
+  }
+}
+
+export async function updateCardTitle(
+  id: string,
+  title: string,
+  userId: string
+) {
+  try {
+    console.log(id);
+    console.log(title, "assigneeId");
+    console.log(userId, "USER ID");
+
+    const user = await e
+      .select(e.User, (user) => ({
+        id: true,
+        email: true,
+        name: true,
+        filter_single: e.op(user.id, "=", e.uuid(userId)),
+      }))
+      .run(client);
+    if (!user) {
+      return "User Not Found";
+    }
+    const card = await e
+      .select(e.Card, (card) => ({
+        id: true,
+        title: true,
+        status: true,
+        filter_single: e.op(card.id, "=", e.uuid(id)),
+      }))
+      .run(client);
+    console.log(card);
+
+    const updateCardTitle = await e
+      .update(e.Card, () => ({
+        filter_single: { id: e.uuid(id) },
+        set: {
+          title: title as string,
+        },
+      }))
+      .run(client);
+    console.log(updateCardTitle);
+
+    return "Card Title Updated";
+  } catch (error) {
+    console.error(error);
+    return "Error Updating Title";
+  }
+}
+
+export async function updateCardDescription(
+  id: string,
+  description: string,
+  userId: string,
+  boardId: string
+) {
+  try {
+    console.log(id);
+    console.log(description, "assigneeId");
+    console.log(userId, "USER ID");
+    console.log(boardId, "boardID");
+    const user = await e
+      .select(e.User, (user) => ({
+        id: true,
+        email: true,
+        name: true,
+        filter_single: e.op(user.id, "=", e.uuid(userId)),
+      }))
+      .run(client);
+    console.log(user);
+    if (!user) {
+      return "User Not Found";
+    }
+
+    const board = await e
+      .select(e.Board, (board) => ({
+        id: true,
+        // title: true,
+        workspace: true,
+        filter_single: e.op(board.id, "=", e.uuid(boardId)),
+      }))
+      .run(client);
+    console.log(board);
+
+    const card = await e
+      .select(e.Card, (card) => ({
+        id: true,
+        title: true,
+        status: true,
+        filter_single: e.op(card.id, "=", e.uuid(id)),
+      }))
+      .run(client);
+    console.log(card);
+
+    const updateCardTitle = await e
+      .update(e.Card, () => ({
+        filter_single: { id: e.uuid(id) },
+        set: {
+          description: description as string,
+        },
+      }))
+      .run(client);
+    console.log(updateCardTitle);
+    revalidatePath(`/workspace/${board?.workspace.id}/board/${boardId}`);
+    return "Card Description Updated";
+  } catch (error) {
+    console.error(error);
+    return "Error Updating Title";
+  }
+}

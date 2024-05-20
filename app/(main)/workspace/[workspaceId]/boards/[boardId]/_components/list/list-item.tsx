@@ -64,6 +64,7 @@ export const ListItem = ({ data, index, members }: ListItemProps) => {
                       index={index}
                       key={card.id}
                       data={card}
+                      members={members as Member[]}
                     />
                   ))}
                   {provided.placeholder}

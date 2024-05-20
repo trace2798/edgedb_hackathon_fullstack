@@ -1,22 +1,23 @@
 "use client";
 
 import { Draggable } from "@hello-pangea/dnd";
-
+import { Separator } from "@/components/ui/separator";
 import { useCardModal } from "@/hooks/use-card-modal";
 import { Card } from "@/types";
-import { Separator } from "@/components/ui/separator";
-import { format } from "date-fns";
+import { LocalDateTime } from "edgedb";
+import { Member } from "../../../../members/_components/members/column";
+import ChangeCardAssignee from "../../../_components/card-assignee-button";
+import ChangeDueDate from "../../../_components/duedate-menu";
 import CardMenuPriority from "../../../_components/priority-menu";
 import CardMenuStatus from "../../../_components/status-menu";
-import ChangeDueDate from "../../../_components/duedate-menu";
-import { LocalDateTime } from "edgedb";
 
 interface CardItemProps {
   data: Card;
   index: number;
+  members: Member[];
 }
 
-export const CardItem = ({ data, index }: CardItemProps) => {
+export const CardItem = ({ data, index, members }: CardItemProps) => {
   const cardModal = useCardModal();
 
   return (
@@ -34,9 +35,21 @@ export const CardItem = ({ data, index }: CardItemProps) => {
           </div>
           <Separator className="bg-zinc-600 my-1" />
           <div className="flex flex-row justify-between">
-            <CardMenuPriority id={data.id} currentPriority={data.priority} />
-            <CardMenuStatus id={data.id} currentStatus={data.status} />
-            <ChangeDueDate id={data.id} currentDueDate={data.duedate as LocalDateTime} />
+            <div className="flex space-x-1">
+              <CardMenuPriority id={data.id} currentPriority={data.priority} />
+              <CardMenuStatus id={data.id} currentStatus={data.status} />
+            </div>
+            <ChangeDueDate
+              id={data.id}
+              currentDueDate={data.duedate as LocalDateTime}
+            />
+          </div>
+          <div>
+            <ChangeCardAssignee
+              id={data.id}
+              currentAssigneeId={data.assigneeId as string}
+              members={members as Member[]}
+            />
           </div>
         </div>
       )}
