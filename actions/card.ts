@@ -1,5 +1,6 @@
 "use server";
 import e, { createClient } from "@/dbschema/edgeql-js";
+import { revalidatePath } from "next/cache";
 
 const client = createClient();
 
@@ -56,15 +57,20 @@ export async function createCard(title: string, listId: string) {
   }
 }
 
-export async function deleteWebLink(id: string, currentUserId?: string) {
+export async function deleteCard(
+  id: string,
+  workspaceId: string,
+  boardId: string
+) {
   try {
     await e
-      .delete(e.WebsiteAddress, (web) => ({
-        filter_single: e.op(web.id, "=", e.uuid(id)),
+      .delete(e.Card, (card) => ({
+        filter_single: e.op(card.id, "=", e.uuid(id)),
       }))
       .run(client);
+    revalidatePath(`/workspace/${workspaceId}/board/${boardId}`);
     return "Done";
   } catch (error) {
-    return "Error Deleting Issue";
+    return "Error Deleting Card";
   }
 }

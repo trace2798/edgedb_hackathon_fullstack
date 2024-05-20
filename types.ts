@@ -10,17 +10,17 @@ export type List = {
 
 export type Card = {
   id: string;
-  tenant_id: string;
   title: string;
   order: number;
+  listId: string;
   description?: string;
-  list_id: string;
-  createdAt: Date;
-  updatedAt: Date;
-  status: string;
-  assign_id: string;
-  assign_name: string;
-  due_date: Date;
+  list_id?: string;
+  // createdAt: Date;
+  // updatedAt: Date;
+  // status: string;
+  // assign_id: string;
+  // assign_name: string;
+  // due_date: Date;
 };
 
 

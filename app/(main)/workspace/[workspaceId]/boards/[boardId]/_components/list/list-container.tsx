@@ -21,8 +21,8 @@ type Card = {
   listId: string;
 };
 interface ListContainerProps {
-  // data: ListWithCards[];
-  data: any[];
+  data: ListWithCards[];
+  // data: any[];
   boardId: string;
   workspaceId: string;
   userInfo: any;
