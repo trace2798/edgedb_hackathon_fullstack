@@ -10,10 +10,9 @@ import { format } from "date-fns";
 interface CardItemProps {
   data: Card;
   index: number;
-  userInfo: any;
 }
 
-export const CardItem = ({ data, index, userInfo }: CardItemProps) => {
+export const CardItem = ({ data, index }: CardItemProps) => {
   const cardModal = useCardModal();
 
   return (

@@ -16,15 +16,13 @@ import CardForm from "./card-form";
 interface ListItemProps {
   data: ListWithCards;
   index: number;
-  userInfo: any;
   members: Member[];
 }
 
-export const ListItem = ({ data, index, userInfo, members }: ListItemProps) => {
+export const ListItem = ({ data, index, members }: ListItemProps) => {
   console.log(data);
   const textareaRef = useRef<ElementRef<"textarea">>(null);
   console.log(data);
-  console.log(userInfo);
   const [isEditing, setIsEditing] = useState(false);
 
   const disableEditing = () => {
@@ -66,7 +64,6 @@ export const ListItem = ({ data, index, userInfo, members }: ListItemProps) => {
                       index={index}
                       key={card.id}
                       data={card}
-                      userInfo={userInfo}
                     />
                   ))}
                   {provided.placeholder}

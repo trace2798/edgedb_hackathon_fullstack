@@ -3,30 +3,23 @@
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
-
-import { ListWithCards } from "@/types";
-// import { useAction } from "@/hooks/use-action";
-// import { updateListOrder } from "@/actions/update-list-order";
-// import { updateCardOrder } from "@/actions/update-card-order";
-
+import { Card, ListWithCards } from "@/types";
 import { ListForm } from "./list-form";
 import { ListItem } from "./list-item";
 import { updateCardOrder } from "@/actions/update-card-order";
 import { updateListOrder } from "@/actions/update-list-order";
 import { Member } from "../../../../members/_components/members/column";
 
-type Card = {
-  id: string;
-  title: string;
-  order: number;
-  listId: string;
-};
+// type Card = {
+//   id: string;
+//   title: string;
+//   order: number;
+//   listId: string;
+// };
 interface ListContainerProps {
   data: ListWithCards[];
-  // data: any[];
   boardId: string;
   workspaceId: string;
-  userInfo: any;
   members: Member[];
 }
 
@@ -42,7 +35,6 @@ export const ListContainer = ({
   data,
   boardId,
   workspaceId,
-  userInfo,
   members,
 }: ListContainerProps) => {
   console.log(data);
@@ -198,7 +190,6 @@ export const ListContainer = ({
                   key={list.id}
                   index={index}
                   data={list}
-                  userInfo={userInfo}
                   members={members as Member[]}
                 />
               );

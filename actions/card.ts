@@ -15,14 +15,6 @@ export async function createCard(
   listId: string
 ) {
   try {
-    // console.log(title, listId);
-    // console.log(userId, "USER ID");
-    // console.log(title, "CONTENT");
-    // console.log(status, "STATUS");
-    // console.log(priority, "PRIORITY");
-    // console.log(assigneeId, "ASSIGNEE ID");
-    // console.log(duedate, "DUE DATE");
-    // console.log(listId, "LIST ID");
     const list = await e
       .select(e.List, (list) => ({
         id: true,
@@ -109,7 +101,7 @@ export async function cardToCopy(
       }))
       .run(client);
     console.log(card);
-    if(!card) {
+    if (!card) {
       return "Error: Card not found";
     }
     const lastCard = await e
@@ -126,15 +118,15 @@ export async function cardToCopy(
     console.log(lastCard);
     const newOrder = lastCard ? lastCard.order + 1 : 1;
     const createCard = await e
-    .insert(e.Card, {
-      title: `${card.title} - Copy` as string,
-      order: newOrder as number,
-      list: e.select(e.List, (list) => ({
-        filter_single: e.op(list.id, "=", e.uuid(listId as string)),
-      })),
-    })
-    .run(client);
-  console.log(createCard);
+      .insert(e.Card, {
+        title: `${card.title} - Copy` as string,
+        order: newOrder as number,
+        list: e.select(e.List, (list) => ({
+          filter_single: e.op(list.id, "=", e.uuid(listId as string)),
+        })),
+      })
+      .run(client);
+    console.log(createCard);
     // await e
     //   .delete(e.Card, (card) => ({
     //     filter_single: e.op(card.id, "=", e.uuid(id)),

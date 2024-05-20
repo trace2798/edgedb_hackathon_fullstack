@@ -1,11 +1,10 @@
 "use client";
 
-import { toast } from "sonner";
 import { Plus, X } from "lucide-react";
 import { FC } from "react";
-import { useAddCardModal } from "@/hooks/use-add-card-modal";
 import { Button } from "@/components/ui/button";
 import { Member } from "../../../../members/_components/members/column";
+import { useAddCardModal } from "@/hooks/use-add-card-modal";
 
 interface CardFormProps {
   listId: string;

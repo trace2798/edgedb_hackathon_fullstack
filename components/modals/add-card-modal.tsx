@@ -40,12 +40,10 @@ import { Button } from "../ui/button";
 import { Calendar } from "../ui/calendar";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
-import { useAddCardModal } from "@/hooks/use-add-card-modal";
 import { createCard } from "@/actions/card";
+import { useAddCardModal } from "@/hooks/use-add-card-modal";
 
-interface CardModalProps extends React.HTMLAttributes<HTMLDivElement> {
-
-}
+interface CardModalProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 const formSchema = z.object({
   title: z.string().min(2).max(50),
@@ -57,7 +55,7 @@ const formSchema = z.object({
   listId: z.string().min(2).max(50),
 });
 
-export function AddCardModal({ className, ...props}: CardModalProps) {
+export function AddCardModal({ className, ...props }: CardModalProps) {
   const card = useAddCardModal();
   const members = useAddCardModal((state) => state.members);
   const listId = useAddCardModal((state) => state.listId);

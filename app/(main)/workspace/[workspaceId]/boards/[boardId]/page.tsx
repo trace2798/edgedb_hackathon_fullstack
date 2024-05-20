@@ -1,9 +1,9 @@
 import { auth } from "@/auth";
 import e, { createClient } from "@/dbschema/edgeql-js";
-import { FC } from "react";
-import { ListContainer } from "./_components/list/list-container";
 import { ListWithCards } from "@/types";
+import { FC } from "react";
 import { Member } from "../../members/_components/members/column";
+import { ListContainer } from "./_components/list/list-container";
 
 interface PageProps {
   params: { workspaceId: string; boardId: string };
@@ -32,6 +32,10 @@ const Page: FC<PageProps> = async ({ params }) => {
       id: true,
       title: true,
       order: true,
+      boardId: true,
+      created: true,
+      updated: true,
+      workspaceId: true,
       filter: e.op(list.board.id, "=", e.uuid(params.boardId)),
       order_by: {
         expression: list.order,
@@ -42,6 +46,13 @@ const Page: FC<PageProps> = async ({ params }) => {
         title: true,
         order: true,
         listId: true,
+        description: true,
+        created: true,
+        updated: true,
+        duedate: true,
+        assigneeId: true,
+        status: true,
+        priority: true,
         filter: e.op(card.list.id, "=", list.id),
         order_by: {
           expression: card.order,
@@ -79,7 +90,6 @@ const Page: FC<PageProps> = async ({ params }) => {
           boardId={params.boardId}
           data={lists as ListWithCards[]}
           workspaceId={params.workspaceId}
-          userInfo={session?.user}
           members={members as Member[]}
         />
       </div>

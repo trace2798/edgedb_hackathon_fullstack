@@ -1,11 +1,13 @@
+import { LocalDateTime } from "edgedb";
+
 export type List = {
   id: string;
   boardId: string;
   workspaceId: string;
   title: string;
   order: number;
-  created: Date;
-  updated: Date;
+  created: LocalDateTime | null;
+  updated: LocalDateTime | null;
 };
 
 export type Card = {
@@ -15,12 +17,12 @@ export type Card = {
   listId: string;
   description?: string;
   list_id?: string;
-  // createdAt: Date;
-  // updatedAt: Date;
-  // status: string;
-  // assign_id: string;
-  // assign_name: string;
-  // due_date: Date;
+  created: LocalDateTime | null;
+  updated: LocalDateTime | null;
+  status: string;
+  priority: string;
+  assigneeId?: string;
+  duedate?: LocalDateTime | null;
 };
 
 
