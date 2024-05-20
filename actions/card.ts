@@ -138,3 +138,99 @@ export async function cardToCopy(
     return "Error Deleting Card";
   }
 }
+
+export async function updateCardPriority(
+  id: string,
+  priority: string,
+  userId: string
+) {
+  try {
+    console.log(id);
+    console.log(priority, "PRIORITY");
+    console.log(userId, "USER ID");
+
+    const user = await e
+      .select(e.User, (user) => ({
+        id: true,
+        email: true,
+        name: true,
+        filter_single: e.op(user.id, "=", e.uuid(userId)),
+      }))
+      .run(client);
+    if (!user) {
+      return "User Not Found";
+    }
+    const card = await e
+      .select(e.Card, (card) => ({
+        id: true,
+        title: true,
+        priority: true,
+        filter_single: e.op(card.id, "=", e.uuid(id)),
+      }))
+      .run(client);
+    console.log(card);
+
+    const updateCardPriority = await e
+      .update(e.Card, () => ({
+        filter_single: { id: e.uuid(id) },
+        set: {
+          priority: priority as string,
+        },
+      }))
+      .run(client);
+    console.log(updateCardPriority);
+
+    return "Card Priority Updated";
+  } catch (error) {
+    console.error(error);
+    return "Error Updating Priority";
+  }
+}
+
+export async function updateCardStatus(
+  id: string,
+  status: string,
+  userId: string
+) {
+  try {
+    console.log(id);
+    console.log(status, "PRIORITY");
+    console.log(userId, "USER ID");
+
+    const user = await e
+      .select(e.User, (user) => ({
+        id: true,
+        email: true,
+        name: true,
+        filter_single: e.op(user.id, "=", e.uuid(userId)),
+      }))
+      .run(client);
+    if (!user) {
+      return "User Not Found";
+    }
+    const card = await e
+      .select(e.Card, (card) => ({
+        id: true,
+        title: true,
+        status: true,
+        filter_single: e.op(card.id, "=", e.uuid(id)),
+      }))
+      .run(client);
+    console.log(card);
+
+    const updateCardPriority = await e
+      .update(e.Card, () => ({
+        filter_single: { id: e.uuid(id) },
+        set: {
+          status: status as string,
+        },
+      }))
+      .run(client);
+    console.log(updateCardPriority);
+
+    return "Card Status Updated";
+  } catch (error) {
+    console.error(error);
+    return "Error Updating Status";
+  }
+}
