@@ -6,22 +6,25 @@ import { Draggable, Droppable } from "@hello-pangea/dnd";
 import { cn } from "@/lib/utils";
 import { List, ListWithCards } from "@/types";
 
-import { CardForm } from "./card-form";
+// import { CardForm } from "./card-form";
 // import { CardItem } from "./card-item";
 import { ListHeader } from "./list-header";
 import { CardItem } from "./card-item";
+import { Member } from "../../../../members/_components/members/column";
+import CardForm from "./card-form";
 
 interface ListItemProps {
   data: ListWithCards;
   index: number;
   userInfo: any;
+  members: Member[];
 }
 
-export const ListItem = ({ data, index, userInfo }: ListItemProps) => {
+export const ListItem = ({ data, index, userInfo, members }: ListItemProps) => {
   console.log(data);
   const textareaRef = useRef<ElementRef<"textarea">>(null);
   console.log(data);
-  console.log(userInfo)
+  console.log(userInfo);
   const [isEditing, setIsEditing] = useState(false);
 
   const disableEditing = () => {
@@ -59,8 +62,12 @@ export const ListItem = ({ data, index, userInfo }: ListItemProps) => {
                   )}
                 >
                   {data.cards.map((card, index) => (
-                    <CardItem index={index} key={card.id} data={card} userInfo={userInfo} />
-                    // <h1 key={index}>{card.title}</h1>
+                    <CardItem
+                      index={index}
+                      key={card.id}
+                      data={card}
+                      userInfo={userInfo}
+                    />
                   ))}
                   {provided.placeholder}
                 </ol>
@@ -68,11 +75,8 @@ export const ListItem = ({ data, index, userInfo }: ListItemProps) => {
             </Droppable>
             <CardForm
               listId={data.id}
-              ref={textareaRef}
-              isEditing={isEditing}
-              enableEditing={enableEditing}
-              disableEditing={disableEditing}
               tenant_id={data.workspaceId}
+              members={members as Member[]}
             />
           </div>
         </li>

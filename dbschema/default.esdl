@@ -246,6 +246,16 @@ type Card {
   required list -> List {
     on target delete delete source;
   }
+    required status: str {
+    default := "todo";
+    index on (.status);
+  }
+    duedate: datetime;
+    required priority: str {
+    default := "no priority";
+    index on (.priority);
+  }
+   assigneeId: uuid;
   index on (.list);
 }
 

@@ -3,6 +3,7 @@ import e, { createClient } from "@/dbschema/edgeql-js";
 import { FC } from "react";
 import { ListContainer } from "./_components/list/list-container";
 import { ListWithCards } from "@/types";
+import { Member } from "../../members/_components/members/column";
 
 interface PageProps {
   params: { workspaceId: string; boardId: string };
@@ -51,6 +52,26 @@ const Page: FC<PageProps> = async ({ params }) => {
     .run(client);
 
   console.log(lists);
+  const members = await e
+    .select(e.WorkspaceMember, (workspaceMember) => ({
+      id: true,
+      name: true,
+      email: true,
+      memberRole: true,
+      userId: true,
+      created: true,
+      filter: e.op(
+        workspaceMember.workspaceId,
+        "=",
+        e.uuid(params.workspaceId)
+      ),
+      order_by: {
+        expression: workspaceMember.created,
+        direction: e.DESC,
+      },
+    }))
+    .run(client);
+  console.log(members);
   return (
     <>
       <div className="p-4 h-full overflow-x-auto">
@@ -59,6 +80,7 @@ const Page: FC<PageProps> = async ({ params }) => {
           data={lists as ListWithCards[]}
           workspaceId={params.workspaceId}
           userInfo={session?.user}
+          members={members as Member[]}
         />
       </div>
     </>

@@ -1,6 +1,5 @@
 "use client";
 
-import { createIssue } from "@/actions/issues";
 import { Member } from "@/app/(main)/workspace/[workspaceId]/members/_components/members/column";
 import {
   Command,
@@ -24,7 +23,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useCurrentUser } from "@/hooks/use-current-user";
-import { useIssues } from "@/hooks/use-issues";
+// import { useIssues } from "@/hooks/use-issues";
 import { priorities, statuses } from "@/lib/constant";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -41,8 +40,12 @@ import { Button } from "../ui/button";
 import { Calendar } from "../ui/calendar";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
+import { useAddCardModal } from "@/hooks/use-add-card-modal";
+import { createCard } from "@/actions/card";
 
-interface IssueModalProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface CardModalProps extends React.HTMLAttributes<HTMLDivElement> {
+
+}
 
 const formSchema = z.object({
   title: z.string().min(2).max(50),
@@ -51,13 +54,16 @@ const formSchema = z.object({
   priority: z.string().min(2).max(50),
   assigneeId: z.string().min(2).max(50),
   duedate: z.date().optional(),
+  listId: z.string().min(2).max(50),
 });
 
-export function IssueModal({ className, ...props }: IssueModalProps) {
-  const issues = useIssues();
-  const members = useIssues((state) => state.members);
-  const defaultStatus = useIssues((state) => state.defaultStatus);
-  console.log(defaultStatus);
+export function AddCardModal({ className, ...props}: CardModalProps) {
+  const card = useAddCardModal();
+  const members = useAddCardModal((state) => state.members);
+  const listId = useAddCardModal((state) => state.listId);
+
+  //   console.log(defaultStatus);
+  console.log(listId);
   console.log(members);
   const user = useCurrentUser();
   console.log(user);
@@ -69,8 +75,8 @@ export function IssueModal({ className, ...props }: IssueModalProps) {
 
   useEffect(() => {
     form.setValue("assigneeId", membershipIdOfCurrentUser);
-    form.setValue("status", defaultStatus);
-  }, [membershipIdOfCurrentUser, defaultStatus]);
+    form.setValue("listId", listId);
+  }, [membershipIdOfCurrentUser, listId]);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -78,10 +84,11 @@ export function IssueModal({ className, ...props }: IssueModalProps) {
     defaultValues: {
       title: "",
       description: "",
-      status: defaultStatus as string,
+      status: "todo" as string,
       priority: "no priority",
       assigneeId: membershipIdOfCurrentUser as string,
       duedate: undefined,
+      listId: listId as string,
     },
   });
   type FormData = z.infer<typeof formSchema>;
@@ -93,19 +100,20 @@ export function IssueModal({ className, ...props }: IssueModalProps) {
       setLoading(true);
 
       console.log(values);
-      await createIssue(
+      await createCard(
         user?.id as string,
         values.title,
         values.description,
         values.status,
         values.priority,
         values.assigneeId,
-        values.duedate
+        values.duedate,
+        values.listId
       );
       form.reset();
       toast.success("Task Created.");
       router.refresh();
-      issues.onClose();
+      card.onClose();
     } catch (error) {
       console.error(error);
       toast.error("Error creating Workspace.");
@@ -114,7 +122,7 @@ export function IssueModal({ className, ...props }: IssueModalProps) {
   const isLoading = form.formState.isSubmitting;
 
   return (
-    <Dialog open={issues.isOpen} onOpenChange={issues.onClose}>
+    <Dialog open={card.isOpen} onOpenChange={card.onClose}>
       <DialogContent className="">
         <DialogHeader className="border-b pb-3">
           <h2 className="text-lg font-medium text-neutral-200">

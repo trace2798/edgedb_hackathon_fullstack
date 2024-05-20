@@ -4,9 +4,25 @@ import { revalidatePath } from "next/cache";
 
 const client = createClient();
 
-export async function createCard(title: string, listId: string) {
+export async function createCard(
+  userId: string,
+  title: string,
+  description: string,
+  status: string,
+  priority: string,
+  assigneeId: string,
+  duedate: Date | undefined,
+  listId: string
+) {
   try {
-    console.log(title, listId);
+    // console.log(title, listId);
+    // console.log(userId, "USER ID");
+    // console.log(title, "CONTENT");
+    // console.log(status, "STATUS");
+    // console.log(priority, "PRIORITY");
+    // console.log(assigneeId, "ASSIGNEE ID");
+    // console.log(duedate, "DUE DATE");
+    // console.log(listId, "LIST ID");
     const list = await e
       .select(e.List, (list) => ({
         id: true,
@@ -34,7 +50,12 @@ export async function createCard(title: string, listId: string) {
     const createCard = await e
       .insert(e.Card, {
         title: title as string,
+        description: description as string,
+        status: status as string,
+        priority: priority as string,
         order: newOrder as number,
+        duedate: duedate as Date,
+        assigneeId: assigneeId as string,
         list: e.select(e.List, (list) => ({
           filter_single: e.op(list.id, "=", e.uuid(listId as string)),
         })),

@@ -86,6 +86,10 @@ export type $CardλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f73840c2
   "order": $.PropertyDesc<_std.$int64, $.Cardinality.One, false, false, false, false>;
   "title": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
   "updated": $.PropertyDesc<_cal.$local_datetime, $.Cardinality.AtMostOne, false, false, false, true>;
+  "priority": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, true>;
+  "status": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, true>;
+  "assigneeId": $.PropertyDesc<_std.$uuid, $.Cardinality.AtMostOne, false, false, false, false>;
+  "duedate": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
   "list": $.LinkDesc<$List, $.Cardinality.One, {}, false, false,  false, false>;
   "<cards[is List]": $.LinkDesc<$List, $.Cardinality.Many, {}, false, false,  false, false>;
   "<cards": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;

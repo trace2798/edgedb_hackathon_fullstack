@@ -13,6 +13,7 @@ import { ListForm } from "./list-form";
 import { ListItem } from "./list-item";
 import { updateCardOrder } from "@/actions/update-card-order";
 import { updateListOrder } from "@/actions/update-list-order";
+import { Member } from "../../../../members/_components/members/column";
 
 type Card = {
   id: string;
@@ -26,6 +27,7 @@ interface ListContainerProps {
   boardId: string;
   workspaceId: string;
   userInfo: any;
+  members: Member[];
 }
 
 function reorder<T>(list: T[], startIndex: number, endIndex: number) {
@@ -41,6 +43,7 @@ export const ListContainer = ({
   boardId,
   workspaceId,
   userInfo,
+  members,
 }: ListContainerProps) => {
   console.log(data);
   const [orderedData, setOrderedData] = useState(data);
@@ -196,6 +199,7 @@ export const ListContainer = ({
                   index={index}
                   data={list}
                   userInfo={userInfo}
+                  members={members as Member[]}
                 />
               );
             })}

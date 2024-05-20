@@ -5,6 +5,7 @@ import { IssueModal } from "../modals/issue-modal";
 import { WorkspaceModal } from "../modals/workspaces-modal";
 import {AddBoardModal} from "../modals/add-board-modal";
 import { CardModal } from "../modals/card-modal";
+import { AddCardModal } from "../modals/add-card-modal";
 
 export const ModalProvider = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -23,6 +24,7 @@ export const ModalProvider = () => {
       <IssueModal />
       <AddBoardModal/>
       <CardModal/>
+      <AddCardModal/>
     </>
   );
 };
